@@ -1,0 +1,231 @@
+﻿2019-07-24
+1. Limpiar el formulario modal cuando se crear un warehouse desde la pantalla recibo de tracking.===============================
+2. Revisar por qué la consulta global de tracking muestra 3 tracking cuando busco uno.==========================================
+3. En la pantalla de prealertas permitir que el cliente ingrese el contenido también. ==========================================
+4. Colocar un archivo Excel de ejemplo de como debe ser el archivo para actualizarstatus masivamente.===========================
+
+2019-08-05
+5. El logo cuando guarde que cambie el nombre ==================================================================================
+1. Revisar en los status que si se habilita un envio de email ==================================================================
+
+2019-08-06
+1. Revision del boton de impresion de la grilla de consolidados ya que estaba diferente del boton de Impresion
+  de la grilla de documentos. Se acomodo y se ajustaron los botones de las grillas a la izquierda para mejor visualizacion.======
+2. Revisar el badget de los pendientes que me muestra una info al iniciar y otra al seleccionarlo o mostrarlos todos=============
+2. La ayuda del inventario de la master =========================================================================================
+
+2019-08-09
+-. los cards de la configuracion que valla centrada y meter la seguridad alli.===================================================
+-. Organizar mejor los cards, colocar el titulo visible y con icono.=============================================================
+-. los iconos de todas las grillas que sean iguales.=============================================================================
+
+
+2019-8-12
+1. En CONSOLIDADO los botones y el mensaje no aparecen hasta que el comsolidado tenga un registro. ==============================
+2. En CONSOLIDADO el mensaje de error debe salir arriba
+3. Enm CONSOLIDADO la validación que se realizó es solo si el destino es para el país COLOMBIA.==================================
+5. En BL y AWB si los consolidados se están mostrando de accuerdo al medio de envío. ============================================
+6. En CONSOLIDADO Los botones de descargar Excel salen solamente si el destino es COLOMBIA. =====================================
+
+2019-08-13
+-. colocar el icono del estatus en el listado de estatus del documento (cajita).=================================================
+-. Organizar busqueda por cliente en la grilla de master. =======================================================================
+-. En la pestaña de courier al aplicar el estatus, que ya este seleccionado y bloqueado el campo de seleccionar warehouse.=======
+-. en el modal de cambiar estatus del consolidado, intercambiar las pociciones de los tabs.======================================
+-. colocar iconos al select de los estatus del consolidado en la grilla principal.===============================================
+4. En CONFIGURACIÓN Hay un error al ir a las impresoras.=========================================================================
+
+2019-08-14
+-. Se modifico tabla monedas de la BD y se agregaron registros. =================================================================
+-. Se modifico tabla de master_costos y se agregaron registros.==================================================================
+-. Se acomodod formulario de costos master y se probo funcionalidad.=============================================================
+
+2019-08-15
+-. Se corrigio registro de BL.===================================================================================================
+-. se corrigio la modal de registrar shipper y consignee del BL ya que la grilla de registros no cargaba debido a las rutas.=====
+-. se acomodaron los iconos y botones en la grilla del BL y el formulario.=======================================================
+-. se acomodo la impresion del BL porque salian dos paginas.=====================================================================
+-. se corrigio vista de la modal de agregar costos de la master. ================================================================
+-. agregar en la impresion de la guia (invoice) la columna en el detalle de la pieza que corresponde ej: P1, P2 =================
+-. despues de consolidado el documento, que no deje editar. =====================================================================
+-. cambiar los iconos por los pro. (consolidado) ================================================================================
+-. cambiar la forma de pago del documento en un componente modal, que elija el tipo de pago y si es COD guardar==================
+    y si es PP mostrar forma de pago y luego si guardar.=========================================================================
+
+2019-08-16
+-. cerrar consolidado desde grilla.==============================================================================================
+-. comente la linea 169 de agregar un id de estatus en la tabla pivot_wrh_guia ya que creo que no se necesita ese campo==========
+-. coloque la forma de pago null en la tabla pivot_wrh_guia======================================================================
+-. mostrar todos los recibos al buscar guias en el consolidado.==================================================================
+-. modal subir archivo de estatus y filtrar documento, mejorados=================================================================
+
+2019-08-20
+-. en las url publicas no mostrar url casillero.=================================================================================
+-. Que el numero de la master se pueda escribir si no tienen inventario en el momento ===========================================
+-. Acomodar los select de la creacion de master con los select de element =======================================================
+
+
+2019-08-28
+-. revisar modal cuando es COD no es oblogatorio la forma de pago.===============================================================
+3. En la forma del PAGO no se ha actualizado que el PP muestre la lista de formas de pago sigue con COD y los recibos se les
+   está colocando forma de pago errada, lo que no va a permitir cobrarlos========================================================
+-. la imagen variable para la agencia en los templates.==========================================================================
+-. Campo CC en formulario shipper y consignee, campo WhatsApp. ==================================================================
+-. quitar la agencia de las tablas shipper, consignee y que los registros solo filtren los datos de cada agencias================
+
+2019-09-03
+-. colocar edicion al tracking en linea.=========================================================================================
+-. mostrar al buscar shipper y consignee en la modal de documento solo sus shippers y consignees de cada uno ====================
+-. los documentos de la grilla principal solo muestre los documentos de la agencia logueada.====================================
+-. colocar fecha en el email de tracking recibido.==============================================================================
+-. Revisar si en clientes, se muestra solo los datos de los clientes de la agencia que se logueó.===============================
+
+2019-09-05
+-. colocar el cliente en la columna agencia de la grilla de consignees.=========================================================
+===Revisión con Colombiana===
+2. Se ingresó un consignee desde el recibo de colombiana, se separó el nombre y apellidos con líneas y el sistema no ingresó bien el nombre, y lo creó doble.===
+6. CRÍTICO: El CC del correo en Shipper y Consignee=============================================================================
+7. CRÍTICO: El WhatsApp en el Consignee y la agencia============================================================================
+2. En CARGA Ordenar los nuevos tracking recibidos arriba en el datatable.==========================================================
+1. En CARGA Cambiar el combo del Consignee en el recibo del tracking y cambiar la palabra cliente por Consignee.======================
+3. En CARGA En el mensaje de recibido casillero colocar el contenido del tracking =====================================================
+-. EN RECIBO DE TRACKING: los casilleros que tengan ingreo el dia de hoy queda el badged en verde con en inventario de trackings.========================
+4. En CARGA En Shipper, Consignee y agencias colocar la opción de WhatsApp, también colocar la opción de CC para agregar correos, y que ese CC permita correos múltiple. =======================
+-. Tener las formas de pago en las dos (COD y PP) al guardar el documento.============================================================
+4. En CARGA En el Consignee y Shipper, colocar un campo adicional para correos y para teléfonos.===================================================
+4. En CARGA en recibo de tracking cambiar el combo de cliente por el de ELEMENT y colocar en vez de la palabra cliente,==================================
+Destinatario y que se pueda enviar un email consolidado al cliente y no uno por uno.================================================================
+6. En CARGA En las variables de las plantillas, mostrar el contenido del tracking y la fecha de recibo del tracking.=======================================
+-. Registrar shipper y consignee desde un componente aparte.. que se cree y se seleccione en el documento================================
+
+-. Revisar porque al crear consignee no tomo el prefijo de la agencia si no que tomo el prefijo de la principal.
+-. los emails templates que solo filtre por la agencia logueada
+
+1. Cuando se crea un recibo para courier y este tiene una agencia diferente a la principal, el prefijo del casillero no cambia, sigue usando el de la principal.
+4. En las tarifas de las agencias se debe colcoar la mínima de las agencias.
+**** 5. CRÍTICO: El logo variable en las plantillas de correo
+8. CRÍTICO: Es enredado crear consignee y shipper desde el recibo, mejor usemos una modal.
+9. CRÍTICO: Los controles a los menú por parte de los usuarios.
+10. Coloquemos un status de envío de email en los tracking que se anuncia el envío de email, y adicional se debe colcoar un JSON que permita guardar el historial de envío de correo.
+
+5. En CARGA en el consolidado mostrar la cantidad que se van a imprimir en los documentos.
+
+-. Cambiar formulario de usuarios por el de element y colocar campo de contraseña con el de element (tiene el ojito para ver la contraseña)
+-. Colocar dos botones en las formas de pago (COD y PP)
+-. No salga las libras en el label ni el FOB
+-. Crear campo tarifa minima para la agencia porque hay 2
+
+-. la factura proforma (invoice) en toda una hoja
+1. En CARGA QUe en la campanita aparezcan los prealertas de las personas.
+2. En Carga Mostrar un reporte de las personas que se registran a través de la web, mes a mes
+5. En CARGA cuando me registro, selecciono la ciudad y en el + del teléfono no se ve el código del país
+-. agregar cargos adicionales por defecto en la configuración (descripcion, valor);
+-. Agregar boton en la forma de pago que diga '+ Cargos' y al lado texto 'Desea agregar cargos a esta factura?'
+   La palabra cargos que este subrayada y que al pasar el mouse por encima, muestre los cargos que vienen de la config
+
+1. En CARGA En el control de acceso meter la administración, el BL y Clientes.
+2. En CARGA que funcione el control de acceso.
+3. En CARGA Arriba en donde se buscan tracking si no está el tracking en un recibo no muestra nada
+5. En CARGA A los contactos permitir colocar más email y más correos y la segunda línea de dirección.
+7. En CARGA La pregunta de agregar un cargo adicional.
+
+
+-. crear boton de guardar en shipper y consignee dentro del documento para asegurar los datos registrados.
+-. en la ayuda del logo de la agencia que diga 170px por 60px y a si debe registrar el logo.
+
+-. ***el tab recibido de cambiar status en el consolidado pasar a una vista sola, Logistica en Destino.
+   (despachar transportadora, despachar en los camiones, agregar status a las cajas etc).
+
+8. En RECIBOS DE CARGA, que se puedan imprimir en formatos de Guías MASTER y BL si es Marítimo.
+7. En EMAIL TEMPLATE, el logo debe ser variable, cada agencia envía email.
+10. Crear facturas para QuickBook.
+11. Exportar archivo para QuickBook.
+    Esto último lo está pidiendo un cliente nuevo que no conozco.
+    Pero nos recomendaron.
+
+
+-. Dejar en la grilla las cajas que no están consolidadas.
+
+autocomplete="aplextmautocomplete"
+
+===PRIORIDAD===
+====== J21.1. Colocar la tarifa mínima en la tabla del documento (Guardar y consultar de ahí cuando edito el documento).
+======J3.2. Agregar la tarifa mínima para la agencia hija.
+======J11.1. Agregar el nombre del sender en el email.
+======J5.3. Enviar email al cliente (Colocar check si el cliente no quiere que le lleguen las notificaciones a sus consignee), si este lo solicita.
+      (Cuando se envía un email a un consignee, que este si tiene un cliente, y si el cliente tiene veiricado que quiere recibir correos, se vaya con CCO).
+======J5.1. Mostrar el cliente en el documento warehouse si el consignee tiene un cliente.
+======J3.6. Crear el logo de las agencias como variable.
+======J10.1. En la búsqueda global de trackins la consulta no muestra los que no tienen recibos.
+======J14.2. Mostrar el cliente al lado del consignee si lo tiene, Grilla principal y documento.
+======J14.3. Editar el nombre del consignee desde la grilla de recibo de casillero.
+======colocar el consignee y la agnecia al buscar las guias en el consolidado.
+======J14.5. Quitar la opción de colocar Piezas desde la generación de recibos lo que dijo Duma.
+======J16.3. Que se pueda ver el nombre del consignatario cuando abro el modal desde el botón GUIAS.
+======J15.3. Revisar que esté saliendo bien el TSA con el logo del agente (Que el logo lo pida si se chequea el agente).
+======J16.4. Mostrar la cantidad de piezas en el consolidado.
+======J9.1. Separar los usuarios de las agencias y los casilleros y los de la agencia principal, por pestañas, que si ingresa una agencia que no es principal
+vea sus usuarios y sus casilleros, que si entra la principal pueda ver sus usuarios y casilleros, y pueda seleccionar de que agencia quiere ver usuarios y casilleros.
+======J17.3. Mostrar la cantidad de piezas que tiene la cajita.
+======J17.4. Cuando agrupo cajas seleccionar si es MINTIC y que si no son MINTIC, se sumen: (Piezas, Peso y Declarado)
+======J10.2. Agregar la fecha de recibo del tracking en la consulta global que está en la barra arriba.
+
+J7.4. Informe de Manifiesto interno.
+R7.1. Informe de agencias, lo que se envía a la principal con utilidades.
+DJ4.1. Impresión de documentos con el programa que compramos.
+******DJR6.1. Facturar Recibos, Ojo: Vi que varios recibos se pueden facturar en una sola factura, colocar un Check al cliente para definir si se le hace factura solo a él.
+DJR6.1. Generar archivo plano para subir facturación a QB (Flete, Seguro, Impuestos, Otros Cobros).
+
+PREGUNTAS PARA RAMON
+- Borrar fisicamente los usuarios de casillero?
+- En la plantilla de correo de registro de casillero agregar la info del usuario y las url y revisar porque no 
+  aparece el sender el el email
+- colocar las imagenes con tamaño obligado
+- colocar en el recibo de trackin si esta prealertado, si se despacha o no segun el check.
+- colocar en la plantilla de email de trackin recibido, los links para rastrear e ir al casillero
+- colocar filtro de agencia para la busqueda de consignee en recibo de tracking
+- colocar lb en el peso al crear recibo desde recibo casillero
+- colocar tilde en donde dice envio al crear recibo desde recibo casillero
+- quitar intensidad al nombre de la agencia en el formulario de documento
+- revisar la generacion del detalle cuando se crea el documento desde el recibo de tracking
+  porque no coloco la P y el consecutivo de la pieza
+- El boton de agregar en la modal del boton del detalle del documento que tiene los tracking debe ir con icono de plus
+  y tilde en la u de numero y la palabra trackings en plural y asociados en singular (corregir)
+- en la miga de pan del documento dice crear warehouse cuando en verdad estoy editando
+- los botones de la modal de agregar tracking del campo contenido en documento no tienen iconos
+- SUGERENCIA DE DUVIER: el boton verde del contenido para agregar trackings no debe ir alli.
+
+
+- Dejar factura proforma en una sola copia.
+- Revisar el label en el consolidado porque estan saliendo los datos originales, colocar datos fake.
+- Colocar en el numero de guia el COL siempre en vez de el codigo de la ciudad. ej: MZL00002545P1 => COL00002545P1
+
+1. copia de base de datos****
+2. consignee hijo en consignee
+3. quitar letras de las guias colocar AHWB*****
+4. Dejar factura proforma en una sola copia.****
+5. Revisar por que  da mas valores en los totales de la impresion****
+
+*****- Colocar formulario de validacion de element para el registro de cliente y quitar el calcular en el zip code 
+y borrar el consignee y user si no se esta usando (de forma permanente)
+
+- Pasos para config impresora: 
+  Elegir sistema operativo y explicar que se debe descargar e instalar en el pc
+ ***** Seleccionar impresora con el combo que sale de las impresoras instaladas (impresora para documentos - impresora para label)
+
+- validar antes de imprimir si tiene configurada la impresora o si la imresora configurada existe.
+-****** ocultar consolidado agencia para la principal
+-****** poner consecutivo en consolidado agencia
+- ***** *y poner (editando..) para saber que se esta editando en la modal que sale a la derecha
+
+- SELECCIONE UNA CIUDAD DE LA LISTA
+- boton guardar configuracion de impresora
+- mirar que error manda cuando no encuentra la impresora
+- *******cargar impresoras automaticamente
+- *******reducir el tamaño de los selects
+
+- colocar pais en las tarifas (servicios)
+
+1. Debemos verificar que las impresoras del PC estén guardadas en el sistema.
+2. Si no están se imprimen los documentos en PDF
+3. Si existen se imprime en las impresoras encontradas en la config y si no.. se imprime en el pdf
