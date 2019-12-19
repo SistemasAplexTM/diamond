@@ -236,6 +236,7 @@ class MasterController extends Controller
             ->leftJoin('deptos', 'localizacion.deptos_id', '=', 'deptos.id')
             ->leftJoin('pais AS x', 'deptos.pais_id', 'x.id')
             ->select(
+                'a.agencia_id',
                 'a.num_master',
                 'a.master_id',
                 'a.account_information',
@@ -708,5 +709,17 @@ class MasterController extends Controller
       ->header('Content-Type', 'application/xml')
       ->header('Content-Disposition', 'attachment; filename="Dmuisca.xml"');
 
+    }
+
+    public function printDelivery($id)
+    {
+        $master    = $this->getMasterForImpress($id);
+        $detalle = $this->getMasterDetalleForImpress($id);
+        $agencia = [];
+        if($master){
+            $agencia = $this->getDataAgenciaById($master->agencia_id);
+        }
+        return view('pdf/masterTemplates/deliveryOrder', compact('agencia','master','detalle'));
+        // return array('agencia' => $agencia, 'data' => $master, 'detalle' => $detalle);
     }
 }

@@ -108,6 +108,7 @@ Route::group(['middleware' => 'auth'], function () {
   Route::get('master/getCosts/{master_id}', 'MasterController@getCosts');
   Route::delete('master/deleteCost/{id}', 'MasterController@deleteCost');
   Route::get('master/generateXml/{id}', 'MasterController@generateXml');
+  Route::get('master/printDelivery/{id_master}', 'MasterController@printDelivery');
 
   /*--- MODULO TRACKINGS ---*/
   Route::resource('tracking', 'TrackingController', ['except' => ['show', 'create', 'edit', 'update']]);

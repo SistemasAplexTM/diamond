@@ -479,7 +479,7 @@
 					                </td>
 					                <td width="6%" align="center" valign="top" class="left_line" style="border-left: 1px solid {{ $color }};">
 					                <div class="margin_div text_titles_tc" style="color: {{ $color }}">to</div>
-					                <div id="to_1" class="text_regular_c">{{ $data->to2 }}</div>
+					                <div id="to_1" class="text_regular_c">{{ $data->to1 }}</div>
 					                </td>
 					                <td width="4%" align="center" valign="top" class="left_line" style="border-left: 1px solid {{ $color }};">
 					                <div class="margin_div text_titles_tc" style="color: {{ $color }}">by</div>
@@ -487,7 +487,7 @@
 					                </td>
 					                <td width="6%" align="center" valign="top" class="left_line" style="border-left: 1px solid {{ $color }};">
 					                <div class="margin_div text_titles_tc" style="color: {{ $color }}">to</div>
-					                <div id="to_2" class="text_regular_c">{{ $data->to3 }}</div>
+					                <div id="to_2" class="text_regular_c">{{ $data->to1 }}</div>
 					                </td>
 					                <td width="4%" align="center" valign="top" class="left_line" style="border-left: 1px solid {{ $color }};">
 					                <div class="margin_div text_titles_tc" style="color: {{ $color }}">by</div>
