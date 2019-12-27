@@ -46,6 +46,7 @@
             color: #1d1d1e;
         }
     </style>
+    <?php exit(); ?>
     {{-- CABECERA --}}
     <table cellspacing="0" cellpadding="0" id="tableContainer" border="0" width="100%">
         <thead>
@@ -165,16 +166,11 @@
                     <div id="detalle">{{ ($val->ship_nomfull2) ? $val->ship_nomfull2 : $val->nom_ship }}</div>
                     <div id="detalle">{{ ($val->ship_dir2) ? $val->ship_dir2 : $val->dir_ship }}</div>
                     <div id="detalle">{{ ($val->ship_tel2) ? $val->ship_tel2 : $val->tel_ship }}</div>
-                    {{-- <div id="detalle" >{{ ($val->shipper_json) ? $shipper_json->ciudad : $val->ciu_ship }} /
-                    {{ ($val->shipper_json) ? $shipper_json->pais : $val->pais_ship }}, {{ $val->zip_ship }}</div> --}}
                 </td>
                 <td id="detalle" style="width: 22%" valign="top">
                     <div id="detalle">{{ ($val->cons_nomfull2) ? $val->cons_nomfull2 : $val->nom_cons }}</div>
                     <div id="detalle">{{ ($val->cons_dir2) ? $val->cons_dir2 : $val->dir_cons }}</div>
                     <div id="detalle">{{ ($val->cons_tel2) ? $val->cons_tel2 : $val->tel_cons }}</div>
-                    {{-- <div id="detalle" >{{ ($val->consignee_json) ? $consignee_json->ciudad : $val->ciu_cons }} /
-                    {{ ($val->consignee_json) ? $consignee_json->pais : $val->pais_cons }}, {{ $val->zip_cons }}</div>
-                    --}}
                 </td>
                 <td id="detalle" style="width: 20%">
                     {{ str_replace(",", ", ", str_replace("/", "/ ",$val->contenido2)) }}</td>
@@ -245,6 +241,7 @@
         </tfoot>
         </tbody>
     </table>
+
 </body>
 
 </html>

@@ -131,11 +131,17 @@
     </div>
   </div>
   <!-- Scripts -->
+  <script src="{{ asset('js/plugins/zip.js-master/scripts/JSPrintManager.js') }}"></script>
+  <script src="{{ asset('js/plugins/zip.js-master/scripts/zip.js') }}"></script>
+  <script src="{{ asset('js/plugins/zip.js-master/scripts/zip-ext.js') }}"></script>
+  <script src="{{ asset('js/plugins/zip.js-master/scripts/deflate.js') }}"></script>
+
   <script src="{{ asset('js/plantilla.js') }}"></script>
-  {!! $wcppScriptDetect !!}
-  {!! $wcpScript !!}
+  {{-- {!! $wcppScriptDetect !!}
+  {!! $wcpScript !!} --}}
   <script src="{{ asset('js/app.js') }}"></script>
   {{-- <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-6jHF7Z3XI3fF4XZixAuSu0gGKrXwoX/w3uFPxC56OtjChio7wtTGJWRW53Nhx6Ev" crossorigin="anonymous"> --}}
+
   <script src="{{ asset('js/templates/login.js') }}"></script>
 </body>
 

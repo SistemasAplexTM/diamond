@@ -106,7 +106,7 @@ $(document).ready(function () {
           "<li><a onclick=\"createLabel(" + full.id + ", '" + full.num_master + "')\"> <spam class='fal fa-print'></spam> Labels</a></li>" +
           // "<li><a href='master/imprimirLabel/" +full.id +"' target='_blank'> <spam class='fal fa-print'></spam> Labels 2</a></li>" +
           "<li><a href='impresion-documento/pdfContrato' target='_blank'> <spam class='fal fa-print'></spam> Contrato</a></li>" +
-          "<li><a href='impresion-documento-tsa/pdfTsa/" + full.carrier_id + "' target='_blank'> <spam class='fal fa-print'></spam> TSA</a></li>" +
+          "<li><a href='impresion-documento-tsa/pdfTsa/" + full.num_master + "/" + full.carrier_id + "' target='_blank'> <spam class='fal fa-print'></spam> TSA</a></li>" +
           "<li><a href='master/printDelivery/" + full.id + "' target='_blank'> <spam class='fal fa-print'></spam> Delivery Order</a></li>" +
           // "<li><a href='printDelivery/" + full.id + "' target='_blank'> <spam class='fal fa-print'></spam> Delivery Order</a></li>" +
           btn_consolidado +

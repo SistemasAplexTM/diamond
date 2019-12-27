@@ -895,16 +895,16 @@
         if (data.type) {
           if (data.type == 'c') {
             this.consignee = data;
-            this.datos_consignee = data.name + '\n' + data.direccion + '\n' +
-            data.ciudad + ', ' + data.estado + ' ' + data.pais + ' ' + ((data.zip != null) ? data.zip : '') + '\n' + data.telefono +  '\n' + ((data.contacto != null) ? 'Contacto: '+data.contacto : '');
+            this.datos_consignee = data.name + '\nPhone: ' + data.telefono +  '\n' + ((data.contacto != null) ? 'Contact: '+data.contacto : '') + '\n' + data.direccion + '\n' +
+            data.ciudad + ', ' + data.estado + ' ' + data.pais + ' ' + ((data.zip != null) ? data.zip : '') ;
           }else if(data.type == 'cr'){
             this.carrier = data;
-            this.datos_carrier = data.name + '\n' + data.direccion + '\n' +
-            data.ciudad + ', ' + data.estado + ' ' + data.pais + ' ' + ((data.zip != null) ? data.zip : '') + '\n' + data.telefono +  '\n' + ((data.contacto != null) ? 'Contacto: '+data.contacto : '');
+            this.datos_carrier = data.name + '\nPhone: ' + data.telefono +  '\n' + ((data.contacto != null) ? 'Contact: '+data.contacto : '') + '\n' + data.direccion + '\n' +
+            data.ciudad + ', ' + data.estado + ' ' + data.pais + ' ' + ((data.zip != null) ? data.zip : '') ;
           }else{
             this.shipper = data;
-            this.datos_shipper = data.name + '\n' + data.direccion + '\n' +
-            data.ciudad + ', ' + data.estado + ' ' + data.pais + ' ' + ((data.zip != null) ? data.zip : '') + '\n' + data.telefono +  '\n' + ((data.contacto != null) ? 'Contacto: '+data.contacto : '');
+            this.datos_shipper = data.name + '\nPhone: ' + data.telefono +  '\n' + ((data.contacto != null) ? 'Contact: '+data.contacto : '') + '\n' + data.direccion + '\n' +
+            data.ciudad + ', ' + data.estado + ' ' + data.pais + ' ' + ((data.zip != null) ? data.zip : '') ;
           }
         }else{
           if (data == 'c') {
@@ -988,12 +988,13 @@
           'created_at': this.getTime()
         }).then(response => {
             toastr.success('Registro exitoso.');
-            location.reload(true);
             window.open("../../imprimir/" + response.data.id_master + '/' + true,'_blank');
+            location.href ='/master';
         });
       },
       update: function(){
         axios.put('/master/' + this.master, {
+          'num_master': this.num_master,
           'shipper_id': this.shipper.id,
           'shipper': this.datos_shipper,
           'consignee_id': this.consignee.id,
@@ -1032,8 +1033,8 @@
           'updated_at': this.getTime()
         }).then(response => {
             toastr.success('Actualización exitosa.');
-            // location.reload(true);
             window.open("../imprimir/" + response.data.id_master + '/' + true, '_blank');
+            location.href ='/master';
         });
       },
       edit(id){

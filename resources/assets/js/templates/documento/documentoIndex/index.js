@@ -261,14 +261,15 @@ function actionsButtons(data, type, full, meta) {
 
       /* CONFIGURAR IMPRESION CON WCP */
       if (print_labels != '') {
-        label_wcp = '<li><a onclick="javascript:jsWebClientPrint.print(\'useDefaultPrinter=false&printerName=' + print_labels + '&filetype=' + print_format + '&id=' + full.id + '&agency_id=' + agency_id + '&document=warehouse&label=true\')"> <spam class="fal fa-print"></spam> Label Warehouse</a></li>';
+        // var label_printer_name = 'Nitro PDF Creator (Pro 12)';
+        label_wcp = '<li><a onclick="print_direct(\'impresion-documento-label/' + full.id + '/warehouse\', \'' + print_labels + '\', \'File\')"> <spam class="fal fa-print"></spam> Label Warehouse</a></li>';
       }
       if (print_documents != '') {
-        wrh_wcp = '<li><a onclick="javascript:jsWebClientPrint.print(\'useDefaultPrinter=false&printerName=' + print_documents + '&filetype=' + print_format + '&id=' + full.id + '&agency_id=' + agency_id + '&document=warehouse\')"> <spam class="fal fa-print"></spam> Warehouse</a></li>';
+        wrh_wcp = '<li><a onclick="print_direct(\'impresion-documento/' + full.id + '/warehouse\', \'' + print_documents + '\', \'File\')"> <spam class="fal fa-print"></spam> Warehouse</a></li>';
         if (full.liquidado == 1) {
-          guia_wcp = '<li><a onclick="javascript:jsWebClientPrint.print(\'useDefaultPrinter=false&printerName=' + print_documents + '&filetype=' + print_format + '&id=' + full.id + '&agency_id=' + agency_id + '&document=guia\')"> <spam class="fal fa-print"></spam> Invoice</a></li>';
-          label_guia_wcp = '<li><a onclick="javascript:jsWebClientPrint.print(\'useDefaultPrinter=false&printerName=' + print_labels + '&filetype=' + print_format + '&id=' + full.id + '&agency_id=' + agency_id + '&document=guia&label=true\')"> <spam class="fal fa-print"></spam> Label Invoice</a></li>';
-          guia_invoice_wcp = '<li><a onclick="javascript:jsWebClientPrint.print(\'useDefaultPrinter=false&printerName=' + print_documents + '&filetype=' + print_format + '&id=' + full.id + '&agency_id=' + agency_id + '&document=invoice_guia\')"> <spam class="fal fa-print"></spam> Factura Proforma</a></li>';
+          guia_wcp = '<li><a onclick="print_direct(\'impresion-documento/' + full.id + '/guia\', \'' + print_documents + '\', \'File\')"> <spam class="fal fa-print"></spam> Invoice</a></li>';
+          label_guia_wcp = '<li><a onclick="print_direct(\'impresion-documento-label/' + full.id + '/guia\', \'' + print_documents + '\', \'File\')"> <spam class="fal fa-print"></spam> Label Invoice</a></li>';
+          guia_invoice_wcp = '<li><a onclick="print_direct(\'impresion-documento/' + full.id + '/invoice_guia\', \'' + print_documents + '\', \'File\')"> <spam class="fal fa-print"></spam> Factura Proforma</a></li>';
         }
       }
 
@@ -298,6 +299,33 @@ function actionsButtons(data, type, full, meta) {
       return btn_edit + btns + ' ' + btn_tags + btn_delete;
     }
   }
+}
+
+function print_direct(param, printer_name, doc) {
+  axios.get(param).then(data => {
+    JSPM.JSPrintManager.auto_reconnect = true;
+    JSPM.JSPrintManager.start();
+    JSPM.JSPrintManager.WS.onStatusChanged = function () {
+      if (JSPM.JSPrintManager.websocket_status == JSPM.WSStatus.Open) {
+        // Impresion Multiple
+        var cpj = new JSPM.ClientPrintJob();
+        // imprime con una impresora seleccionada
+        cpj.clientPrinter = new JSPM.InstalledPrinter(printer_name);
+
+        var my_file1 = new JSPM.PrintFilePDF('/files/' + doc + '.pdf', JSPM.FileSourceType.URL, 'documento.pdf', 1);
+        cpj.files.push(my_file1);
+        cpj.sendToClient();
+      } else {
+        if (JSPM.JSPrintManager.websocket_status == JSPM.WSStatus.Closed) {
+          console.log('JSPM is not installed or not running!');
+        } else {
+          if (JSPM.JSPrintManager.websocket_status == JSPM.WSStatus.BlackListed) {
+            console.log('JSPM has blacklisted this website!');
+          }
+        }
+      }
+    };
+  }).catch(error => { console.log('Error ', error) })
 }
 
 function showVolumen(data, type, full, meta) {

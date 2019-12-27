@@ -1,4 +1,4 @@
-$(document).ready(function() {
+$(document).ready(function () {
     $('#tbl-transportadoras_locales').DataTable({
         ajax: 'transportadoras_locales/all',
         columns: [{
@@ -12,14 +12,14 @@ $(document).ready(function() {
             name: 'b.descripcion'
         }, {
             sortable: false,
-            "render": function(data, type, full, meta) {
+            "render": function (data, type, full, meta) {
                 var btn_edit = '';
                 var btn_delete = '';
                 var params = [
                     full.id, +full.pais_id, "'" + full.nombre + "'", "'" + full.url_rastreo + "'"
                 ];
                 var btn_edit = "<a onclick=\"edit(" + params + ")\" class='edit_btn' data-toggle='tooltip' data-placement='top' title='Editar'><i class='fal fa-pencil fa-lg'></i></a> ";
-                var btn_delete = " <a onclick=\"eliminar(" + full.id + "," + true + ")\" class='delete_btn' data-toggle='tooltip' data-placement='top' title='Eliminar'><i class='fal fa-trash-alt fa-lg'></i></a> ";
+                var btn_delete = " <a onclick=\"eliminar(" + full.id + "," + false + ")\" class='delete_btn' data-toggle='tooltip' data-placement='top' title='Eliminar'><i class='fal fa-trash-alt fa-lg'></i></a> ";
                 return btn_edit + btn_delete;
             },
             width: 100
@@ -42,36 +42,36 @@ function edit(id, pais_id, nombre, url_rastreo) {
 var objVue = new Vue({
     el: '#transportadoras_locales',
     data: {
-      id: null,
-      paises: [],
-      pais_id: null,
-      nombre: null,
-      url_rastreo: null,
-      editar: 0,
-      formErrors: {},
-      listErrors: {}
+        id: null,
+        paises: [],
+        pais_id: null,
+        nombre: null,
+        url_rastreo: null,
+        editar: 0,
+        formErrors: {},
+        listErrors: {}
     },
-    mounted: function() {
-      this.getPaises()
+    mounted: function () {
+        this.getPaises()
     },
     methods: {
-        resetForm: function() {
+        resetForm: function () {
             this.id = null;
             this.pais_id = null;
             this.nombre = null;
             this.url_rastreo = null;
             this.editar = 0;
         },
-        getPaises: function(){
-          let me = this
-          axios.get('transportadoras_locales/getPaises').then(response => {
-              me.paises = response.data
-          });
+        getPaises: function () {
+            let me = this
+            axios.get('transportadoras_locales/getPaises').then(response => {
+                me.paises = response.data
+            });
         },
         /* metodo para eliminar el error de los campos del formulario cuando dan clic sobre el */
-        deleteError: function(element) {
+        deleteError: function (element) {
             let me = this;
-            $.each(me.listErrors, function(key, value) {
+            $.each(me.listErrors, function (key, value) {
                 if (key !== element) {
                     me.listErrors[key] = value;
                 } else {
@@ -79,17 +79,17 @@ var objVue = new Vue({
                 }
             });
         },
-        rollBackDelete: function(data) {
+        rollBackDelete: function (data) {
             var urlRestaurar = 'transportadoras_locales/restaurar/' + data.id;
             axios.get(urlRestaurar).then(response => {
                 toastr.success('Registro restaurado.');
                 this.updateTable();
             });
         },
-        updateTable: function() {
+        updateTable: function () {
             refreshTable('tbl-transportadoras_locales');
         },
-        delete: function(data) {
+        delete: function (data) {
             this.formErrors = {};
             this.listErrors = {};
             if (data.logical === true) {
@@ -106,7 +106,7 @@ var objVue = new Vue({
                 });
             }
         },
-        create: function() {
+        create: function () {
             let me = this;
             this.$validator.validateAll().then((result) => {
                 if (result) {
@@ -114,7 +114,7 @@ var objVue = new Vue({
                         'pais_id': this.pais_id,
                         'nombre': this.nombre,
                         'url_rastreo': this.url_rastreo
-                    }).then(function(response) {
+                    }).then(function (response) {
                         if (response.data['code'] == 200) {
                             toastr.success('Registro creado correctamente.');
                             toastr.options.closeButton = true;
@@ -124,25 +124,25 @@ var objVue = new Vue({
                             toastr.warning(response.data['error']);
                             toastr.options.closeButton = true;
                         }
-                    }).catch(function(error) {
-                      console.log(error);
+                    }).catch(function (error) {
+                        console.log(error);
                     });
                 } else {
                     toastr.warning("Error. Porfavor verifica los datos ingresados.<br>");
                 }
-            }).catch(function(error) {
+            }).catch(function (error) {
                 console.log(error);
                 toastr.warning('Error: -' + error);
             });
         },
-        update: function() {
+        update: function () {
             var me = this;
             axios.put('transportadoras_locales/' + this.id, {
-              'pais_id': this.pais_id,
-              'nombre': this.nombre,
-              'url_rastreo': this.url_rastreo
-            }).then(function(response) {
-              console.log('error');
+                'pais_id': this.pais_id,
+                'nombre': this.nombre,
+                'url_rastreo': this.url_rastreo
+            }).then(function (response) {
+                console.log('error');
                 if (response.data['code'] == 200) {
                     toastr.success('Registro Actualizado correctamente');
                     toastr.options.closeButton = true;
@@ -153,13 +153,13 @@ var objVue = new Vue({
                     toastr.warning(response.data['error']);
                     toastr.options.closeButton = true;
                 }
-            }).catch(function(error) {
+            }).catch(function (error) {
                 toastr.error("Porfavor completa los campos obligatorios.", {
                     timeOut: 50000
                 });
             });
         },
-        edit: function(data) {
+        edit: function (data) {
             var me = this;
             me.resetForm();
             this.id = data['id'];
@@ -170,7 +170,7 @@ var objVue = new Vue({
             this.formErrors = {};
             this.listErrors = {};
         },
-        cancel: function() {
+        cancel: function () {
             var me = this;
             me.resetForm();
         },

@@ -180,28 +180,60 @@ var objVue = new Vue({
         toastr.options.closeButton = true;
       });
     },
-    printDocument: function () {
+    printDocument: async function () {
+      // var label_printer_name = 'Nitro PDF Creator (Pro 12)';
       if ($('#documentoIndex').data('id_print') != '' && $('#documentoIndex').data('doc_print') != '') {
         if (print_labels != '') {
-          javascript: jsWebClientPrint.print("useDefaultPrinter=false&printerName=" + print_labels + "&filetype=" + print_format + "&id=" + $('#documentoIndex').data('id_print') + "&agency_id=" + agency_id + "&document=" + $('#documentoIndex').data('doc_print') + "&label=true")
+          await this.print_direct('impresion-documento-label/' + $('#documentoIndex').data('id_print') + '/' + $('#documentoIndex').data('doc_print'), print_labels, 'File');
+          // javascript: jsWebClientPrint.print("useDefaultPrinter=false&printerName=" + print_labels + "&filetype=" + print_format + "&id=" + $('#documentoIndex').data('id_print') + "&agency_id=" + agency_id + "&document=" + $('#documentoIndex').data('doc_print') + "&label=true")
         }
         else {
           window.open('impresion-documento-label/' + $('#documentoIndex').data('id_print') + '/' + $('#documentoIndex').data('doc_print'), '_blank');
         }
-        setTimeout(function () {
+        setTimeout(async function () {
           if (print_documents != '') {
-            javascript: jsWebClientPrint.print("useDefaultPrinter=false&printerName=" + print_documents + "&filetype=" + print_format + "&id=" + $('#documentoIndex').data('id_print') + "&agency_id=" + agency_id + "&document=" + $('#documentoIndex').data('doc_print'))
+            await this.print_direct('impresion-documento/' + $('#documentoIndex').data('id_print') + '/' + $('#documentoIndex').data('doc_print'), print_documents, 'File');
+            // javascript: jsWebClientPrint.print("useDefaultPrinter=false&printerName=" + print_documents + "&filetype=" + print_format + "&id=" + $('#documentoIndex').data('id_print') + "&agency_id=" + agency_id + "&document=" + $('#documentoIndex').data('doc_print'))
           }
           else {
             window.open('impresion-documento/' + $('#documentoIndex').data('id_print') + '/' + $('#documentoIndex').data('doc_print'), '_blank');
           }
-        }, 1000);
+        }, 2000);
         if ($('#documentoIndex').data('doc_print') == 'guia') {
           setTimeout(function () {
             window.open('impresion-documento/' + $('#documentoIndex').data('id_print') + '/invoice_guia', '_blank');
-          }, 1500);
+          }, 3000);
         }
       }
+    },
+    print_direct: async function (url, printer_name, doc) {
+      await axios.get(url).then(data => {
+        JSPM.JSPrintManager.auto_reconnect = true;
+        JSPM.JSPrintManager.start();
+        JSPM.JSPrintManager.WS.onStatusChanged = function () {
+          if (JSPM.JSPrintManager.websocket_status == JSPM.WSStatus.Open) {
+            // Impresion Multiple
+            var cpj = new JSPM.ClientPrintJob();
+            // imprime con una impresora seleccionada
+            cpj.clientPrinter = new JSPM.InstalledPrinter(printer_name);
+
+            var my_file1 = new JSPM.PrintFilePDF('/files/' + doc + '.pdf', JSPM.FileSourceType.URL, 'documento.pdf', 1);
+            cpj.files.push(my_file1);
+            cpj.sendToClient();
+            console.log('fin prinnt');
+
+            return true;
+          } else {
+            if (JSPM.JSPrintManager.websocket_status == JSPM.WSStatus.Closed) {
+              console.log('JSPM is not installed or not running!');
+            } else {
+              if (JSPM.JSPrintManager.websocket_status == JSPM.WSStatus.BlackListed) {
+                console.log('JSPM has blacklisted this website!');
+              }
+            }
+          }
+        };
+      }).catch(error => { console.log('Error ', error) })
     },
     sendMail: function (id) {
       axios.get('documento/sendEmailDocument/' + id).then(function (response) {

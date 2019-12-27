@@ -151,8 +151,7 @@ class DocumentoController extends Controller
               ->first();
           // OBTENER LA CONFIGURACION DE LA IMPRESORA
           $printers = Session::get('printer');
-          //   print_r($printers);
-          //   exit();
+
           JavaScript::put([
               'print_labels' => (($printers) ? $printers->label : ''),
               'print_documents'  => (($printers) ? $printers->default : ''),
@@ -1318,11 +1317,11 @@ class DocumentoController extends Controller
         return $pdf->stream('contrato.pdf');
     }
 
-    public function pdfTsa($carrier_id)
+    public function pdfTsa($master, $carrier_id)
     {
         // $agencia2 = $this->getDataAgenciaById(1);
         $data = Transportador::findOrFail($carrier_id);
-        $pdf     = PDF::loadView('pdf.tsaPdf', compact('data'));
+        $pdf     = PDF::loadView('pdf.tsaPdf', compact('data', 'master'));
         $this->AddToLog('Impresion TSA');
         return $pdf->stream('TSA.pdf');
     }
@@ -1713,6 +1712,7 @@ class DocumentoController extends Controller
                                     'b.num_guia',
                                     'b.piezas',
                                     'b.volumen',
+                                    'b.peso2',
                                     'c.nombre_full as ship_nomfull',
                                     'c.direccion as ship_dir',
                                     'c.telefono as ship_tel',
@@ -1730,7 +1730,7 @@ class DocumentoController extends Controller
                                     'd.telefono as cons_tel',
                                     'i.descripcion as cons_pais',
                                     'b.declarado2',
-                                    'j.peso2',
+                                    'j.peso2 AS peso2_sum',
                                     'b.contenido2',
                                     'b.liquidado',
                                     'pa.pa',
@@ -1779,7 +1779,7 @@ class DocumentoController extends Controller
                                 $this->AddToLog('Impresion Consolidado guias (' . $id . ')');
                                 if ($documento->transporte_id == 1) {
                                     if (env('APP_TYPE') === 'courier') {
-                                        if (env('APP_CLIENT') === 'colombiana') {
+                                        if (env('APP_CLIENT') === 'colombiana' || env('APP_CLIENT') === 'diamond') {
                                             return view('pdf/consolidadoGuiasPdf2', compact('documento', 'detalle', 'detalleConsolidado'));
                                             // $pdf = PDF::loadView('pdf.consolidadoGuiasPdf2', compact('documento', 'detalle', 'detalleConsolidado'));
                                         } else {
@@ -1875,6 +1875,7 @@ class DocumentoController extends Controller
                                         'b.num_warehouse',
                                         'b.num_guia',
                                         'b.volumen',
+                                        'b.peso2',
                                         'c.nombre_full as ship_nomfull',
                                         DB::raw('CONCAT_WS(" ", c . primer_nombre, c . segundo_nombre, c . primer_apellido, c . segundo_apellido) as nom_ship'),
                                         'c.direccion as dir_ship',
@@ -1892,7 +1893,7 @@ class DocumentoController extends Controller
                                         'd.telefono as tel_cons',
                                         'i.descripcion as pais_cons',
                                         'b.declarado2',
-                                        'j.peso2',
+                                        'j.peso2 AS peso2_sum',
                                         'b.contenido2',
                                         'b.liquidado',
                                         'b.piezas',
@@ -1942,7 +1943,7 @@ class DocumentoController extends Controller
                                 if ($peso_t === 0 and $decla_t === 0) {
                                     $this->AddToLog('Impresion Consolidado (' . $id . ')');
                                     if (env('APP_TYPE') === 'courier') {
-                                        if (env('APP_CLIENT') === 'colombiana') {
+                                        if (env('APP_CLIENT') === 'colombiana' || env('APP_CLIENT') === 'diamond') {
                                             $pdf          = PDF::loadView('pdf.consolidadoPdfColombiana', compact('documento', 'detalle', 'detalleConsolidado'));
                                         } else {
                                             if ($documento->pais_id_document === $pais_id_puntos) {
@@ -1962,7 +1963,7 @@ class DocumentoController extends Controller
                                             $pdf          = PDF::loadView('pdf.consolidadoPdf2Maritimo', compact('documento', 'detalle', 'detalleConsolidado'));
                                         }
                                     }
-                                    $nameDocument = $documento->tipo_documento . '-' . $documento->id;
+                                    $nameDocument = $documento->tipo_documento . ' - ' . $documento->consecutivo;
                                 } else {
                                     $error = 'El peso o valor declarado supera lo permitido por cliente. Por favor revisar.';
                                     return view('errors/generalError', compact('error'));
@@ -1973,11 +1974,11 @@ class DocumentoController extends Controller
                 }
             }
         }
-        if ($view) {
-            return $pdf->stream($nameDocument . '.pdf'); //visualizar en el navegador
-        } else {
+        // if ($view) {
             $pdf->save(public_path() . '/files/File.pdf'); //GUARDAR PARA IMPRIMIR POR DEFECTO
-        }
+            return $pdf->stream($nameDocument . '.pdf'); //visualizar en el navegador
+        // } else {
+        // }
         // return $pdf->download($nameDocument . ' . pdf');// DESCARGAR ARCHIVO
     }
 
@@ -2382,6 +2383,7 @@ class DocumentoController extends Controller
                 'a.num_bolsa',
                 'c.num_warehouse',
                 'c.num_guia',
+                'c.peso2 AS peso2',
                 // 'a.shipper AS shipper_json',
                 // 'a.consignee AS consignee_json',
                 'd.id as shipper_id',
@@ -2395,7 +2397,7 @@ class DocumentoController extends Controller
                 'f.id AS pa_id',
                 'f.pa',
                 'c.declarado2',
-                DB::raw('ROUND(g.peso2,1) as peso2'),
+                DB::raw('ROUND(g.peso2,1) as peso2_sum'),
                 DB::raw('ROUND(g.peso,1) as peso'),
                 'g.guias_agrupadas',
                 'c.liquidado',
@@ -2445,6 +2447,7 @@ class DocumentoController extends Controller
               	) AS shipper_json')
             )
             ->where($where)
+            ->orderBy('c.num_guia', 'DESC')
             ->get();
         return \DataTables::of($detalle)->make(true);
     }
@@ -3364,6 +3367,7 @@ class DocumentoController extends Controller
     public function exportLiquimp($id)
     {
         $data = DB::table('consolidado_detalle AS a')
+            ->join('documento AS doc', 'doc.id', 'a.consolidado_id')
             ->join('documento_detalle AS b', 'a.documento_detalle_id', 'b.id')
             ->join('posicion_arancelaria AS c', 'c.id', 'b.arancel_id2')
             ->join('shipper AS d', 'd.id', 'b.shipper_id')
@@ -3374,7 +3378,43 @@ class DocumentoController extends Controller
             ->leftJoin('localizacion AS j', 'i.localizacion_id', 'j.id')
             ->leftJoin('deptos AS k', 'j.deptos_id', 'k.id')
             ->leftJoin('pais AS l', 'k.pais_id', 'l.id')
+            ->leftJoin('master AS ma', 'doc.master_id', 'ma.id')
+            ->leftJoin('master_detalle AS ma_d', 'ma_d.master_id', 'ma.id')
+            ->leftJoin(DB::raw("(SELECT
+                    s.id,
+                    s.nombre_full,
+                    s.direccion,
+                    s.telefono,
+                    s.correo,
+                    s.zip,
+                    l.nombre AS ciudad,
+                    de.descripcion AS depto,
+                    pa.descripcion AS pais
+                    FROM
+                    shipper AS s
+                    INNER JOIN localizacion AS l ON l.id = s.localizacion_id
+                    INNER JOIN deptos AS de ON l.deptos_id = de.id
+                    INNER JOIN pais AS pa ON de.pais_id = pa.id
+                    ) AS ss"), 'a.shipper', 'ss.id')
+            ->leftJoin(DB::raw("(SELECT
+                    cc.id,
+                    cc.nombre_full,
+                    cc.direccion,
+                    cc.telefono,
+                    cc.correo,
+                    cc.zip,
+                    ll.nombre AS ciudad,
+                    ll.codigo_int AS cons_ciu_codigo,
+                    dep.descripcion AS depto,
+                    pai.descripcion AS pais
+                    FROM
+                    consignee AS cc
+                    INNER JOIN localizacion AS ll ON ll.id = cc.localizacion_id
+                    INNER JOIN deptos AS dep ON ll.deptos_id = dep.id
+                    INNER JOIN pais AS pai ON dep.pais_id = pai.id
+                    ) AS cc"), 'a.consignee', 'cc.id')
             ->select(
+                'doc.consecutivo',
                 'b.num_warehouse',
                 'b.num_guia',
                 'c.pa',
@@ -3384,6 +3424,7 @@ class DocumentoController extends Controller
                 'b.declarado2 AS declarado',
                 'b.peso2 AS peso_lb',
                 'b.piezas',
+                'b.created_at AS fecha_guia',
                 'd.nombre_full AS ship',
                 'd.direccion AS ship_dir',
                 'd.zip AS ship_zip',
@@ -3395,19 +3436,38 @@ class DocumentoController extends Controller
                 'i.nombre_full AS cons',
                 'i.direccion AS cons_dir',
                 'j.nombre AS cons_ciu',
+                'j.codigo_int AS cons_ciu_codigo',
                 'k.descripcion AS cons_depto',
                 'l.descripcion AS cons_pais',
                 'i.telefono AS cons_tel',
-                'i.zip AS cons_zip'
+                'i.zip AS cons_zip',
+                'ma.num_master AS master',
+                'ma_d.tarifa AS rate',
+                'ss.nombre_full AS ship_nomfull2',
+                'ss.direccion as ship_dir2',
+                'ss.telefono as ship_tel2',
+                'ss.zip as ship_zip2',
+                'ss.ciudad as ship_ciudad2',
+                'ss.depto as ship_depto2',
+                'ss.pais as ship_pais2',
+                'cc.nombre_full as cons_nomfull2',
+                'cc.zip as cons_zip2',
+                'cc.ciudad as cons_ciudad2',
+                'cc.cons_ciu_codigo as cons_ciu_codigo2',
+                'cc.depto as cons_depto2',
+                'cc.direccion as cons_dir2',
+                'cc.telefono as cons_tel2',
+                'cc.pais as cons_pais2'
             )
             ->where([
                 ['a.deleted_at', null],
                 ['b.deleted_at', null],
+                ['a.flag', 0],
                 ['a.consolidado_id', $id],
             ])->orderBy('b.num_warehouse', 'ASC')->get();
         return Excel::download(
             new ConsolidadoExport('exports.excelLiquimp', array('datos' => $data,)),
-            'Excel Liquimp.xlsx',
+            'Excel Liquimp '. $data[0]->consecutivo.'.xlsx',
             \Maatwebsite\Excel\Excel::XLSX
         );
     }
@@ -3415,6 +3475,7 @@ class DocumentoController extends Controller
     public function exportCellar($id)
     {
         $data = DB::table('consolidado_detalle AS a')
+            ->join('documento AS docu', 'docu.id', 'a.consolidado_id')
             ->join('documento_detalle AS b', 'a.documento_detalle_id', 'b.id')
             ->join('documento AS doc', 'b.documento_id', 'doc.id')
             ->join('posicion_arancelaria AS c', 'c.id', 'b.arancel_id2')
@@ -3427,6 +3488,7 @@ class DocumentoController extends Controller
             ->leftJoin('deptos AS k', 'j.deptos_id', 'k.id')
             ->leftJoin('pais AS l', 'k.pais_id', 'l.id')
             ->select(
+                'docu.consecutivo AS consecutivo_documento',
                 'doc.consecutivo',
                 'b.num_warehouse',
                 'b.num_guia',
@@ -3452,6 +3514,7 @@ class DocumentoController extends Controller
                 'l.descripcion AS cons_pais',
                 'i.telefono AS cons_tel',
                 'i.zip AS cons_zip',
+                DB::raw("(SELECT rr.num_guia FROM documento_detalle AS rr WHERE rr.id = a.agrupado and a.flag = 1) as mintic"),
                 DB::raw("(SELECT GROUP_CONCAT(tracking.codigo) FROM tracking WHERE tracking.documento_detalle_id = b.id) as tracking")
             )
             ->where([
@@ -3461,7 +3524,7 @@ class DocumentoController extends Controller
             ])->orderBy('b.num_warehouse', 'ASC')->get();
         return Excel::download(
             new ConsolidadoExport('exports.excelBodega', array('datos' => $data,)),
-            'Excel Bodega.xlsx',
+            'Excel Bodega '. $data[0]->consecutivo_documento.'.xlsx',
             \Maatwebsite\Excel\Excel::XLSX
         );
     }

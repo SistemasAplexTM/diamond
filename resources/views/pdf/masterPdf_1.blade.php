@@ -586,7 +586,7 @@
 					  <tr>
 					    <td width="85%" valign="top" height="40px" rowspan="2">
 					    <div class="text_titles_tl margin_div" style="color: {{ $color }}">Handling Information</div>
-					    <div id="handling_information" class="text_regular_l">{{ $data->handing_information }}
+					    <div id="handling_information" class="text_regular_l"><pre>{{ $data->handing_information }}</pre>
 					</div>
 					    </td>
 					    <td class="text_titles_tl" style="color: {{ $color }}">&nbsp;</td>

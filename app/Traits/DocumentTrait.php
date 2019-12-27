@@ -106,6 +106,7 @@ trait DocumentTrait
               'b.carga_courier'
           )
           ->orderBy('b.created_at', 'DESC');
+          
         return $sql;
     }
 
@@ -117,10 +118,10 @@ trait DocumentTrait
         $fFin = date('Y-m-d' , $fFin);
         $nuevafecha = strtotime('-2 day' , strtotime($fFin));
         $fIni = date('Y-m-d' , $nuevafecha);
-        $dates = array(
-          'inicio' => $fIni,
-          'fin' => $fFin,
-        );
+        //$dates = array(
+          //'inicio' => $fIni,
+          //'fin' => $fFin,
+        //);
       }else{
         if($filter['dates'] != '' and $type != 4){
           $dates = array(
@@ -143,6 +144,8 @@ trait DocumentTrait
 
       if ($type != 4) {
         $where[] = ['b.carga_courier', 1];
+      }else{
+        $filter = false;
       }
 
         $label_1 = "<a style='float:right;cursor:pointer;color:red' title='Quitar' data-toggle='tooltip' onclick='removerDocumentoAgrupado(";
@@ -270,6 +273,11 @@ trait DocumentTrait
                 DB::raw('"ciudad" AS ciudad')
             )
             ->where($where)
+            ->when(!$filter['dates'], function ($query, $data) use ($type) {
+              if ($type != 4) {
+                return $query->where('a.consolidado', 0);
+              }
+            })
             ->when($filter['warehouse'], function ($query, $data) {
               return $query->where('a.num_warehouse', 'LIKE', "%".$data."%");
             })
@@ -282,6 +290,7 @@ trait DocumentTrait
             ->orderBy('a.agrupado', 'DESC')
             ->orderBy('a.flag', 'ASC')
             ->orderBy('b.created_at', 'ASC');
+            
         return $sql;
     }
 

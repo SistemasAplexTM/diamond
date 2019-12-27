@@ -274,7 +274,7 @@
                     <div class="warehouse">Rec: </div>
                 </div>
                 <div class="datos">
-                    <div class="pkgs">Pkgs: 1 </div>
+                    <div class="pkgs">Pkgs: {{ $value->piezas }} </div>
                     <div class="fob">
                         Fob:
                         {{ number_format(((isset($consolidado) and $consolidado != null) ? $value->declarado2 : $value->valor),2) }}

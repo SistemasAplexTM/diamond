@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Delivery Order</title>
+    <title>Delivery Order - {{ $master->num_master }}</title>
     <style>
         * {
             font-family: Gotham, "Helvetica Neue", Helvetica, Arial, "sans-serif"
@@ -157,7 +157,7 @@
                     </div>
                 </td>
                 <td valign="top">
-                    <div class="content_detail">&nbsp;</div>
+                    <div class="content_detail">{{ number_format($detalle->peso_cobrado, 2, '.', ',') }}</div>
                 </td>
                 <td valign="top">
                     <div class="content_detail">{{ number_format($detalle->peso_kl, 2, '.', ',') }}
@@ -168,7 +168,10 @@
         </tbody>
         <thead>
             <tr>
-                <td colspan="4" style="padding: 10px;font-weight: bold;font-size: 20px;text-align:right">TOTAL</td>
+                <td colspan="3" style="padding: 10px;font-weight: bold;font-size: 20px;text-align:right">TOTAL</td>
+                <td style="padding: 10px;font-weight: bold;font-size: 20px;">
+                    {{ number_format($detalle->peso_cobrado, 2, '.', ',') }}
+                </td>
                 <td style="padding: 10px;font-weight: bold;font-size: 20px;">
                     {{ number_format($detalle->peso_kl, 2, '.', ',') }}
                 </td>

@@ -237,8 +237,10 @@
         @if(isset($agencia) and $agencia)
         <div class="col-lg-6" style="padding-right: 0px;">
           <div class="form-group">
-            <label for="num_guia" class=""
-              style="font-family: 'Russo One', sans-serif; font-size: 40px; float: right;font-weight: bold; color: #0d87e9;">{{ $documento->num_warehouse }}</label>
+            <label for="num_guia"
+              style="font-family: 'Russo One', sans-serif; font-size: 40px; float: right;font-weight: bold; color: #0d87e9;">
+              {{ ($documento->tipo_documento_id == 3) ? 'Consolidado: ' . $documento->consecutivo : $documento->num_warehouse }}
+            </label>
             {{-- <input type="text" id="num_guia" name="num_guia" class="form-control" readonly="" value="{{ $documento->num_warehouse }}"
             > --}}
           </div>

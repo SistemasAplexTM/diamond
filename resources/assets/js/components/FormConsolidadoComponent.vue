@@ -520,7 +520,6 @@ a.badge:hover {
               id
               @click="addGuiasToConsolidadoModal()"
               class="btn btn-primary"
-              data-dismiss="modal"
             >Agregar</button>
             <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
           </div>
@@ -641,7 +640,6 @@ a.badge:hover {
               id
               @click="agruparGuiasConsolidado()"
               class="btn btn-primary"
-              data-dismiss="modal"
             >Agregar</button>
             <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
           </div>
@@ -844,8 +842,11 @@ export default {
           infoFiltered: "(Filtrando para _MAX_ Registros totales)",
           zeroRecords: "No se encontraron registros coincidentes"
         },
-        processing: true,
-        serverSide: true,
+        scrollY: "400px",
+        scrollCollapse: true,
+        paging: false,
+        processing: false,
+        serverSide: false,
         searching: true,
         ajax: "getGuiasAgrupar/" + option.id,
         columns: [
@@ -1114,8 +1115,11 @@ export default {
             infoFiltered: "(Filtrando para _MAX_ Registros totales)",
             zeroRecords: "No se encontraron registros coincidentes"
           },
-          processing: true,
-          serverSide: true,
+          scrollY: "400px",
+          scrollCollapse: true,
+          paging: false,
+          processing: false,
+          serverSide: false,
           searching: true,
           order: [[1, "desc"]],
           ajax: "getAllGuiasDisponibles/" + me.pais_id + "/" + me.transporte_id,
@@ -1298,8 +1302,16 @@ export default {
       }
     },
     updateTableDetail() {
-      var table = $("#tbl-consolidado").DataTable();
-      table.ajax.reload();
+      this.getModalGuias();
+      // var table = $("#tbl-consolidado").DataTable();
+      // $("#tbl-modalguiasconsolidado tbody").empty();
+      // $("#tbl-modalguiasconsolidado")
+      //   .dataTable()
+      //   .fnDestroy();
+      // table.ajax.reload();
+    },
+    updateAgrupar() {
+      this.agrupar();
     },
     increaseBoxes() {
       this.num_bolsa = parseInt(this.num_bolsa) + 1;
@@ -1318,6 +1330,7 @@ export default {
             [40, 50, 80, 100, 200, -1],
             [40, 50, 80, 100, 200, "All"]
           ],
+          order: [[1, "desc"]],
           ajax: "getAllConsolidadoDetalle",
           columns: [
             { data: "num_bolsa", name: "num_bolsa" },

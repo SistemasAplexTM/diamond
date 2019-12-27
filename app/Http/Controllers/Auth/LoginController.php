@@ -100,8 +100,7 @@ class LoginController extends Controller
       if ($data) {
         $printersDB =  json_decode($data->value);
       }
-      // var_dump($printersDB);
-      // exit();
+      
       $default = null;
       if ($printers && $printersDB) {
         foreach ($printers as $key => $value) {
@@ -116,6 +115,11 @@ class LoginController extends Controller
           }
         }
       }
+      // echo '<pre>';
+      // print_r($printers);
+      // print_r($default);
+      // echo '</pre>';
+      // exit();
       Session::put('printer', $default);
       return redirect()->route($this->redirectPath());
     } else {
