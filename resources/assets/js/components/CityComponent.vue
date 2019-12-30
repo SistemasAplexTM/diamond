@@ -1,6 +1,7 @@
 <template>
   <div class>
     <el-autocomplete
+      :debounce="400"
       class="inline-input"
       v-model="city.name"
       :fetch-suggestions="querySearch"
@@ -53,17 +54,26 @@ export default {
   },
   methods: {
     querySearch(queryString, cb) {
-      var me = this;
-      axios
-        .get("/ciudad/getSelectCity/" + queryString)
-        .then(function(response) {
-          me.options = response.data.data;
-          cb(me.options);
-        })
-        .catch(function(error) {
-          console.log(error);
-          toastr.warning("Error: -" + error);
-        });
+      if (queryString.length > 3) {
+        var me = this;
+        axios
+          .get("/ciudad/getSelectCity/" + queryString)
+          .then(function(response) {
+            console.log(response.data);
+            if (response.data.code) {
+              me.options = response.data.data;
+              console.log("existe response.data.data");
+            } else {
+              console.log("No existe");
+              me.options = [];
+            }
+            cb(me.options);
+          })
+          .catch(function(error) {
+            console.log(error);
+            toastr.warning("Error: -" + error);
+          });
+      }
     },
     handleSelect(item) {
       this.city = item;
