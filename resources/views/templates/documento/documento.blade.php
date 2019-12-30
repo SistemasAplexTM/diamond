@@ -210,8 +210,6 @@
   <modalconsignee-component v-if="!mostrar.includes(24)"></modalconsignee-component>
   <modalarancel-component></modalarancel-component>
   <modalcargosadd-component v-if="!mostrar.includes(24)" :showmodal="showmodalAdd"></modalcargosadd-component>
-  <products-cuba-component v-if="mostrar.includes(66)" :id_document="{{ $documento->id }}" :points="total_points"
-    :data_p="data_points" @get="getProductsCuba($event)"></products-cuba-component>
 
   <form class="" autocomplete="off" id="formDocumento" name="formDocumento" class=" form-horizontal" role="form"
     action="{{ url('documento/updatedDocument') }}/{{  $documento->id }}" method="post">
@@ -282,9 +280,9 @@
                 <div class="col-sm-8">
                   <div class="input-group" style="margin-bottom: 5px;" :class="{ 'has-error': errors.has('nombreR') }">
                     <input type="search" autocomplete="aplextmautocomplete" data-id="nomBuscarShipper" id="nombreR"
-                      name="nombreR" placeholder="@lang('documents.type_to_search')" class="form-control"
+                      name="nombreR" placeholder="@lang('documents.search')" class="form-control"
                       onkeyup="deleteError($(this).parent());" v-model="nombreR" v-validate="'required'"
-                      :disabled="disabled_s">
+                      :disabled="disabled_s" readonly="readonly">
                     <span class="input-group-btn">
                       <button id="btnBuscarShipper" @click="modalShipper(true)" class="btn btn-default" type="button"
                         data-toggle='tooltip' title="Buscar"><span class="fal fa-search"></span>&nbsp;</button>
@@ -366,9 +364,9 @@
                   <input type="hidden" value="" id="urlBuscarConsignee">
                   <div class="input-group" style="margin-bottom: 5px;" :class="{ 'has-error': errors.has('nombreD') }">
                     <input type="search" autocomplete="off" data-id="nomBuscarConsignee" class="form-control"
-                      id="nombreD" name="nombreD" placeholder="@lang('documents.type_to_search')"
+                      id="nombreD" name="nombreD" placeholder="@lang('documents.search')"
                       onkeyup="deleteError($(this).parent());" v-model="nombreD" v-validate="'required'"
-                      :disabled="disabled_c">
+                      :disabled="disabled_c" readonly="readonly">
                     <span class="input-group-btn">
                       <button class="btn btn-default" @click="modalConsignee(true)" id="btnBuscarConsignee"
                         type="button" data-toggle='tooltip' title="Buscar"><span
@@ -1081,8 +1079,6 @@
   @include('templates/documento/modals/modalTracking')
   {{-- MODAL AGREGAR TRACKINGS --}}
   @include('templates/documento/modals/modalChangeShipperConsignee')
-  {{-- MODAL AGREGAR PUNTOS --}}
-  {{-- <points-component v-if="mostrar.includes(66)" :id_detail="points_id_detail"></points-component> --}}
 </div>
 @endsection
 @section('scripts')

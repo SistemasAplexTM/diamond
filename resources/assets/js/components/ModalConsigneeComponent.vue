@@ -35,8 +35,8 @@
             <span class="sr-only">Close</span>
           </button>
           <h4 class="modal-title" id="myModalLabel">
-            Destinatario (Consignee) ->
-            <label for="buscarF" class="control-label gcore-label-top">
+            Destinatario (Consignee)
+            <!-- <label for="buscarF" class="control-label gcore-label-top">
               Mostrar Todos:
               <input
                 type="checkbox"
@@ -50,7 +50,7 @@
                 data-onstyle="primary"
                 data-offstyle="danger"
               />
-            </label>
+            </label>-->
           </h4>
         </div>
         <div class="modal-body">
