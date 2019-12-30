@@ -730,7 +730,7 @@ var objVue = new Vue({
             }
             if (data_search) {
                 if ($('#consignee_id').val() != '') {
-                    id_data = $('#consignee_id').val();
+                    // id_data = $('#consignee_id').val();
                 }
             }
             $('#modalShipper').modal('show');
@@ -739,7 +739,7 @@ var objVue = new Vue({
                 $('#tbl-modalshipper').dataTable().fnDestroy();
             }
             if ($('#nombreR').val() != '') {
-                nom = $('#nombreR').val();
+                // nom = $('#nombreR').val();
             }
             var table = $('#tbl-modalshipper').DataTable({
                 ajax: '../../shipper/all/' + nom + '/' + id_data + '/' + $('#agencia_id').val(),
@@ -779,7 +779,7 @@ var objVue = new Vue({
             }
             if (data_search) {
                 if ($('#shipper_id').val() != '') {
-                    id_data = $('#shipper_id').val();
+                    // id_data = $('#shipper_id').val();
                 }
             }
             $('#modalConsignee').modal('show');
@@ -789,7 +789,7 @@ var objVue = new Vue({
 
             }
             if ($('#nombreD').val() != '') {
-                nom = $('#nombreD').val();
+                // nom = $('#nombreD').val();
             }
             var table = $('#tbl-modalconsignee').DataTable({
                 ajax: '../../consignee/all/' + nom + '/' + id_data + '/' + $('#agencia_id').val(),
