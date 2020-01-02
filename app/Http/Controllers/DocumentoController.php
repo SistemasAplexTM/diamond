@@ -761,8 +761,10 @@ class DocumentoController extends Controller
         $data->save();
         $piv = DB::table('status_detalle')->where([['documento_detalle_id', $obj->documento_detalle_id], ['status_id', 5]])->delete();
         $this->AddToLog('Consolidado detalle eliminado (' . $id_detalle . ')');
+        /* BUSCAR GUIAS AGRUPADAS EN LA GUIA CONSOLIDADA */
+        $this->guidesGroups($obj->documento_detalle_id, 0);
         $answer = array(
-            "code" => 200,
+            "code" => 200
         );
 
         return $answer;
@@ -2188,6 +2190,7 @@ class DocumentoController extends Controller
         return $pdf->stream('labelsGroup.pdf');
     }
 
+    //  ESTAFUNCION AGREGA GUIAS A UN CONSOLIDADO
     public function buscarGuias($id, $num_guia, $num_bolsa, $pais_id, $range_value = false)
     {
 
@@ -2254,9 +2257,11 @@ class DocumentoController extends Controller
                                 'fecha_status'         => date('Y-m-d H:i:s'),
                             ],
                         ]);
+                        /* BUSCAR GUIAS AGRUPADAS EN LA GUIA CONSOLIDADA */
+                        $this->guidesGroups($detalle->id, 1);
                         $answer = array(
                             "code" => 200,
-                            "data" => $detalle,
+                            "data" => $detalle
                         );
                     } else {
                         $answer = array(
@@ -2287,6 +2292,18 @@ class DocumentoController extends Controller
             );
         }
         return $answer;
+    }
+
+    /* ACTUALIZAR GUIAS AGRUPADAS EN EL CAMPO CONSOLIDADO */
+    public function guidesGroups($id, $data)
+    {
+        $guias_agrupadas = DocumentoDetalle::select('id')->where('agrupado', $id)->get();
+        if ($guias_agrupadas) {
+            foreach ($guias_agrupadas as $key => $value) {
+                DocumentoDetalle::where('id', $value->id)->update(['consolidado' => $data]);
+            }
+        }
+        return true;
     }
 
     public function getAllConsolidadoDetalle($id, $num_bolsa = null)
