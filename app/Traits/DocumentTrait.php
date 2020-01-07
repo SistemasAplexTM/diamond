@@ -275,7 +275,7 @@ trait DocumentTrait
             ->where($where)
             ->when(!$filter['dates'], function ($query, $data) use ($type) {
               if ($type != 4) {
-                return $query->where('a.consolidado', 0);
+                return $query->where([['a.consolidado', 0]]);
               }
             })
             ->when($filter['warehouse'], function ($query, $data) {
