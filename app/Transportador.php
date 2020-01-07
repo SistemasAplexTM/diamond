@@ -13,7 +13,7 @@ class Transportador extends Model
      * @var array
      */
     protected $fillable = [
-        'nombre', 
+        'nombre',
         'direccion',
         'telefono',
         'email',
@@ -25,5 +25,6 @@ class Transportador extends Model
         'shipper',
         'consignee',
         'carrier',
+        'information',
     ];
 }

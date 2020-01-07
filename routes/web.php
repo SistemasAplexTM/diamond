@@ -192,6 +192,7 @@ Route::group(['middleware' => 'auth'], function () {
   Route::get('transport/delete/{id}/{logical?}', 'AerolineasAeropuertosController@delete')->name('transport.delete');
   Route::get('transport/{type}/restaurar/{id}', 'AerolineasAeropuertosController@restaurar');
   Route::get('transport/selectInput/{tableName}', 'AerolineasAeropuertosController@selectInput');
+  Route::post('saveFromRigthMenu/transport', 'TransportadorController@saveFromRigthMenu');
 
   /*--- MODULO SERVICIOS ---*/
   Route::resource('servicios', 'ServiciosController', ['except' => ['show', 'create', 'edit']]);
