@@ -11,7 +11,8 @@ use App\Http\Requests\TransportadorRequest;
 
 class TransportadorController extends Controller
 {
-    public function __construct(){
+    public function __construct()
+    {
         $this->middleware('permission:transportador.index')->only('index');
         $this->middleware('permission:transportador.store')->only('store');
         $this->middleware('permission:transportador.update')->only('update');
@@ -37,17 +38,17 @@ class TransportadorController extends Controller
      */
     public function store(TransportadorRequest $request)
     {
-        try{
+        try {
             $data = (new Transportador)->fill($request->all());
             $data->created_at = date('Y-m-d H:i:s');
             if ($data->save()) {
-                $answer=array(
+                $answer = array(
                     "datos" => $request->all(),
                     "code" => 200,
                     "status" => 200,
                 );
-            }else{
-                $answer=array(
+            } else {
+                $answer = array(
                     "error" => 'Error al intentar Eliminar el registro.',
                     "code" => 600,
                     "status" => 500,
@@ -59,11 +60,11 @@ class TransportadorController extends Controller
             foreach ($e->errorInfo as $key => $value) {
                 $error .= $key . ' - ' .  $value . ' <br> ';
             }
-            $answer=array(
-                    "error" => $error,
-                    "code" => 600,
-                    "status" => 500,
-                );
+            $answer = array(
+                "error" => $error,
+                "code" => 600,
+                "status" => 500,
+            );
             return $answer;
         }
     }
@@ -81,22 +82,21 @@ class TransportadorController extends Controller
         try {
             $data = Transportador::findOrFail($id);
             $data->update($request->all());
-            $answer=array(
+            $answer = array(
                 "datos" => $request->all(),
                 "code" => 200,
             );
             return $answer;
-
         } catch (\Exception $e) {
             $error = '';
             foreach ($e->errorInfo as $key => $value) {
                 $error .= $key . ' - ' .  $value . ' <br> ';
             }
-            $answer=array(
-                    "error" => $error,
-                    "code" => 600,
-                    "status" => 500,
-                );
+            $answer = array(
+                "error" => $error,
+                "code" => 600,
+                "status" => 500,
+            );
             return $answer;
         }
     }
@@ -120,27 +120,27 @@ class TransportadorController extends Controller
      * @param  boolean  $deleteLogical
      * @return \Illuminate\Http\Response
      */
-    public function delete($id,$logical)
+    public function delete($id, $logical)
     {
 
-        if(isset($logical) and $logical == 'true'){
+        if (isset($logical) and $logical == 'true') {
             $data = Transportador::findOrFail($id);
             $now = new \DateTime();
-            $data->deleted_at =$now->format('Y-m-d H:i:s');
-            if($data->save()){
-                    $answer=array(
-                        "datos" => 'Eliminación exitosa.',
-                        "code" => 200
-                    );
-               }  else{
-                    $answer=array(
-                        "error" => 'Error al intentar Eliminar el registro.',
-                        "code" => 600
-                    );
-               }
+            $data->deleted_at = $now->format('Y-m-d H:i:s');
+            if ($data->save()) {
+                $answer = array(
+                    "datos" => 'Eliminación exitosa.',
+                    "code" => 200
+                );
+            } else {
+                $answer = array(
+                    "error" => 'Error al intentar Eliminar el registro.',
+                    "code" => 600
+                );
+            }
 
-                return $answer;
-        }else{
+            return $answer;
+        } else {
             $this->destroy($id);
         }
     }
@@ -171,21 +171,34 @@ class TransportadorController extends Controller
 
     public function uploadImage(Request $request)
     {
-      if ($request->file('file')) {
-          $data = Transportador::findOrFail($request->id);
-          //obtenemos el nombre del archivo
-          $data->logo = trim($request->file('file')->getClientOriginalName());
-          $data->logo_url = trim('storage/'.$data->logo);
-          $data->save();
-          //indicamos que queremos guardar un nuevo archivo en el disco local
-          \Storage::disk('public')->put('storage/'.$data->logo, \File::get($request->file('file'))); //se guardara en 'public/storage'
-      }
-      return $request->all();
+        if ($request->file('file')) {
+            $data = Transportador::findOrFail($request->id);
+            //obtenemos el nombre del archivo
+            $data->logo = trim($request->file('file')->getClientOriginalName());
+            $data->logo_url = trim('storage/' . $data->logo);
+            $data->save();
+            //indicamos que queremos guardar un nuevo archivo en el disco local
+            \Storage::disk('public')->put('storage/' . $data->logo, \File::get($request->file('file'))); //se guardara en 'public/storage'
+        }
+        return $request->all();
     }
 
     public function getLogo($id)
     {
-      $data = Transportador::findOrFail($id);
-      return ['name' => $data->logo, 'url' => $data->logo_url];
+        $data = Transportador::findOrFail($id);
+        return ['name' => $data->logo, 'url' => $data->logo_url];
+    }
+
+    public function saveFromRigthMenu(Request $request)
+    {
+        $data = Transportador::create([
+            'nombre' => $request->name,
+            'email' => $request->email,
+            'information' => $request->info,
+            'shipper' => $request->shipper,
+            'consignee' => $request->consignee,
+            'carrier' => $request->carrier,
+        ]);
+        return $data;
     }
 }

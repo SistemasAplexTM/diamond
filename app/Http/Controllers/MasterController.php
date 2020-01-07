@@ -15,9 +15,10 @@ use Auth;
 
 class MasterController extends Controller
 {
-    public function __construct(){
+    public function __construct()
+    {
         $this->middleware('permission:master.index')->only('index');
-        $this->middleware('permission:master.create')->only('store','create');
+        $this->middleware('permission:master.create')->only('store', 'create');
         $this->middleware('permission:master.update')->only('update');
         $this->middleware('permission:master.destroy')->only('destroy');
     }
@@ -34,10 +35,10 @@ class MasterController extends Controller
             $master             = (new Master)->fill($request->all());
             $master->agencia_id = Auth::user()->agencia_id;
             if ($master->save()) {
-                if($request->consolidado_id != null){
-                DB::table('documento')
-                    ->where('id', $request->consolidado_id)
-                    ->update(['master_id' => $master->id]);
+                if ($request->consolidado_id != null) {
+                    DB::table('documento')
+                        ->where('id', $request->consolidado_id)
+                        ->update(['master_id' => $master->id]);
                 }
             }
             AerolineaInventario::where('id', $request->aerolinea_inventario_id)->update(['usado' => 1]);
@@ -48,7 +49,7 @@ class MasterController extends Controller
             $detalle->save();
 
             DB::table('master_cargos_adicionales')->where('master_id', $master->id)->delete();
-            if($request->other_c[0]['oc_value'] != ''){
+            if ($request->other_c[0]['oc_value'] != '') {
                 foreach ($request->other_c as $value) {
                     DB::table('master_cargos_adicionales')->insert(
                         [
@@ -97,24 +98,24 @@ class MasterController extends Controller
         $consolidado_id = $consolidado_id;
         $peso = 0;
         $piezas = 1;
-        if($consolidado_id != 'null' and $consolidado_id != null){
-          $peso_consolidado  = DB::table('consolidado_detalle AS a')
-          ->join('documento_detalle AS b', 'a.documento_detalle_id', 'b.id')
-          ->select(DB::raw("ROUND(Sum(b.peso2) * 0.453592) AS peso_total"))
-          ->where([['b.deleted_at', null], ['a.deleted_at', null], ['a.consolidado_id', $consolidado_id]])
-          ->first();
-          if($peso_consolidado and $peso_consolidado != null){
-            $peso = $peso_consolidado->peso_total;
-          }
+        if ($consolidado_id != 'null' and $consolidado_id != null) {
+            $peso_consolidado  = DB::table('consolidado_detalle AS a')
+                ->join('documento_detalle AS b', 'a.documento_detalle_id', 'b.id')
+                ->select(DB::raw("ROUND(Sum(b.peso2) * 0.453592) AS peso_total"))
+                ->where([['b.deleted_at', null], ['a.deleted_at', null], ['a.consolidado_id', $consolidado_id]])
+                ->first();
+            if ($peso_consolidado and $peso_consolidado != null) {
+                $peso = $peso_consolidado->peso_total;
+            }
 
-          $piezas_consolidado  = DB::table('consolidado_detalle AS a')
-          ->join('documento_detalle AS b', 'a.documento_detalle_id', 'b.id')
-          ->select(DB::raw("Count(DISTINCT a.num_bolsa) AS cantidad"))
-          ->where([['b.deleted_at', null], ['a.deleted_at', null], ['a.consolidado_id', $consolidado_id]])
-          ->first();
-          if($piezas_consolidado and $piezas_consolidado != null){
-            $piezas = $piezas_consolidado->cantidad;
-          }
+            $piezas_consolidado  = DB::table('consolidado_detalle AS a')
+                ->join('documento_detalle AS b', 'a.documento_detalle_id', 'b.id')
+                ->select(DB::raw("Count(DISTINCT a.num_bolsa) AS cantidad"))
+                ->where([['b.deleted_at', null], ['a.deleted_at', null], ['a.consolidado_id', $consolidado_id]])
+                ->first();
+            if ($piezas_consolidado and $piezas_consolidado != null) {
+                $piezas = $piezas_consolidado->cantidad;
+            }
         }
         return view('templates.master.create', compact('master', 'consolidado_id', 'peso', 'piezas'));
     }
@@ -140,7 +141,7 @@ class MasterController extends Controller
                 'descripcion'    => $request->descripcion,
             ]);
             DB::table('master_cargos_adicionales')->where('master_id', $master)->delete();
-            if($request->other_c[0]['oc_value'] != ''){
+            if ($request->other_c[0]['oc_value'] != '') {
                 foreach ($request->other_c as $value) {
                     DB::table('master_cargos_adicionales')->insert(
                         [
@@ -194,7 +195,9 @@ class MasterController extends Controller
                 'ciudad',
                 'estado',
                 'pais',
-                'zip'
+                'zip',
+                'email',
+                'information'
             )
             ->where($where)
             ->where('a.nombre', 'LIKE', '%' . $dato . '%')
@@ -216,7 +219,7 @@ class MasterController extends Controller
         return view('pdf.masterPdf_1', compact('cantidad', 'data', 'detalle', 'other'));
         $pdf     = \PDF::loadView('pdf.masterPdf_1', $data);
         // $pdf = \PDF::loadView('templates.master.imprimir', $data);
-        return $pdf->stream($data->num_master.'.pdf');
+        return $pdf->stream($data->num_master . '.pdf');
     }
 
     public function getMasterForImpress($id_master)
@@ -393,11 +396,11 @@ class MasterController extends Controller
     public function vueSelectConsolidados($data)
     {
         $where = [
-                ['a.ciudad_id', '<>', null],
-                ['a.master_id', null],
-                ['a.deleted_at', null],
-            ];
-        if(!Auth::user()->isRole('admin')){
+            ['a.ciudad_id', '<>', null],
+            ['a.master_id', null],
+            ['a.deleted_at', null],
+        ];
+        if (!Auth::user()->isRole('admin')) {
             $where[] = ['a.agencia_id', Auth::user()->agencia_id];
         }
         $term = $data;
@@ -438,23 +441,23 @@ class MasterController extends Controller
     {
         $data    = $this->getMasterForImpress($id_master);
         $detalle = DB::table('master_detalle AS a')
-                    ->select(
-                        'a.id',
-                        'a.piezas',
-                        'a.rate_class',
-                        'a.commodity_item',
-                        'a.peso_cobrado',
-                        'a.tarifa',
-                        'a.total',
-                        'a.descripcion',
-                        'a.peso',
-                        'a.peso_kl',
-                        'a.unidad_medida'
-                    )
-                    ->where('a.master_id', $id_master)
-                    ->get();
+            ->select(
+                'a.id',
+                'a.piezas',
+                'a.rate_class',
+                'a.commodity_item',
+                'a.peso_cobrado',
+                'a.tarifa',
+                'a.total',
+                'a.descripcion',
+                'a.peso',
+                'a.peso_kl',
+                'a.unidad_medida'
+            )
+            ->where('a.master_id', $id_master)
+            ->get();
         $pdf     = \PDF::loadView('pdf.masterLabelPdf', compact('data', 'detalle'))
-        ->setPaper(array(0, 0, 360, 576)); //multiplicar pulgadas por 72 (5 x 8 pulgadas en este label)
+            ->setPaper(array(0, 0, 360, 576)); //multiplicar pulgadas por 72 (5 x 8 pulgadas en este label)
         return $pdf->stream('master.pdf');
     }
 
@@ -467,248 +470,247 @@ class MasterController extends Controller
 
     public function getDataConsolidados($type)
     {
-      $where = [
-              ['a.ciudad_id', '<>', null],
-              ['a.master_id', null],
-              ['a.bill_id', null],
-              ['a.deleted_at', null],
-          ];
-      if(!Auth::user()->isRole('admin')){
-          $where[] = ['a.agencia_id', Auth::user()->agencia_id];
-      }
-      if($type == 0){
-        $where[] = ['a.transporte_id', 1];
-      }else{
-        $where[] = ['a.transporte_id', 2];
-      }
-      $data = DB::table('documento AS a')
-          ->leftJoin('localizacion AS b', 'a.ciudad_id', 'b.id')
-          ->leftJoin('deptos AS c', 'b.deptos_id', 'c.id')
-          ->leftJoin('pais AS d', 'c.pais_id', 'd.id')
-          ->select(['a.id', 'a.consecutivo AS consolidado', DB::raw('SUBSTRING_INDEX(`a`.`created_at`, " ", 1) as fecha'), 'b.nombre AS ciudad'])
-          ->where($where)->get();
-      return $data;
+        $where = [
+            ['a.ciudad_id', '<>', null],
+            ['a.master_id', null],
+            ['a.bill_id', null],
+            ['a.deleted_at', null],
+        ];
+        if (!Auth::user()->isRole('admin')) {
+            $where[] = ['a.agencia_id', Auth::user()->agencia_id];
+        }
+        if ($type == 0) {
+            $where[] = ['a.transporte_id', 1];
+        } else {
+            $where[] = ['a.transporte_id', 2];
+        }
+        $data = DB::table('documento AS a')
+            ->leftJoin('localizacion AS b', 'a.ciudad_id', 'b.id')
+            ->leftJoin('deptos AS c', 'b.deptos_id', 'c.id')
+            ->leftJoin('pais AS d', 'c.pais_id', 'd.id')
+            ->select(['a.id', 'a.consecutivo AS consolidado', DB::raw('SUBSTRING_INDEX(`a`.`created_at`, " ", 1) as fecha'), 'b.nombre AS ciudad'])
+            ->where($where)->get();
+        return $data;
     }
 
     public function createHawb($id)
     {
-      DB::beginTransaction();
-      try {
-        /* BUSCAR HOUSES DE ESTA MASTER */
-        $houses = Master::select(DB::raw('Count(master.id) AS cantidad'))
-        ->where([['master.master_id', $id], ['master.deleted_at', NULL]])
-        ->first();
-        /* CREACION DE LA NUEVA MASTER */
-        $master = Master::find($id);
-        $newMaster = $master->replicate();
-        $newMaster->master_id = $id;
-        $newMaster->num_master = $master->num_master . '_' . ($houses->cantidad + 1);
-        $newMaster->save();
+        DB::beginTransaction();
+        try {
+            /* BUSCAR HOUSES DE ESTA MASTER */
+            $houses = Master::select(DB::raw('Count(master.id) AS cantidad'))
+                ->where([['master.master_id', $id], ['master.deleted_at', NULL]])
+                ->first();
+            /* CREACION DE LA NUEVA MASTER */
+            $master = Master::find($id);
+            $newMaster = $master->replicate();
+            $newMaster->master_id = $id;
+            $newMaster->num_master = $master->num_master . '_' . ($houses->cantidad + 1);
+            $newMaster->save();
 
-        /* ENCONTRAR DETALLE ASOCIADO */
-        $detalle = MasterDetalle::select(
-          'id',
-          'master_id',
-          'piezas',
-          'peso',
-          'peso_kl',
-          'unidad_medida',
-          'rate_class',
-          'commodity_item',
-          'peso_cobrado',
-          'tarifa',
-          'total',
-          'descripcion'
-          )
-        ->where([['master_detalle.master_id', $id], ['master_detalle.deleted_at', NULL]])
-        ->first();
-        $newDetalle = $detalle->replicate();
-        $newDetalle->master_id = $newMaster->id;
-        $newDetalle->save();
+            /* ENCONTRAR DETALLE ASOCIADO */
+            $detalle = MasterDetalle::select(
+                'id',
+                'master_id',
+                'piezas',
+                'peso',
+                'peso_kl',
+                'unidad_medida',
+                'rate_class',
+                'commodity_item',
+                'peso_cobrado',
+                'tarifa',
+                'total',
+                'descripcion'
+            )
+                ->where([['master_detalle.master_id', $id], ['master_detalle.deleted_at', NULL]])
+                ->first();
+            $newDetalle = $detalle->replicate();
+            $newDetalle->master_id = $newMaster->id;
+            $newDetalle->save();
 
-        /* ENCONTRAR CARGOS ADICIONALES */
-        $cargos_id = MasterCargosAdicionales::select('id')
-        ->where([['master_id', $id]])
-        ->get();
-        if($cargos_id){
-          foreach ($cargos_id as $val) {
-            $cargos = MasterCargosAdicionales::find($val->id);
-            $newCargos = $cargos->replicate();
-            $newCargos->master_id = $newMaster->id;
-            $newCargos->save();
-          }
+            /* ENCONTRAR CARGOS ADICIONALES */
+            $cargos_id = MasterCargosAdicionales::select('id')
+                ->where([['master_id', $id]])
+                ->get();
+            if ($cargos_id) {
+                foreach ($cargos_id as $val) {
+                    $cargos = MasterCargosAdicionales::find($val->id);
+                    $newCargos = $cargos->replicate();
+                    $newCargos->master_id = $newMaster->id;
+                    $newCargos->save();
+                }
+            }
+
+            DB::commit();
+            return array('code' => 200);
+        } catch (Exception $e) {
+            DB::rollback();
+            return $e;
         }
-
-        DB::commit();
-        return array('code' => 200);
-      } catch (Exception $e) {
-          DB::rollback();
-          return $e;
-      }
     }
 
     public function saveTaxMaster(Request $request)
     {
-      DB::beginTransaction();
-      try {
-        if($request->cost_edit){
-          DB::table('impuesto_master')
-          ->where('master_id', $request->master_id)
-          ->update([
-            'fecha_liquidacion' => $request->cost_date,
-            'rate' => $request->cost_rate,
-            'trm' => $request->cost_trm,
-            'peso' => $request->cost_weight,
-          ]);
-          $data = DB::table('impuesto_master')->where('master_id', $request->master_id)->first();
-          $this->saveMasterTaxDetail($data->id, $request->master_id);
-        }else{
-          $id = DB::table('impuesto_master')->insertGetId(
-              [
-                  'master_id' => $request->master_id,
-                  'fecha_liquidacion' => $request->cost_date,
-                  'rate' => $request->cost_rate,
-                  'trm' => $request->cost_trm,
-                  'peso' => $request->cost_weight,
-                  'created_at' => date('Y-m-d H:i:s')
-              ]
-          );
-          $this->saveMasterTaxDetail($id, $request->master_id);
+        DB::beginTransaction();
+        try {
+            if ($request->cost_edit) {
+                DB::table('impuesto_master')
+                    ->where('master_id', $request->master_id)
+                    ->update([
+                        'fecha_liquidacion' => $request->cost_date,
+                        'rate' => $request->cost_rate,
+                        'trm' => $request->cost_trm,
+                        'peso' => $request->cost_weight,
+                    ]);
+                $data = DB::table('impuesto_master')->where('master_id', $request->master_id)->first();
+                $this->saveMasterTaxDetail($data->id, $request->master_id);
+            } else {
+                $id = DB::table('impuesto_master')->insertGetId(
+                    [
+                        'master_id' => $request->master_id,
+                        'fecha_liquidacion' => $request->cost_date,
+                        'rate' => $request->cost_rate,
+                        'trm' => $request->cost_trm,
+                        'peso' => $request->cost_weight,
+                        'created_at' => date('Y-m-d H:i:s')
+                    ]
+                );
+                $this->saveMasterTaxDetail($id, $request->master_id);
+            }
+            DB::commit();
+            return array('code' => 200);
+        } catch (\Exception $e) {
+            DB::rollback();
+            return $e;
         }
-        DB::commit();
-        return array('code' => 200);
-      } catch (\Exception $e) {
-          DB::rollback();
-          return $e;
-      }
     }
 
     public function saveMasterTaxDetail($impuesto_master_id, $master_id)
     {
-      DB::beginTransaction();
-      try {
-        $consolidate = Documento::where('master_id', $master_id)->first();
-        $masterD = MasterDetalle::where('master_id', $master_id)->first();
-        $hijas = DB::table('consolidado_detalle AS a')
-        ->join('documento_detalle AS b', 'a.documento_detalle_id', 'b.id')
-        ->join('posicion_arancelaria AS c', 'c.id', 'b.arancel_id2')
-        ->select(
-            'a.id',
-            'a.documento_detalle_id',
-            'b.declarado2 AS declarado',
-            'b.peso2 AS peso',
-            'c.arancel',
-            'c.iva'
-        )
-        ->where([['a.deleted_at', null], ['a.consolidado_id', $consolidate->id]])
-        ->get();
-        foreach ($hijas as $key => $val) {
+        DB::beginTransaction();
+        try {
+            $consolidate = Documento::where('master_id', $master_id)->first();
+            $masterD = MasterDetalle::where('master_id', $master_id)->first();
+            $hijas = DB::table('consolidado_detalle AS a')
+                ->join('documento_detalle AS b', 'a.documento_detalle_id', 'b.id')
+                ->join('posicion_arancelaria AS c', 'c.id', 'b.arancel_id2')
+                ->select(
+                    'a.id',
+                    'a.documento_detalle_id',
+                    'b.declarado2 AS declarado',
+                    'b.peso2 AS peso',
+                    'c.arancel',
+                    'c.iva'
+                )
+                ->where([['a.deleted_at', null], ['a.consolidado_id', $consolidate->id]])
+                ->get();
+            foreach ($hijas as $key => $val) {
 
-          $seguro = $val->declarado * 0.005;
-          $flete = $val->peso * $masterD->tarifa;
-          $baseArancel = $val->declarado + $seguro + $flete;
-          $arancel = round($baseArancel * $val->arancel, 2);
-          $baseIva = $baseArancel + $arancel;
-          $iva = round($baseIva * $val->iva, 2);
+                $seguro = $val->declarado * 0.005;
+                $flete = $val->peso * $masterD->tarifa;
+                $baseArancel = $val->declarado + $seguro + $flete;
+                $arancel = round($baseArancel * $val->arancel, 2);
+                $baseIva = $baseArancel + $arancel;
+                $iva = round($baseIva * $val->iva, 2);
 
-          $data = array(
-            'impuesto_master_id' => $impuesto_master_id,
-            'documento_id' => $val->documento_detalle_id,
-            'seguro' => $seguro,
-            'flete' => $flete,
-            'costo' => $val->declarado,
-            'arancel' => $arancel,
-            'iva' => $iva,
-            'total_impuesto' => $arancel + $iva,
-            'porcentaje_iva' => $val->iva,
-            'porcentaje_arancel' => $val->arancel
-          );
-          DB::table('impuesto_hijas')->insert($data);
+                $data = array(
+                    'impuesto_master_id' => $impuesto_master_id,
+                    'documento_id' => $val->documento_detalle_id,
+                    'seguro' => $seguro,
+                    'flete' => $flete,
+                    'costo' => $val->declarado,
+                    'arancel' => $arancel,
+                    'iva' => $iva,
+                    'total_impuesto' => $arancel + $iva,
+                    'porcentaje_iva' => $val->iva,
+                    'porcentaje_arancel' => $val->arancel
+                );
+                DB::table('impuesto_hijas')->insert($data);
+            }
+            DB::commit();
+            return true;
+        } catch (\Exception $e) {
+            DB::rollback();
+            return $e;
         }
-        DB::commit();
-        return true;
-      } catch (\Exception $e) {
-          DB::rollback();
-          return $e;
-      }
     }
 
     public function impuestosMaster($id)
     {
-      return view('templates.master.impuestosMaster');
+        return view('templates.master.impuestosMaster');
     }
 
     public function saveCostMaster(Request $request)
     {
-      DB::beginTransaction();
-      try {
-        $cost = (new MasterCostos)->fill($request->all());
-        $cost->save();
-        DB::commit();
-        return array('code' => 200);
-      } catch (\Exception $e) {
-          DB::rollback();
-          return $e;
-      }
+        DB::beginTransaction();
+        try {
+            $cost = (new MasterCostos)->fill($request->all());
+            $cost->save();
+            DB::commit();
+            return array('code' => 200);
+        } catch (\Exception $e) {
+            DB::rollback();
+            return $e;
+        }
     }
 
     public function getCosts($master_id)
     {
-      DB::beginTransaction();
-      try {
-        $data = DB::table('master_costos AS a')
-        ->join('moneda AS b', 'a.moneda_id', 'b.id')
-        ->leftJoin('maestra_multiple AS c', 'a.costos_id', 'c.id')
-        ->select(
-            'a.id',
-            'a.master_id',
-            'a.moneda_id',
-            'a.costos_id',
-            'a.descripcion',
-            'a.valor',
-            'a.trm',
-            'a.costo_gasto',
-            'b.moneda',
-            'b.simbolo',
-            'c.nombre'
-        )
-        ->where([
-          ['a.deleted_at', null],
-          ['a.master_id', $master_id]
-        ])
-        ->orderBy('a.costo_gasto', 'ASC')
-        ->get();
-        DB::commit();
-        return array('data' => $data);
-      } catch (\Exception $e) {
-          DB::rollback();
-          return $e;
-      }
+        DB::beginTransaction();
+        try {
+            $data = DB::table('master_costos AS a')
+                ->join('moneda AS b', 'a.moneda_id', 'b.id')
+                ->leftJoin('maestra_multiple AS c', 'a.costos_id', 'c.id')
+                ->select(
+                    'a.id',
+                    'a.master_id',
+                    'a.moneda_id',
+                    'a.costos_id',
+                    'a.descripcion',
+                    'a.valor',
+                    'a.trm',
+                    'a.costo_gasto',
+                    'b.moneda',
+                    'b.simbolo',
+                    'c.nombre'
+                )
+                ->where([
+                    ['a.deleted_at', null],
+                    ['a.master_id', $master_id]
+                ])
+                ->orderBy('a.costo_gasto', 'ASC')
+                ->get();
+            DB::commit();
+            return array('data' => $data);
+        } catch (\Exception $e) {
+            DB::rollback();
+            return $e;
+        }
     }
 
     public function deleteCost($id)
     {
-      DB::beginTransaction();
-      try {
-        $data = MasterCostos::findOrFail($id);
-        $data->delete();
-        DB::commit();
-        return array('code' => 200);
-      } catch (\Exception $e) {
-          DB::rollback();
-          return $e;
-      }
+        DB::beginTransaction();
+        try {
+            $data = MasterCostos::findOrFail($id);
+            $data->delete();
+            DB::commit();
+            return array('code' => 200);
+        } catch (\Exception $e) {
+            DB::rollback();
+            return $e;
+        }
     }
 
     public function generateXml($id)
     {
-      $data = array('ano' => '220');
-      $content = view('templates.master.fileXml', compact('data'))->render();
-      \File::put(storage_path().'/file.xml', $content);
-      return response()->make($content, 200)
-      ->header('Content-Type', 'application/xml')
-      ->header('Content-Disposition', 'attachment; filename="Dmuisca.xml"');
-
+        $data = array('ano' => '220');
+        $content = view('templates.master.fileXml', compact('data'))->render();
+        \File::put(storage_path() . '/file.xml', $content);
+        return response()->make($content, 200)
+            ->header('Content-Type', 'application/xml')
+            ->header('Content-Disposition', 'attachment; filename="Dmuisca.xml"');
     }
 
     public function printDelivery($id)
@@ -716,10 +718,10 @@ class MasterController extends Controller
         $master    = $this->getMasterForImpress($id);
         $detalle = $this->getMasterDetalleForImpress($id);
         $agencia = [];
-        if($master){
+        if ($master) {
             $agencia = $this->getDataAgenciaById($master->agencia_id);
         }
-        return view('pdf/masterTemplates/deliveryOrder', compact('agencia','master','detalle'));
+        return view('pdf/masterTemplates/deliveryOrder', compact('agencia', 'master', 'detalle'));
         // return array('agencia' => $agencia, 'data' => $master, 'detalle' => $detalle);
     }
 }
