@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Neodynamic\SDK\Web\WebClientPrint;
+// use Neodynamic\SDK\Web\WebClientPrint;
 use Session;
 use App\AplexConfig;
 use Illuminate\Support\Facades\DB;
@@ -15,9 +15,9 @@ class PrintConfigController extends Controller
   public function index()
   {
     $this->assignPermissionsJavascript();
-    $wcpScript = WebClientPrint::createScript(action('WebClientPrintController@processRequest'), action('PrintConfigController@index'), Session::getId());
-    $wcppScriptDetect = WebClientPrint::createWcppDetectionScript(action('WebClientPrintController@processRequest'), Session::getId());
-    return view('templates/printConfig', compact('wcpScript', 'wcppScriptDetect'));
+    // $wcpScript = WebClientPrint::createScript(action('WebClientPrintController@processRequest'), action('PrintConfigController@index'), Session::getId());
+    // $wcppScriptDetect = WebClientPrint::createWcppDetectionScript(action('WebClientPrintController@processRequest'), Session::getId());
+    return view('templates/printConfig');
   }
 
   public function save(Request $request)

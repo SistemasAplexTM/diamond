@@ -1303,12 +1303,8 @@ export default {
     },
     updateTableDetail() {
       this.getModalGuias();
-      // var table = $("#tbl-consolidado").DataTable();
-      // $("#tbl-modalguiasconsolidado tbody").empty();
-      // $("#tbl-modalguiasconsolidado")
-      //   .dataTable()
-      //   .fnDestroy();
-      // table.ajax.reload();
+      var table = $("#tbl-consolidado").DataTable();
+      table.ajax.reload();
     },
     updateAgrupar() {
       this.agrupar();
