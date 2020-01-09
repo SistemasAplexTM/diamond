@@ -12,7 +12,8 @@ use Illuminate\Support\Facades\DB;
 
 class PaisController extends Controller
 {
-    public function __construct(){
+    public function __construct()
+    {
         $this->middleware('permission:pais.index')->only('index');
         $this->middleware('permission:pais.store')->only('store');
         $this->middleware('permission:pais.update')->only('update');
@@ -38,18 +39,18 @@ class PaisController extends Controller
      */
     public function store(PaisRequest $request)
     {
-        try{
+        try {
             $data = (new Pais)->fill($request->all());
             $data->created_at = date('Y-m-d H:i:s');
-            $data->iso3 = $request->prefijo;// PARA PODER REJISTRAR LA ISO3
+            $data->iso3 = $request->prefijo; // PARA PODER REJISTRAR LA ISO3
             if ($data->save()) {
-                $answer=array(
+                $answer = array(
                     "datos" => $request->all(),
                     "code" => 200,
                     "status" => 200,
                 );
-            }else{
-                $answer=array(
+            } else {
+                $answer = array(
                     "error" => 'Error al intentar Eliminar el registro.',
                     "code" => 600,
                     "status" => 500,
@@ -61,11 +62,11 @@ class PaisController extends Controller
             foreach ($e->errorInfo as $key => $value) {
                 $error .= $key . ' - ' .  $value . ' <br> ';
             }
-            $answer=array(
-                    "error" => $error,
-                    "code" => 600,
-                    "status" => 500,
-                );
+            $answer = array(
+                "error" => $error,
+                "code" => 600,
+                "status" => 500,
+            );
             return $answer;
         }
     }
@@ -83,23 +84,22 @@ class PaisController extends Controller
         try {
             $data = Pais::findOrFail($id);
             $data->update($request->all());
-            $answer=array(
+            $answer = array(
                 "datos" => $request->all(),
                 "code" => 200,
                 "status" => 500,
             );
             return $answer;
-            
         } catch (\Exception $e) {
             $error = '';
             foreach ($e->errorInfo as $key => $value) {
                 $error .= $key . ' - ' .  $value . ' <br> ';
             }
-            $answer=array(
-                    "error" => $error,
-                    "code" => 600,
-                    "status" => 500,
-                );
+            $answer = array(
+                "error" => $error,
+                "code" => 600,
+                "status" => 500,
+            );
             return $answer;
         }
     }
@@ -123,7 +123,7 @@ class PaisController extends Controller
             $error = '';
             foreach ($e->errorInfo as $key => $value) {
                 // $error .= $key . ' - ' . $value . ' <br> ';
-                if($value == '23000'){
+                if ($value == '23000') {
                     $error .= 'No es posible eliminar el registro, esta asociado con otro registro <br> ';
                 }
             }
@@ -143,27 +143,27 @@ class PaisController extends Controller
      * @param  boolean  $deleteLogical
      * @return \Illuminate\Http\Response
      */
-    public function delete($id,$logical)
+    public function delete($id, $logical)
     {
-        
-        if(isset($logical) and $logical == 'true'){
+
+        if (isset($logical) and $logical == 'true') {
             $data = Pais::findOrFail($id);
             $now = new \DateTime();
-            $data->deleted_at =$now->format('Y-m-d H:i:s');
-            if($data->save()){
-                    $answer=array(
-                        "datos" => 'Eliminación exitosa.',
-                        "code" => 200
-                    ); 
-               }  else{
-                    $answer=array(
-                        "error" => 'Error al intentar Eliminar el registro.',
-                        "code" => 600
-                    );
-               }          
-                
-                return $answer;
-        }else{
+            $data->deleted_at = $now->format('Y-m-d H:i:s');
+            if ($data->save()) {
+                $answer = array(
+                    "datos" => 'Eliminación exitosa.',
+                    "code" => 200
+                );
+            } else {
+                $answer = array(
+                    "error" => 'Error al intentar Eliminar el registro.',
+                    "code" => 600
+                );
+            }
+
+            return $answer;
+        } else {
             $this->destroy($id);
         }
     }
@@ -189,6 +189,7 @@ class PaisController extends Controller
      */
     public function getAll()
     {
-        return \DataTables::of(Pais::query()->where('deleted_at', '=', NULL))->make(true);
+        // return \DataTables::of(Pais::query()->where('deleted_at', '=', NULL))->make(true);
+        return Pais::all();
     }
 }
