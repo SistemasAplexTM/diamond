@@ -69,6 +69,14 @@ span.error {
               >
                 <i class="fal fa-user-plus"></i>&nbsp;
               </button>
+              <button
+                @click="open('s', false)"
+                class="btn btn-xs btn-warning btn-action pull-right mr-10"
+                type="button"
+                style="margin-right: 10px"
+              >
+                <i class="fal fa-edit"></i>&nbsp;
+              </button>
             </div>
             <div class="panel-body">
               <div class="row">
@@ -893,7 +901,7 @@ span.error {
                         </tr>
                       </thead>
                       <tbody>
-                        <tr v-for="(find, index) in other_c">
+                        <tr v-for="(find, index) in other_c" :key="index">
                           <td>
                             <div class :class="{'has-error': errors.has('oc_description') }">
                               <input
@@ -1143,6 +1151,8 @@ export default {
   },
   methods: {
     open(type, create) {
+      console.log("create: ", create, " this.shipper.id: ", this.shipper.id);
+
       var data = {
         component: "form-transporter",
         title: "Transportador",

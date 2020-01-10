@@ -69,6 +69,18 @@ export default {
       me.resetForm();
     });
   },
+  watch: {
+    "payload.field_id": {
+      handler(newVal, oldVal) {
+        if (!this.payload.id_c) {
+          if (newVal !== "null" && newVal !== null && newVal !== "") {
+            this.getDataById(newVal);
+          }
+        }
+      },
+      deep: true
+    }
+  },
   methods: {
     onSubmit() {
       axios
@@ -82,6 +94,9 @@ export default {
         .catch(error => {
           console.log(error);
         });
+    },
+    getDataById(id) {
+      console.log("nbkjhbkhbbbbbbbbb", id);
     },
     resetForm() {
       this.form = {

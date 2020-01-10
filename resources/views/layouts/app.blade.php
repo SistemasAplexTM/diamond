@@ -23,6 +23,8 @@
         rel="stylesheet">
     <!-- ICONOS DE FONT AWESOME 5 PRO -->
     {{-- <script src="https://kit.fontawesome.com/a3e351735a.js"></script> --}}
+    <link rel="stylesheet" type="text/css" href="https://jqwidgets.com/public/jqwidgets/jqx-all.js" />
+    <link rel="stylesheet" type="text/css" href="https://jqwidgets.com/public/jqwidgets/styles/jqx.base.css" />
     @yield('scripts_head')
 </head>
 
