@@ -104,20 +104,20 @@ $(function () {
             jQuery(this).find('.edit').hide();
         });
 
-    $('#show-all-c').change(function () {
-        if ($(this).prop('checked') === true) {
-            objVue.modalConsignee(false);
-        } else {
-            objVue.modalConsignee($('#shipper_id').val());
-        }
-    });
-    $('#show-all').change(function () {
-        if ($(this).prop('checked') === true) {
-            objVue.modalShipper(false);
-        } else {
-            objVue.modalShipper($('#consignee_id').val());
-        }
-    });
+    // $('#show-all-c').change(function () {
+    //     if ($(this).prop('checked') === true) {
+    //         objVue.modalConsignee(false);
+    //     } else {
+    //         objVue.modalConsignee($('#shipper_id').val());
+    //     }
+    // });
+    // $('#show-all').change(function () {
+    //     if ($(this).prop('checked') === true) {
+    //         objVue.modalShipper(false);
+    //     } else {
+    //         objVue.modalShipper($('#consignee_id').val());
+    //     }
+    // });
     $('#show-totales').change(function () {
         if ($(this).prop('checked') === true) {
             objVue.showTotals(true);

@@ -40,7 +40,7 @@
         <label for="documento" class="control-label gcore-label-top" v-if="form.corporativo">Nit:</label>
       </el-col>
       <el-col :span="16">
-        <el-input  :placeholder="(form.corporativo) ? 'Nit' : 'Documento'" v-model="form.documento" size="medium" clearable></el-input>
+        <el-input  :placeholder="(form.corporativo) ? 'Nit' : 'Documento'" v-model="form.documento" size="medium" clearable autocomplete="new-document"></el-input>
       </el-col>
     </el-row>
 
@@ -54,7 +54,7 @@
         <el-input  :placeholder="(form.corporativo) ? ((hidde) ? 'Razon social' : 'Nombre') : 'Primer Nombre'"
         v-model="form.primer_nombre" size="medium" clearable
         @blur="validateFields('primer_nombre')"
-        :class="{ 'error_field': errors_data.primer_nombre }"></el-input>
+        :class="{ 'error_field': errors_data.primer_nombre }" autocomplete="new-name"></el-input>
         <small class="help-block" v-show="errors_data.primer_nombre">Campo obligatorio</small>
       </el-col>
     </el-row>
@@ -66,7 +66,7 @@
             <label for="segundo_nombre" class="control-label gcore-label-top">Segundo Nombre:</label>
           </el-col>
           <el-col :span="16">
-            <el-input  placeholder="Segundo Nombre" v-model="form.segundo_nombre" size="medium" clearable></el-input>
+            <el-input  placeholder="Segundo Nombre" v-model="form.segundo_nombre" size="medium" clearable autocomplete="new-second-name"></el-input>
           </el-col>
         </el-row>
       </transition>
@@ -78,7 +78,7 @@
           <el-col :span="16">
             <el-input  placeholder="Primer Apellido" v-model="form.primer_apellido" size="medium" clearable
             @blur="validateFields('primer_apellido')"
-            :class="{ 'error_field': errors_data.primer_apellido }"></el-input>
+            :class="{ 'error_field': errors_data.primer_apellido }" autocomplete="new-last-name"></el-input>
             <small class="help-block" v-show="errors_data.primer_apellido">Campo obligatorio</small>
           </el-col>
         </el-row>
@@ -89,7 +89,7 @@
             <label for="segundo_apellido" class="control-label gcore-label-top">Segundo Apellido:</label>
           </el-col>
           <el-col :span="16">
-            <el-input  placeholder="Segundo Apellido" v-model="form.segundo_apellido" size="medium" clearable></el-input>
+            <el-input  placeholder="Segundo Apellido" v-model="form.segundo_apellido" size="medium" clearable autocomplete="new-second-last"></el-input>
           </el-col>
         </el-row>
       </transition>
@@ -102,7 +102,7 @@
       <el-col :span="16">
         <el-input  placeholder="Dirección" v-model="form.direccion" size="medium" clearable
         @blur="validateFields('direccion')"
-        :class="{ 'error_field': errors_data.direccion }"></el-input>
+        :class="{ 'error_field': errors_data.direccion }" autocomplete="new-direction"></el-input>
         <small class="help-block" v-show="errors_data.direccion">Campo obligatorio</small>
       </el-col>
     </el-row>
@@ -122,7 +122,7 @@
         <label for="telefono" class="control-label gcore-label-top">Teléfono:</label>
       </el-col>
       <el-col :span="16">
-        <el-input  placeholder="Teléfono" v-model="form.telefono" size="medium" clearable></el-input>
+        <el-input  placeholder="Teléfono" v-model="form.telefono" size="medium" clearable autocomplete="new-callphone"></el-input>
       </el-col>
     </el-row>
     <el-row :gutter="24" v-if="hidde && showItem">
@@ -130,7 +130,7 @@
         <label for="whatsapp" class="control-label gcore-label-top">Whatsapp:</label>
       </el-col>
       <el-col :span="16">
-        <el-input  placeholder="Whatsapp" v-model="form.whatsapp" size="medium" clearable></el-input>
+        <el-input  placeholder="Whatsapp" v-model="form.whatsapp" size="medium" clearable autocomplete="new-whatsapp"></el-input>
       </el-col>
     </el-row>
     <el-row :gutter="24" v-if="showItem">
@@ -138,7 +138,7 @@
         <label for="correo" class="control-label gcore-label-top">Email:</label>
       </el-col>
       <el-col :span="16">
-        <el-input type="email"  placeholder="Email" v-model="form.correo" size="medium" clearable></el-input>
+        <el-input type="email"  placeholder="Email" v-model="form.correo" size="medium" clearable autocomplete="new-email"></el-input>
       </el-col>
     </el-row>
     <el-row :gutter="24" v-if="hidde && showItem">
@@ -146,7 +146,7 @@
         <label for="emails_cc" class="control-label gcore-label-top">Emails CC:</label>
       </el-col>
       <el-col :span="16">
-        <el-input-tag placeholder="Ingrese correos" v-model="form.emails_cc" size="medium"></el-input-tag>
+        <el-input-tag placeholder="Ingrese correos" v-model="form.emails_cc" size="medium" autocomplete="new-email-cc"></el-input-tag>
       </el-col>
     </el-row>
     
@@ -155,7 +155,7 @@
         <label for="zona" class="control-label gcore-label-top">Zona:</label>
       </el-col>
       <el-col :span="16">
-        <el-input  placeholder="Zona" v-model="form.zona" size="medium" clearable></el-input>
+        <el-input  placeholder="Zona" v-model="form.zona" size="medium" clearable autocomplete="new-zone"></el-input>
       </el-col>
     </el-row>
     <el-row :gutter="24" v-if="hidde">
@@ -163,7 +163,7 @@
         <label for="zip" class="control-label gcore-label-top">Zip Code:</label>
       </el-col>
       <el-col :span="16">
-        <el-input  placeholder="Zip Code" v-model="form.zip" size="medium" clearable></el-input>
+        <el-input  placeholder="Zip Code" v-model="form.zip" size="medium" clearable autocomplete="new-zip-code"></el-input>
       </el-col>
     </el-row>
     <el-row :gutter="24" v-if="payload.table === 'consignee' && showItem">
@@ -232,7 +232,7 @@
         <label for="tarifa" class="control-label gcore-label-top">Tarifa:</label>
       </el-col>
       <el-col :span="16">
-        <el-input-number size="medium" v-model="form.tarifa" :min="0" :precision="2" :step="0.1" placeholder="Tarifa 0.00"></el-input-number>
+        <el-input-number size="medium" v-model="form.tarifa" :min="0" :precision="2" :step="0.1" placeholder="Tarifa 0.00" autocomplete="new-tarif"></el-input-number>
       </el-col>
     </el-row>
     <el-row :gutter="24" v-if="payload.table === 'consignee' && showItem">

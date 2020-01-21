@@ -239,6 +239,7 @@ class MasterController extends Controller
             ->leftJoin('deptos', 'localizacion.deptos_id', '=', 'deptos.id')
             ->leftJoin('pais AS x', 'deptos.pais_id', 'x.id')
             ->select(
+                'a.daughter_guide AS hija',
                 'a.agencia_id',
                 'a.num_master',
                 'a.master_id',

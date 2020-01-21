@@ -118,14 +118,16 @@ trait DocumentTrait
         $fFin = date('Y-m-d' , $fFin);
         $nuevafecha = strtotime('-2 day' , strtotime($fFin));
         $fIni = date('Y-m-d' , $nuevafecha);
-        //$dates = array(
-          //'inicio' => $fIni,
-          //'fin' => $fFin,
-        //);
+        // $dates = array(
+        //   'inicio' => $fIni,
+        //   'fin' => $fFin,
+        // );
       }else{
         if($filter['dates'] != '' and $type != 4){
+          $nuevafecha = strtotime('-2 day' , strtotime($filter['dates'][0]));
+          $fIni = date('Y-m-d' , $nuevafecha);
           $dates = array(
-            'inicio' => $filter['dates'][0],
+            'inicio' => $fIni,
             'fin' => $filter['dates'][1],
           );
         }else{
@@ -273,16 +275,18 @@ trait DocumentTrait
                 DB::raw('"ciudad" AS ciudad')
             )
             ->where($where)
-            ->when(!$filter['dates'], function ($query, $data) use ($type) {
+            ->when(!$filter['dates'], function ($query, $data) use ($type, $filter) {
               if ($type != 4) {
-                return $query->where([['a.consolidado', 0]]);
+                if ($filter['dates'] == '' and $filter['consignee_id'] == '' and $filter['warehouse'] == '') {
+                  return $query->where([['a.consolidado', 0]]);
+                }
               }
             })
             ->when($filter['warehouse'], function ($query, $data) {
               return $query->where('a.num_warehouse', 'LIKE', "%".$data."%");
             })
             ->when($dates, function ($query, $data) {
-              return $query->whereBetween('b.created_at', [$data['inicio'],$data['fin']]);
+              return $query->whereBetween('b.created_at', [$data['inicio'], date("Y-m-d",strtotime($data['fin']."+ 1 days"))]);
             })
             ->when($filter['consignee_id'], function ($query, $data) {
               return $query->where('b.consignee_id', $data);
@@ -290,7 +294,6 @@ trait DocumentTrait
             ->orderBy('a.agrupado', 'DESC')
             ->orderBy('a.flag', 'ASC')
             ->orderBy('b.created_at', 'ASC');
-            
         return $sql;
     }
 

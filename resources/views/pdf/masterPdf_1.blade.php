@@ -284,22 +284,23 @@
 	        <?php $destino = 'EXTRA COPY' ?>
 	        @endif
 	<div id="guia_master" style="">
+		
 		<table border="0" cellpadding="0" cellspacing="0" id="tableContainer" style="page-break-after:always;">
             <tr>
                 <td>
 					<table width="100%">
 					  <tr>
 					    <td width="70%" style="font-size:18px">
-					    <table width="40%" align="left">
+					    <table width="50%" align="left">
 					      <tr>
-					        <td width="25%" align="center">{{ $data->codigo_aerolinea  }}</td>
-					        <td class="left_line" style="border-left: 1px solid {{ $color }};" style="text-align:center" width="25%">{{ $data->prefijo }}</td>
-					        <td class="left_line" style="border-left: 1px solid {{ $color }};" width="50%"><div style="padding-left:3px;">{{ substr($data->num_master,3) }}</div></td>
+					        <td width="20%" align="center">{{ ($data->hija === 0) ? $data->codigo_aerolinea : '' }}</td>
+					        <td class="left_line" style="border-left: 1px solid {{ $color }};" style="text-align:center" width="20%">{{ ($data->hija === 0) ? $data->prefijo : 'MIA' }}</td>
+					        <td class="left_line" style="border-left: 1px solid {{ $color }};" width="60%"><div style="padding-left:3px;">{{ ($data->hija === 0) ? substr($data->num_master,3) : 'HAWB-'.substr($data->num_master,3) }}</div></td>
 					      </tr>
 					    </table></td>
 					    <td align="center"><table width="40%" style="text-align:right; font-size:18px;">
 					      <tr>
-					        <td width="40%">{{ ($data->master_id != '') ? 'HAWB' : '' }}{{ $data->codigo_aerolinea  }}</td>
+					        <td width="40%">{{ ($data->master_id != '') ? 'HAWB' : '' }}{{ ($data->hija === 0) ? $data->codigo_aerolinea : 'HAWB'  }}</td>
 					        <td width="5%"> - </td>
 					        <td width="55%" align="center">{{ substr($data->num_master,3) }}</td>
 					      </tr>
@@ -343,13 +344,24 @@
 					    <div class="text_titles_tl" style="color: {{ $color }}">Not Negotiable</div>
 					    <div class="big_title" style="color: {{ $color }};font-size: 16px;">Air Waybill</div></td>
 					    <td valign="bottom">
-					    	<div id="aerolinea"><span style="font-size:18px; font-weight:700;">{{ $data->nombre_aerolinea }}</span></div>
+								<div id="aerolinea">
+									<span style="font-size:13px; font-weight:700;">
+										@if($data->hija === 0)
+										{{ $data->nombre_aerolinea }}
+										@else
+										<div>DIAMOND LOGISTICS SERVICES</div>
+										<div>4761 NW 72 Ave, Miami, FL 33166</div>
+										<div>PH: 305-640-0464</div>
+										@endif
+										{{-- {{ ($data->hija === 0) ? $data->nombre_aerolinea : '' }} --}}
+									</span>
+								</div>
 					    </td>
 					  </tr>
 					  <tr>
 					    <td width="25%" height="25px" class="text_titles_tl bottom_line" style="border-bottom: 1px solid {{ $color }};" style="border-bottom: 1px solid {{ $color }};color: {{ $color }}"><div style="color: {{ $color }}">Issued By</div></td>
 					    <td class="bottom_line" style="border-bottom: 1px solid {{ $color }};">
-					    	<div id="direccion_aerolinea">{{ $data->dir_aerolinea }}</div>
+					    	<div id="direccion_aerolinea">{{ ($data->hija === 0) ? $data->dir_aerolinea : '' }}</div>
 					        <div id="direccion_aerolinea2">&nbsp;</div>
 					        <div id="direccion_aerolinea3">&nbsp;{{-- MIAMI, FL, 33122 --}}</div>
 					    </td>
@@ -654,7 +666,7 @@
 					    </td>
 					    <td class="left_line bg_azul" style="border-left: 1px solid {{ $color }};background-color:{{ $background }};">&nbsp;</td>
 					    <td align="center" valign="top" class="left_line" style="border-left: 1px solid {{ $color }};">
-					    	<div id="total" class="margin_div text_total">$ {{ number_format($detalle->total,2) }}</div>
+					    	<div id="total" class="margin_div text_total">{{ '$ ' . number_format($detalle->total,2)}}</div>
 					    </td>
 					    <td class="left_line bg_azul" style="border-left: 1px solid {{ $color }};background-color:{{ $background }};">&nbsp;</td>
 					    <td valign="top" rowspan="2" class="left_line" style="border-left: 1px solid {{ $color }};">
@@ -679,7 +691,7 @@
 					    <td class="left_line bg_azul" style="border-left: 1px solid {{ $color }};background-color:{{ $background }};">&nbsp;</td>
 					    <td class="left_line bg_azul" style="border-left: 1px solid {{ $color }};background-color:{{ $background }};">&nbsp;</td>
 					    <td align="center" valign="middle" class="left_line top_line" style="border-left: 1px solid {{ $color }};border-top: 1px solid {{ $color }};">
-					    	<div id="total_2" class="margin_div text_total">$ {{ number_format($detalle->total,2) }}</div>
+					    	<div id="total_2" class="margin_div text_total">{{ '$ ' . number_format($detalle->total,2) }}</div>
 					    </td>
 					    <td class="left_line bg_azul" style="border-left: 1px solid {{ $color }};background-color:{{ $background }};">&nbsp;</td>
 					  </tr>
@@ -957,12 +969,12 @@
 						    <div style="width:24%; float:left" class="text_regular_c">{{-- MIA --}}</div>
 						    <div style="width:50%; float:right" class="text_regular_r">
 							    <span>
-		                            {{ $data->nombre_carrier }}
-		                        </span>
-		                        <br>
-		                        <span>
-		                            {{ $data->telefono_carrier }} / {{ $data->direccion_carrier }}
-		                        </span>
+											{{ $data->nombre_carrier }}
+									</span>
+									<br>
+									<span>
+											{{ $data->telefono_carrier }} / {{ $data->direccion_carrier }}
+									</span>
 							</div>
 					    </td>
 					  </tr>
@@ -1004,7 +1016,7 @@
 					            </table>
 					    </td>
 					    <td rowspan="2" class=" left_line" style="border-left: 1px solid {{ $color }};">&nbsp;</td>
-					    <td align="center" rowspan="2"><div id="master_bottom" style="font-size:18px" >{{ ($data->master_id != '') ? 'HAWB' : '' }}{{ $data->codigo_aerolinea .'-'. substr($data->num_master,3) }}</div></td>
+					    <td align="center" rowspan="2"><div id="master_bottom" style="font-size:18px" >{{ ($data->master_id != '') ? 'HAWB' : '' }}{{ ($data->hija === 0) ? $data->codigo_aerolinea . ' '.substr($data->num_master,3) : 'HAWB' .'-'. substr($data->num_master,3) }}</div></td>
 					  </tr>
 					  <tr>
 					    <td width="18%" class="left_line bottom_line bg_azul" style="border-left: 1px solid {{ $color }};border-bottom: 1px solid {{ $color }};background-color:{{ $background }};">

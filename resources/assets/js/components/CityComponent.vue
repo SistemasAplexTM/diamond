@@ -1,7 +1,6 @@
 <template>
   <div class>
     <el-autocomplete
-      :debounce="400"
       class="inline-input"
       v-model="city.name"
       :fetch-suggestions="querySearch"
@@ -10,6 +9,7 @@
       placeholder="Buscar Ciudad"
       @select="handleSelect"
       size="medium"
+      autocomplete="nueva-ciudad"
     >
       <template slot-scope="{ item }">
         <div>
@@ -59,14 +59,7 @@ export default {
         axios
           .get("/ciudad/getSelectCity/" + queryString)
           .then(function(response) {
-            console.log(response.data);
-            if (response.data.code) {
-              me.options = response.data.data;
-              console.log("existe response.data.data");
-            } else {
-              console.log("No existe");
-              me.options = [];
-            }
+            me.options = response.data.data;
             cb(me.options);
           })
           .catch(function(error) {

@@ -2,6 +2,7 @@
 <html>
 
 <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title></title>
 </head>
 
@@ -37,12 +38,13 @@
         #t_detalle {
             padding-top: 5px;
             padding-bottom: 5px;
-            font-size: 11px;
+            font-size: 9px;
         }
 
         #detalle {
             font-size: 10px;
-            /*padding-top: 5px;*/
+            padding-left: 3px;
+            padding-right: 3px;
             color: #1d1d1e;
         }
     </style>
@@ -64,7 +66,7 @@
                 </th>
                 <th>&nbsp;</th>
                 <th width="250px" style="text-align: right;">
-                    <div id="nomAgencia" style="font-size: 20px;">{{ $documento->agencia }}</div>
+                    <div id="nomAgencia" style="font-size: 17px;">{{ $documento->agencia }}</div>
                     <div id="dirAgencia">{{ $documento->agencia_dir }} - {{ $documento->agencia_ciudad }} -
                         {{ $documento->agencia_depto }}</div>
                     <div id="telAgencia">@lang('general.phone'): {{ $documento->agencia_tel }} Zip:
@@ -82,7 +84,10 @@
                     <div id="title">POINT LOADING:</div>
                 </th>
                 <th width="250px">
-                    <div id="title2">{{ $documento->aeropuerto }}</div>
+                    <div id="title2">
+                        {{ $documento->aeropuerto }}
+                        {{-- MIAMI INT'L AIR PORT --}}
+                    </div>
                 </th>
             </tr>
             <tr>
@@ -104,7 +109,7 @@
                     <div id="title">DATE:</div>
                 </th>
                 <th>
-                    <div id="title2">{{ date('m-d-y', strtotime($documento->created_at)) }}</div>
+                    <div id="title2">{{ date('m-d-y', time()) }}</div>
                 </th>
                 <th>
                     <div id="title">PO:</div>
@@ -130,16 +135,16 @@
                 <th>
                     <div id="t_detalle" style="text-align: center;">AWB</div>
                 </th>
-                <th>
+                <th style="width: 150px">
                     <div id="t_detalle">SHIPPER</div>
                 </th>
-                <th>
+                <th style="width: 150px">
                     <div id="t_detalle">CONSIGNEE</div>
                 </th>
-                <th>
+                <th style="width: 120px">
                     <div id="t_detalle">NATURE OF GOODS</div>
                 </th>
-                <th>
+                <th style="width: 10px">
                     <div id="t_detalle" style="text-align: center;">U.S COSTUM</div>
                 </th>
                 <th>
@@ -183,16 +188,22 @@
             <tr>
                 <td id="detalle" style="width: 13%;text-align: center;">{{ $val->num_guia }}</td>
                 <td style="width: 15%">
-                    <div id="detalle">{{ ($val->ship_nomfull2) ? $val->ship_nomfull2 : $val->nom_ship }}</div>
-                    <div id="detalle">{{ ($val->ship_dir2) ? $val->ship_dir2 : $val->dir_ship }}</div>
-                    <div id="detalle">{{ ($val->ship_tel2) ? $val->ship_tel2 : $val->tel_ship }}</div>
+                    {{-- <div id="detalle"> --}}
+                    <pre id="detalle">{{ $val->shipper_data }}</pre>
+                    {{-- </div> --}}
+                    {{-- <div id="detalle">{{ ($val->ship_nomfull2) ? $val->ship_nomfull2 : $val->nom_ship }}</div> --}}
+                    {{-- <div id="detalle">{{ ($val->ship_dir2) ? $val->ship_dir2 : $val->dir_ship }}</div>
+                    <div id="detalle">{{ ($val->ship_tel2) ? $val->ship_tel2 : $val->tel_ship }}</div> --}}
                     {{-- <div id="detalle" >{{ ($val->shipper_json) ? $shipper_json->ciudad : $val->ciu_ship }} /
                     {{ ($val->shipper_json) ? $shipper_json->pais : $val->pais_ship }}, {{ $val->zip_ship }}</div> --}}
                 </td>
                 <td id="detalle" style="width: 22%">
-                    <div id="detalle">{{ ($val->cons_nomfull2) ? $val->cons_nomfull2 : $val->nom_cons }}</div>
+                    {{-- <div id="detalle"> --}}
+                    <pre id="detalle">{{ $val->consignee_data }}</pre>
+                    {{-- </div> --}}
+                    {{-- <div id="detalle">{{ ($val->cons_nomfull2) ? $val->cons_nomfull2 : $val->nom_cons }}</div>
                     <div id="detalle">{{ ($val->cons_dir2) ? $val->cons_dir2 : $val->dir_cons }}</div>
-                    <div id="detalle">{{ ($val->cons_tel2) ? $val->cons_tel2 : $val->tel_cons }}</div>
+                    <div id="detalle">{{ ($val->cons_tel2) ? $val->cons_tel2 : $val->tel_cons }}</div> --}}
                     {{-- <div id="detalle" >{{ ($val->consignee_json) ? $consignee_json->ciudad : $val->ciu_cons }} /
                     {{ ($val->consignee_json) ? $consignee_json->pais : $val->pais_cons }}, {{ $val->zip_cons }}</div>
                     --}}
@@ -210,11 +221,11 @@
                 {{-- <td id="detalle" style="text-align: center;width: 10%">{{ ceil($val->volumen) }} Lb</td> --}}
                 <td id="detalle" style="text-align: center;">
                     @if($val->declarado2 == 0)
-                    $ {{ number_format($val->declarado2,2) }}
+                    ${{ number_format($val->declarado2,2) }}
                     {{-- <div style="background-color:black;color:white;">$ {{ number_format($val->declarado2,2) }}<div>
                         --}}
                         @else
-                        $ {{ number_format($val->declarado2,2) }}
+                        ${{ number_format($val->declarado2,2) }}
                         @endif
                 </td>
             </tr>
@@ -254,7 +265,8 @@
                     </div>
                 </th>
                 <th>
-                    <div style="margin-top:5px;text-align: center;font-size: 14px;color:#1d1d1e;">{{ $peso }} Lb</div>
+                    <div style="margin-top:5px;text-align: center;font-size: 14px;color:#1d1d1e;">
+                        {{ round($peso * 0.453592, 2) }} KL</div>
                 </th>
                 <th>
                     <div style="margin-top:5px;text-align: center;font-size: 14px;color:#1d1d1e;"></div>

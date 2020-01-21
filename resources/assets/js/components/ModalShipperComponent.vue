@@ -88,7 +88,7 @@
 export default {
   methods: {
     closeModal() {
-      // $("#show-all").bootstrapToggle("off");
+      $("#show-all").bootstrapToggle("off");
       //   setTimeout(() => {
       $("#modalShipper").modal("hide");
       //   }, 200);

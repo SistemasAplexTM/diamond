@@ -210,6 +210,8 @@
   <modalconsignee-component v-if="!mostrar.includes(24)"></modalconsignee-component>
   <modalarancel-component></modalarancel-component>
   <modalcargosadd-component v-if="!mostrar.includes(24)" :showmodal="showmodalAdd"></modalcargosadd-component>
+  <products-cuba-component v-if="mostrar.includes(66)" :id_document="{{ $documento->id }}" :points="total_points"
+    :data_p="data_points" @get="getProductsCuba($event)"></products-cuba-component>
 
   <form class="" autocomplete="off" id="formDocumento" name="formDocumento" class=" form-horizontal" role="form"
     action="{{ url('documento/updatedDocument') }}/{{  $documento->id }}" method="post">
@@ -235,7 +237,7 @@
         @if(isset($agencia) and $agencia)
         <div class="col-lg-6" style="padding-right: 0px;">
           <div class="form-group">
-            <label for="num_guia"
+            <label for="num_guia" class=""
               style="font-family: 'Russo One', sans-serif; font-size: 40px; float: right;font-weight: bold; color: #0d87e9;">
               {{ ($documento->tipo_documento_id == 3) ? 'Consolidado: ' . $documento->consecutivo : $documento->num_warehouse }}
             </label>
@@ -282,7 +284,7 @@
                     <input type="search" autocomplete="aplextmautocomplete" data-id="nomBuscarShipper" id="nombreR"
                       name="nombreR" placeholder="@lang('documents.search')" class="form-control"
                       onkeyup="deleteError($(this).parent());" v-model="nombreR" v-validate="'required'"
-                      :disabled="disabled_s" readonly="readonly">
+                      disabled="true">
                     <span class="input-group-btn">
                       <button id="btnBuscarShipper" @click="modalShipper(true)" class="btn btn-default" type="button"
                         data-toggle='tooltip' title="Buscar"><span class="fal fa-search"></span>&nbsp;</button>
@@ -366,7 +368,7 @@
                     <input type="search" autocomplete="off" data-id="nomBuscarConsignee" class="form-control"
                       id="nombreD" name="nombreD" placeholder="@lang('documents.search')"
                       onkeyup="deleteError($(this).parent());" v-model="nombreD" v-validate="'required'"
-                      :disabled="disabled_c" readonly="readonly">
+                      disabled="true">
                     <span class="input-group-btn">
                       <button class="btn btn-default" @click="modalConsignee(true)" id="btnBuscarConsignee"
                         type="button" data-toggle='tooltip' title="Buscar"><span
@@ -438,12 +440,12 @@
               @if(env('APP_LIQUIDADO') == 1)
               <input type='checkbox' data-toggle="toggle" id='show-totales' name="liquidar" @click="showTotals()"
                 data-size='mini' data-on="Si" data-off="No" data-width="50" data-style="ios" data-onstyle="primary"
-                data-offstyle="danger" disabled="disabled"
+                data-offstyle="danger"
                 {{ ($documento->liquidado === null || $documento->liquidado !== 0) ? 'checked="checked"' : '' }}>
               @else
               <input type='checkbox' data-toggle="toggle" id='show-totales' name="liquidar" @click="showTotals()"
                 data-size='mini' data-on="Si" data-off="No" data-width="50" data-style="ios" data-onstyle="primary"
-                data-offstyle="danger" disabled="disabled"
+                data-offstyle="danger"
                 {{ ($documento->liquidado !== 0 and $documento->liquidado !== null) ? 'checked="checked"' : '' }}>
               @endif
             </div>
@@ -1079,6 +1081,8 @@
   @include('templates/documento/modals/modalTracking')
   {{-- MODAL AGREGAR TRACKINGS --}}
   @include('templates/documento/modals/modalChangeShipperConsignee')
+  {{-- MODAL AGREGAR PUNTOS --}}
+  {{-- <points-component v-if="mostrar.includes(66)" :id_detail="points_id_detail"></points-component> --}}
 </div>
 @endsection
 @section('scripts')
