@@ -104,7 +104,7 @@ class MasterController extends Controller
                 ->select(DB::raw("ROUND(Sum(b.peso2) * 0.453592) AS peso_total"))
                 ->where([['b.deleted_at', null], ['a.deleted_at', null], ['a.consolidado_id', $consolidado_id]])
                 ->first();
-            if ($peso_consolidado and $peso_consolidado != null) {
+            if ($peso_consolidado and $peso_consolidado != null and $peso_consolidado->peso_total != '') {
                 $peso = $peso_consolidado->peso_total;
             }
 

@@ -11,7 +11,7 @@
     <style type="text/css">
         * {
             font-family: 'Roboto Condensed', sans-serif;
-            font-size: 13px;
+            font-size: 12px;
             color: #1d68a4;
         }
 
@@ -19,7 +19,7 @@
         #localAgencia,
         #telAgencia {
             color: #5d5f60;
-            font-size: 13px;
+            font-size: 12px;
             font-family: cursive;
         }
 
@@ -65,7 +65,7 @@
                     @endif
                 </th>
                 <th>&nbsp;</th>
-                <th width="250px" style="text-align: right;">
+                <th width="300px" style="text-align: right;">
                     <div id="nomAgencia" style="font-size: 17px;">{{ $documento->agencia }}</div>
                     <div id="dirAgencia">{{ $documento->agencia_dir }} - {{ $documento->agencia_ciudad }} -
                         {{ $documento->agencia_depto }}</div>

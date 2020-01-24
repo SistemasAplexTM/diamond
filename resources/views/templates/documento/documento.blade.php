@@ -235,7 +235,14 @@
           @endforeach
         </div>
         @if(isset($agencia) and $agencia)
-        <div class="col-lg-6" style="padding-right: 0px;">
+        <div class="col-lg-2" style="padding-right: 0px;">
+          <div class="form-group">
+            <span class="">&nbsp;</span>
+            <el-date-picker v-model="date_document" type="date" size="medium" placeholder="Seleccionar Fecha">
+            </el-date-picker>
+          </div>
+        </div>
+        <div class="col-lg-4" style="padding-right: 0px;">
           <div class="form-group">
             <label for="num_guia" class=""
               style="font-family: 'Russo One', sans-serif; font-size: 40px; float: right;font-weight: bold; color: #0d87e9;">

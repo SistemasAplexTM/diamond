@@ -220,7 +220,7 @@ var objVue = new Vue({
             var my_file1 = new JSPM.PrintFilePDF('/files/' + doc + '.pdf', JSPM.FileSourceType.URL, 'documento.pdf', 1);
             cpj.files.push(my_file1);
             cpj.sendToClient();
-            console.log('fin prinnt');
+            console.log('End prinnt', printer_name, doc);
 
             return true;
           } else {

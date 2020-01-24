@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use Neodynamic\SDK\Web\WebClientPrint;
-use Neodynamic\SDK\Web\Utils;
-use Neodynamic\SDK\Web\DefaultPrinter;
-use Neodynamic\SDK\Web\InstalledPrinter;
-use Neodynamic\SDK\Web\PrintFile;
-use Neodynamic\SDK\Web\PrintFilePDF;
-use Neodynamic\SDK\Web\PrintFileTXT;
-use Neodynamic\SDK\Web\PrintRotation;
-use Neodynamic\SDK\Web\PrintOrientation;
-use Neodynamic\SDK\Web\TextAlignment;
-use Neodynamic\SDK\Web\ClientPrintJob;
+// use Neodynamic\SDK\Web\WebClientPrint;
+// use Neodynamic\SDK\Web\Utils;
+// use Neodynamic\SDK\Web\DefaultPrinter;
+// use Neodynamic\SDK\Web\InstalledPrinter;
+// use Neodynamic\SDK\Web\PrintFile;
+// use Neodynamic\SDK\Web\PrintFilePDF;
+// use Neodynamic\SDK\Web\PrintFileTXT;
+// use Neodynamic\SDK\Web\PrintRotation;
+// use Neodynamic\SDK\Web\PrintOrientation;
+// use Neodynamic\SDK\Web\TextAlignment;
+// use Neodynamic\SDK\Web\ClientPrintJob;
 use Session;
 
 use Auth;
@@ -69,60 +69,60 @@ class DocumentoController extends Controller
 
     public function printFile(Request $request)
     {
-        $consolidado = null;
-        $id_detalle = null;
-        $id_detail_consol = null;
-        if ($request->input('consolidado')) {
-            $consolidado = 'consolidado';
-        }
-        if ($request->input('id_detail')) {
-            $id_detalle = $request->input('id_detail');
-        }
-        if ($request->input('id_detail_consol')) {
-            $id_detail_consol = $request->input('id_detail_consol');
-        }
+        // $consolidado = null;
+        // $id_detalle = null;
+        // $id_detail_consol = null;
+        // if ($request->input('consolidado')) {
+        //     $consolidado = 'consolidado';
+        // }
+        // if ($request->input('id_detail')) {
+        //     $id_detalle = $request->input('id_detail');
+        // }
+        // if ($request->input('id_detail_consol')) {
+        //     $id_detail_consol = $request->input('id_detail_consol');
+        // }
 
-        // VALIDAR SI ES UN LABEL O UN DOCUMENTO A IMPRIMIR
-        if ($request->input('label')) {
-            $this->pdfLabel($request->input('id'), $request->input('document'), $id_detalle, $consolidado, $id_detail_consol);
-            $print = $request->input('printerName');
-        } else {
-            $this->pdf($request->input('id'), $request->input('document'), $id_detalle, false);
-            $print = $request->input('printerName');
-        }
-        if ($request->exists(WebClientPrint::CLIENT_PRINT_JOB)) {
-            $useDefaultPrinter = ($request->input('useDefaultPrinter') === 'checked');
-            // $printerName = urldecode($request->input('printerName'));
-            $printerName = urldecode($print);
-            $filetype = $request->input('filetype');
-            $fileName = uniqid() . '.' . $filetype;
+        // // VALIDAR SI ES UN LABEL O UN DOCUMENTO A IMPRIMIR
+        // if ($request->input('label')) {
+        //     $this->pdfLabel($request->input('id'), $request->input('document'), $id_detalle, $consolidado, $id_detail_consol);
+        //     $print = $request->input('printerName');
+        // } else {
+        //     $this->pdf($request->input('id'), $request->input('document'), $id_detalle, false);
+        //     $print = $request->input('printerName');
+        // }
+        // if ($request->exists(WebClientPrint::CLIENT_PRINT_JOB)) {
+        //     $useDefaultPrinter = ($request->input('useDefaultPrinter') === 'checked');
+        //     // $printerName = urldecode($request->input('printerName'));
+        //     $printerName = urldecode($print);
+        //     $filetype = $request->input('filetype');
+        //     $fileName = uniqid() . '.' . $filetype;
 
-            $filePath = '';
-            $filePath = public_path() . '/files/File.pdf';
+        //     $filePath = '';
+        //     $filePath = public_path() . '/files/File.pdf';
 
-            if (!Utils::isNullOrEmptyString($filePath)) {
-                //Create a ClientPrintJob obj that will be processed at the client side by the WCPP
-                $cpj = new ClientPrintJob();
+        //     if (!Utils::isNullOrEmptyString($filePath)) {
+        //         //Create a ClientPrintJob obj that will be processed at the client side by the WCPP
+        //         $cpj = new ClientPrintJob();
 
-                $myfile = new PrintFilePDF($filePath, $fileName, null);
-                $myfile->printRotation = PrintRotation::None;
-                //$myfile->pagesRange = '1,2,3,10-15';
-                //$myfile->printAnnotations = true;
-                //$myfile->printAsGrayscale = true;
-                //$myfile->printInReverseOrder = true;
-                $cpj->printFile = $myfile;
+        //         $myfile = new PrintFilePDF($filePath, $fileName, null);
+        //         $myfile->printRotation = PrintRotation::None;
+        //         //$myfile->pagesRange = '1,2,3,10-15';
+        //         //$myfile->printAnnotations = true;
+        //         //$myfile->printAsGrayscale = true;
+        //         //$myfile->printInReverseOrder = true;
+        //         $cpj->printFile = $myfile;
 
-                if ($useDefaultPrinter || $printerName === 'null') {
-                    $cpj->clientPrinter = new DefaultPrinter();
-                } else {
-                    $cpj->clientPrinter = new InstalledPrinter($printerName);
-                }
+        //         if ($useDefaultPrinter || $printerName === 'null') {
+        //             $cpj->clientPrinter = new DefaultPrinter();
+        //         } else {
+        //             $cpj->clientPrinter = new InstalledPrinter($printerName);
+        //         }
 
-                //Send ClientPrintJob back to the client
-                return response($cpj->sendToClient())
-                    ->header('Content-Type', 'application/octet-stream');
-            }
-        }
+        //         //Send ClientPrintJob back to the client
+        //         return response($cpj->sendToClient())
+        //             ->header('Content-Type', 'application/octet-stream');
+        //     }
+        // }
     }
 
     public function index()
@@ -133,10 +133,10 @@ class DocumentoController extends Controller
               ->where([['deleted_at', null]])
               ->get();
 
-          $fFin = strtotime('+5 day' , strtotime(date('Y-m-d')));
-          $fFin = date('Y-m-d' , $fFin);
-          $nuevafecha = strtotime('-6 day' , strtotime($fFin));
-          $fIni = date('Y-m-d' , $nuevafecha);
+        //   $fFin = strtotime('+5 day' , strtotime(date('Y-m-d')));
+        //   $fFin = date('Y-m-d' , $fFin);
+        //   $nuevafecha = strtotime('-6 day' , strtotime($fFin));
+        //   $fIni = date('Y-m-d' , $nuevafecha);
           $pendientes = DB::table('documento AS a')
               ->leftJoin('documento_detalle AS b', 'a.id', 'b.documento_id')
               ->select(DB::raw('Count(a.num_warehouse) AS cantidad'))
@@ -146,7 +146,7 @@ class DocumentoController extends Controller
                   ['b.num_warehouse', null],
                   ['b.deleted_at', null]
               ])
-              ->whereBetween('a.created_at', [$fIni,$fFin])
+            //   ->whereBetween('a.created_at', [$fIni,$fFin])
               ->whereNotNull('a.num_warehouse')
               ->first();
           // OBTENER LA CONFIGURACION DE LA IMPRESORA
@@ -157,8 +157,8 @@ class DocumentoController extends Controller
               'print_documents'  => (($printers) ? $printers->default : ''),
               'print_format'  => 'PDF',
           ]);
-          $wcpScript = WebClientPrint::createScript(action('WebClientPrintController@processRequest'), action('DocumentoController@printFile'), Session::getId());
-          return view('templates.documento.index', compact('status_list', 'pendientes', 'wcpScript'));
+        //   $wcpScript = WebClientPrint::createScript(action('WebClientPrintController@processRequest'), action('DocumentoController@printFile'), Session::getId());
+          return view('templates.documento.index', compact('status_list', 'pendientes'));
         } catch (\Exception  $e) {
             \Log::debug('Test var fails: ' . $e->getMessage());
         }
@@ -454,6 +454,26 @@ class DocumentoController extends Controller
                 ['a.id', $documento->consignee_id],
             ])
             ->first();
+
+            // $insert =  DB::table('consolidado_detalle AS a')
+            // ->join('documento_detalle AS b', 'a.documento_detalle_id', 'b.id')
+            // ->join('shipper AS c', 'b.shipper_id', 'c.id')
+            // ->leftJoin('shipper AS c2', 'a.shipper', 'c2.id')
+            // ->join('consignee AS d', 'b.consignee_id', 'd.id')
+            // ->leftJoin('consignee AS d2', 'a.consignee', 'd2.id')
+            // ->select(
+            //     'a.id',
+            //     DB::raw('(IF(a.shipper IS NULL,CONCAT_WS("\n", c.nombre_full, c.direccion, c.telefono),CONCAT_WS("\n", c2.nombre_full, c2.direccion, c2.telefono))) AS shipper_d'),
+            //     DB::raw('(IF(a.consignee IS NULL,CONCAT_WS("\n", d.nombre_full, d.direccion, d.telefono),CONCAT_WS("\n", d2.nombre_full, d2.direccion, d2.telefono))) AS consignee_d')
+            // )
+            // ->where([
+            //     ['a.consolidado_id', 155]
+            // ])
+            // ->get();
+
+            // foreach ($insert as $key => $value) {
+            //     DB::table('consolidado_detalle')->where([['id', $value->id]])->update(['shipper_data' => $value->shipper_d, 'consignee_data' => $value->consignee_d]);
+            // }
 
         // $funcionalidades_doc = MaestraMultiple::select('id', 'nombre')
         //     ->where([['modulo', 7], ['deleted_at', null]])
@@ -1952,7 +1972,7 @@ class DocumentoController extends Controller
                                     $this->AddToLog('Impresion Consolidado (' . $id . ')');
                                     if (env('APP_TYPE') === 'courier') {
                                         if (env('APP_CLIENT') === 'colombiana' || env('APP_CLIENT') === 'diamond') {
-                                            $pdf          = PDF::loadView('pdf.consolidadoPdfColombiana', compact('documento', 'detalle', 'detalleConsolidado'));
+                                            $pdf          = PDF::loadView('pdf.consolidadoPdfColombiana', compact('documento', 'detalle', 'detalleConsolidado'))->setPaper('a4', 'landscape');
                                         } else {
                                             if ($documento->pais_id_document === $pais_id_puntos) {
                                                 //FORMATO PARA CUBA
@@ -2976,10 +2996,44 @@ class DocumentoController extends Controller
     {
         $id_change = $request->all()['id_change'];
         $data   = $request->all()['data'];
-        $this->updateIdConsigneeContactConsolidate(false, $data['option'], $data['id'], $id_change);
-        DB::table('consolidado_detalle')
-            ->where('id', $data['id'])
-            ->update([$data['option'] => $id_change]);
+        // $this->updateIdConsigneeContactConsolidate(false, $data['option'], $data['id'], $id_change);
+        // $dat = explode("-", $data['id_data']);
+        // $id_dat = $dat[0];
+       
+       $sql = DB::table($data['option'])
+        ->join('localizacion', $data['option'] . '.localizacion_id', 'localizacion.id')
+        ->join('deptos', 'localizacion.deptos_id', 'deptos.id')
+        ->join('pais', 'deptos.pais_id', 'pais.id')
+        ->select(
+            $data['option'] . '.nombre_full',
+            $data['option'] . '.direccion',
+            $data['option'] . '.telefono'
+        )
+        ->where($data['option'] .'.id', $id_change)
+        ->first();
+        if ($data['option'] === 'shipper') {
+            $id_detail = DB::table('consolidado_detalle')->where('id', $data['id'])
+            ->update(
+                [
+                    'shipper_data'         => $sql->nombre_full . 
+                                        "\n" . $sql->direccion .
+                                        "\n" . $sql->telefono
+                ]
+            );
+        }else{
+            $id_detail = DB::table('consolidado_detalle')->where('id', $data['id'])
+            ->update(
+                [
+                    'consignee_data'       => $sql->nombre_full . 
+                                        "\n" . $sql->direccion .
+                                        "\n" . $sql->telefono
+                ]
+            );
+        }
+        
+        // DB::table('consolidado_detalle')
+        //     ->where('id', $data['id'])
+        //     ->update([$data['option'] => $id_change]);
         $answer = array(
             'code' => 200,
         );
@@ -3045,9 +3099,9 @@ class DocumentoController extends Controller
         
         
         // $this->updateIdConsigneeContactConsolidate(true, $table, $idD);
-        // DB::table('consolidado_detalle')
-        //     ->where('id', $idD)
-        //     ->update([$table => null]);
+        DB::table('consolidado_detalle')
+            ->where('id', $idD)
+            ->update([$table => null]);
         $answer = array(
             'code' => 200,
         );
@@ -3068,7 +3122,9 @@ class DocumentoController extends Controller
             $dat = explode("-", (($table === 'consignee') ? $data->consignee_id : $data->shipper_id));
             $id_dat = $dat[0];
         } else {
-            $id_dat = (($table === 'consignee') ? $data->consignee_id : $data->shipper_id) . '-' . $id_change;
+            $dat = explode("-", (($table === 'consignee') ? $data->consignee_id : $data->shipper_id));
+            $id_dat = $dat[0];
+            $id_dat = $id_dat . '-' . $id_change;
         }
 
         DB::table('documento_detalle AS a')
@@ -3641,8 +3697,7 @@ class DocumentoController extends Controller
             ->leftJoin('deptos AS k', 'j.deptos_id', 'k.id')
             ->leftJoin('pais AS l', 'k.pais_id', 'l.id')
             ->select(
-                'docu.consecutivo AS consecutivo_documento',
-                'doc.consecutivo',
+                // 'doc.consecutivo',
                 'b.num_warehouse',
                 'b.num_guia',
                 'c.pa',
@@ -3667,6 +3722,7 @@ class DocumentoController extends Controller
                 'l.descripcion AS cons_pais',
                 'i.telefono AS cons_tel',
                 'i.zip AS cons_zip',
+                'docu.consecutivo AS consecutivo_documento',
                 DB::raw("(SELECT rr.num_guia FROM documento_detalle AS rr WHERE rr.id = a.agrupado and a.flag = 1) as mintic"),
                 DB::raw("(SELECT GROUP_CONCAT(tracking.codigo) FROM tracking WHERE tracking.documento_detalle_id = b.id) as tracking")
             )
@@ -3675,6 +3731,11 @@ class DocumentoController extends Controller
                 ['b.deleted_at', null],
                 ['a.consolidado_id', $id],
             ])->orderBy('b.num_warehouse', 'ASC')->get();
+
+            // echo '<pre>';
+            // print_r($data);
+            // echo '</pre>';
+            // exit();
         return Excel::download(
             new ConsolidadoExport('exports.excelBodega', array('datos' => $data,)),
             'Excel Bodega '. $data[0]->consecutivo_documento.'.xlsx',

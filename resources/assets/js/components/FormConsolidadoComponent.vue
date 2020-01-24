@@ -246,13 +246,13 @@ a.badge:hover {
                       <!-- <div class="form-group">
                       <label for style="width: 100%;">&nbsp;</label>-->
                       <button
-                        class="btn btn-primary btn-sm"
+                        class="btn btn-success btn-sm"
                         type="button"
                         data-toggle="tooltip"
                         title="Descargar Excel Liquimp"
                         @click="exportLiquimp()"
                       >
-                        <i class="fal fa-cloud-download-alt"></i> Excel Liquimp
+                        <i class="fal fa-cloud-download-alt"></i> Prevalidador
                       </button>
                       <!-- </div> -->
                       <!-- </div>
@@ -1130,10 +1130,10 @@ export default {
           scrollY: "400px",
           scrollCollapse: true,
           paging: false,
-          processing: true,
-          serverSide: true,
+          processing: false,
+          serverSide: false,
           searching: true,
-          order: [[1, "desc"]],
+          order: [[2, "desc"]],
           ajax: "getAllGuiasDisponibles/" + me.pais_id + "/" + me.transporte_id,
           columns: [
             {
@@ -1155,7 +1155,8 @@ export default {
             },
             {
               data: "created_at",
-              name: "created_at"
+              name: "created_at",
+              visible: false
             },
             {
               render: function(data, type, full, meta) {
@@ -1337,6 +1338,7 @@ export default {
             [40, 50, 80, 100, 200, -1],
             [40, 50, 80, 100, 200, "All"]
           ],
+          order: [[1, "desc"]],
           ajax: "getAllConsolidadoDetalle",
           columns: [
             { data: "num_bolsa", name: "num_bolsa" },

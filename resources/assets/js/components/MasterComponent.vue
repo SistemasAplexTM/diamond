@@ -824,8 +824,10 @@
           id: this.consol
         };
       }
-      if(this.peso_consolidado != 0){
-        this.peso = this.peso_consolidado;
+      if(this.peso_consolidado != 0 && this.peso_consolidado != ''){
+console.log(this.peso_consolidado);
+
+        // this.peso = this.peso_consolidado;
       }
       if(this.piezas_consolidado != null){
         this.piezas = this.piezas_consolidado;

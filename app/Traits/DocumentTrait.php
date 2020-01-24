@@ -132,14 +132,14 @@ trait DocumentTrait
           );
         }else{
           if($type == 4){
-            $fFin = strtotime('+5 day' , strtotime(date('Y-m-d')));
-            $fFin = date('Y-m-d' , $fFin);
-            $nuevafecha = strtotime('-6 day' , strtotime($fFin));
-            $fIni = date('Y-m-d' , $nuevafecha);
-            $dates = array(
-              'inicio' => $fIni,
-              'fin' => $fFin,
-            );
+            // $fFin = strtotime('+5 day' , strtotime(date('Y-m-d')));
+            // $fFin = date('Y-m-d' , $fFin);
+            // $nuevafecha = strtotime('-6 day' , strtotime($fFin));
+            // $fIni = date('Y-m-d' , $nuevafecha);
+            // $dates = array(
+            //   'inicio' => $fIni,
+            //   'fin' => $fFin,
+            // );
           }
         }
       }

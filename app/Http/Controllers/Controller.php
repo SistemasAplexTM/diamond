@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-include_once(app_path() . '\WebClientPrint\WebClientPrint.php');
+// include_once(app_path() . '\WebClientPrint\WebClientPrint.php');
 use Auth;
 use JavaScript;
 use App\Agencia;

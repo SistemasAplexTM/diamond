@@ -28,6 +28,7 @@
 			</tr>
 			<tr>
 				<td>Mintic</td>
+				{{-- <td>Warehouse#</td> --}}
 				<td>Guia#</td>
 				<td>Tracking</td>
 				<td>Peso lb</td>
@@ -47,6 +48,7 @@
 			@foreach ($data as $key => $value)
 			<tr>
 				<td>{{ $value->mintic }}</td>
+				{{-- <td>{{ $value->num_warehouse }}</td> --}}
 				<td>{{ $value->num_guia }}</td>
 				<td>{{ $value->tracking }}</td>
 				<td>{{ $value->peso_lb }}</td>

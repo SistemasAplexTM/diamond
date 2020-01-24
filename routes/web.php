@@ -255,6 +255,7 @@ Route::group(['middleware' => 'auth'], function () {
   Route::get('shipper/selectInput/{tableName}', 'ShipperController@selectInput');
   Route::get('shipper/getDataById/{id}', 'ShipperController@getDataById');
   Route::get('shipper/getContacts/{id}', 'ShipperController@getContacts');
+  Route::get('shipper/removeContact/{id}', 'ShipperController@removeContact');
 
   /*--- MODULO DESTINATARIOS ---*/
   Route::resource('consignee', 'ConsigneeController', ['except' => ['show', 'create', 'edit']]);
@@ -269,6 +270,7 @@ Route::group(['middleware' => 'auth'], function () {
   Route::get('consignee/getContacts/{id}', 'ConsigneeController@getContacts');
   Route::post('consignee/assignContact/{id}/{table}', 'ConsigneeController@assignContact');
   Route::get('consignee/getExisting/{data?}/{consignee_id?}/{table?}', 'ConsigneeController@getExisting');
+  Route::get('consignee/removeContact/{id}', 'ConsigneeController@removeContact');
 
   /*--- MODULO EMAIL TEMPLATES ---*/
   Route::resource('emailTemplate', 'EmailTemplateController', ['except' => ['show', 'create', 'edit']]);
