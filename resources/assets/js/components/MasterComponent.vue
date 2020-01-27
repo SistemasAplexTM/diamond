@@ -69,20 +69,21 @@ span.error {
               >
                 <i class="fal fa-user-plus"></i>&nbsp;
               </button>
-              <button
+              <!-- <button
                 @click="open('s', false)"
                 class="btn btn-xs btn-warning btn-action pull-right mr-10"
                 type="button"
                 style="margin-right: 10px"
               >
                 <i class="fal fa-edit"></i>&nbsp;
-              </button>
+              </button>-->
             </div>
             <div class="panel-body">
               <div class="row">
                 <div class="col-lg-12">
                   <div class="form-group" :class="{'has-error': errors.has('nombre') }">
                     <label for="nombre">Nombre</label>
+                    <!-- <p>{{ shipper.name }}</p> -->
                     <autocomplete-component
                       v-validate="'required'"
                       name="nombre"
@@ -1038,8 +1039,8 @@ export default {
       chgs: "PP",
       tipo_transportador: "s",
       shipper: {
-        id: null,
-        name: null,
+        id: "",
+        name: "",
         direccion: null,
         ciudad: null,
         contacto: null,
@@ -1130,29 +1131,30 @@ export default {
     this.getOtherCharges();
     let me = this;
     bus.$on("assignTransport", function(payload) {
-      console.log(payload.type);
-      if (payload.type == "s") {
-        me.shipper.id = payload.id;
-        me.shipper.name = payload.nombre;
-        me.datos_shipper =
-          "\nEmail: " + payload.email + "\n" + payload.information;
-      } else if (payload.type == "c") {
-        me.consignee.id = payload.id;
-        me.consignee.name = payload.nombre;
-        me.datos_consignee =
-          "\nEmail: " + payload.email + "\n" + payload.information;
-      } else {
-        me.carrier.id = payload.id;
-        me.carrier.name = payload.nombre;
-        me.datos_carrier =
-          "\nEmail: " + payload.email + "\n" + payload.information;
-      }
+      console.log("id: ", payload.id, " nombre: ", payload.nombre);
+      me.setData(payload);
+      // if (payload.type == "s") {
+      //   me.shipper.id = payload.id;
+      //   me.shipper.name = payload.nombre;
+      //   me.datos_shipper =
+      //     "\nEmail: " + payload.email + "\n" + payload.information;
+      // } else if (payload.type == "c") {
+      //   me.consignee.id = payload.id;
+      //   me.consignee.name = payload.nombre;
+      //   me.datos_consignee =
+      //     "\nEmail: " + payload.email + "\n" + payload.information;
+      // } else {
+      //   me.carrier.id = payload.id;
+      //   me.carrier.name = payload.nombre;
+      //   me.datos_carrier =
+      //     "\nEmail: " + payload.email + "\n" + payload.information;
+      // }
     });
   },
   methods: {
     open(type, create) {
-      console.log("create: ", create, " this.shipper.id: ", this.shipper.id);
-
+      this.shipper.name = "";
+      this.shipper.id = "";
       var data = {
         component: "form-transporter",
         title: "Transportador",
@@ -1271,7 +1273,9 @@ export default {
           // " " +
           // (data.zip != null ? data.zip : "");
         } else {
-          this.shipper = data;
+          this.shipper.id = data.id;
+          this.shipper.name = data.nombre;
+          // this.shipper = data;
           this.datos_shipper =
             "\nEmail: " +
             (data.email != null ? data.email : "") +
