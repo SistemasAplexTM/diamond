@@ -744,6 +744,10 @@ a.badge:hover {
 <script>
 export default {
   props: {
+    date_doc: {
+      type: String,
+      required: false
+    },
     documento: {
       type: Object,
       required: true
@@ -783,6 +787,9 @@ export default {
     }
   },
   watch: {
+    date_doc: function(val) {
+      console.log(val);
+    },
     close_document: function(val) {
       this.close = val;
       this.updateTableDetail();
@@ -1203,7 +1210,8 @@ export default {
           central_destino_id: me.central_destino_id,
           transporte_id: me.transporte_id,
           observacion: me.observacion,
-          tipo_consolidado: me.tipo_consolidado
+          tipo_consolidado: me.tipo_consolidado,
+          date_doc: me.date_doc
         };
         axios
           .put("../" + $("#id_documento").val(), rowData)

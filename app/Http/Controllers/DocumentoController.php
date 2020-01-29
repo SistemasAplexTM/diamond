@@ -523,6 +523,7 @@ class DocumentoController extends Controller
                 $data->observaciones      = $request->observacion;
                 $data->updated_at         = $request->date;
                 $data->tipo_consolidado   = $request->tipo_consolidado;
+                $data->date_doc   = $request->date_doc;
                 if ($data->save()) {
                     $this->AddToLog('Documento Consolidado actualizado (' . $id . ')');
                     $answer = array(
