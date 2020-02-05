@@ -360,4 +360,14 @@ class ShipperController extends Controller
         return $e;
         }
     }
+
+    public function removeContact($id)
+    {
+        $data             = Shipper::findOrFail($id);
+        $data->parent_id = null;
+        $data->save();
+        return $answer = array(
+            'code'  => 200
+        );
+    }
 }

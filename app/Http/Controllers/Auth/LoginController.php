@@ -11,7 +11,7 @@ use App\AplexConfig;
 use Session;
 use JavaScript;
 
-use Neodynamic\SDK\Web\WebClientPrint;
+// use Neodynamic\SDK\Web\WebClientPrint;
 
 class LoginController extends Controller
 {
@@ -47,9 +47,9 @@ class LoginController extends Controller
 
   public function showLoginForm()
   {
-    $wcpScript = WebClientPrint::createScript(action('WebClientPrintController@processRequest'), action('Auth\LoginController@showLoginForm'), Session::getId());
-    $wcppScriptDetect = WebClientPrint::createWcppDetectionScript(action('WebClientPrintController@processRequest'), Session::getId());
-    return view('auth.login', compact('wcpScript', 'wcppScriptDetect'));
+    // $wcpScript = WebClientPrint::createScript(action('WebClientPrintController@processRequest'), action('Auth\LoginController@showLoginForm'), Session::getId());
+    // $wcppScriptDetect = WebClientPrint::createWcppDetectionScript(action('WebClientPrintController@processRequest'), Session::getId());
+    return view('auth.login');
   }
 
   public function redirectPath()

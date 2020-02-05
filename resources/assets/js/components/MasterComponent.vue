@@ -77,6 +77,10 @@ span.error {
               >
                 <i class="fal fa-edit"></i>&nbsp;
               </button>-->
+              <!-- <div class="checkbox checkbox-primary checkbox-inline pull-right">
+                  <input type="checkbox" id="crearS" value="true" v-model="shipper.disabled">
+                  <label for="crearS"> Crear </label>
+              </div>-->
             </div>
             <div class="panel-body">
               <div class="row">
@@ -1039,8 +1043,8 @@ export default {
       chgs: "PP",
       tipo_transportador: "s",
       shipper: {
-        id: "",
-        name: "",
+        id: null,
+        name: null,
         direccion: null,
         ciudad: null,
         contacto: null,
@@ -1119,20 +1123,19 @@ export default {
         id: this.consol
       };
     }
-    if (this.peso_consolidado != 0) {
-      this.peso = this.peso_consolidado;
+    if (this.peso_consolidado != 0 && this.peso_consolidado != "") {
+      console.log(this.peso_consolidado);
     }
     if (this.piezas_consolidado != null) {
       this.piezas = this.piezas_consolidado;
     }
-
     this.getAerolineas("aerolineas");
     this.getAerolineas("aeropuertos");
     this.getOtherCharges();
     let me = this;
     bus.$on("assignTransport", function(payload) {
-      console.log("id: ", payload.id, " nombre: ", payload.nombre);
-      me.setData(payload);
+      // console.log("id: ", payload.id, " nombre: ", payload.nombre);
+      // me.setData(payload);
       // if (payload.type == "s") {
       //   me.shipper.id = payload.id;
       //   me.shipper.name = payload.nombre;
@@ -1296,6 +1299,95 @@ export default {
           // data.pais +
           // " " +
           // (data.zip != null ? data.zip : "");
+          this.total_other_charge_due_carrier = total_c;
+          this.total_other_charge_due_agent = total_a;
+        }
+      }
+    },
+    getOtherCharges: function() {
+      let url = null;
+      if (this.editing) {
+        url = "../getOtherCharges/" + this.master;
+        axios.get(url).then(response => {
+          var obj = response.data.data;
+          if (Object.keys(obj).length !== 0) {
+            this.other_c = obj;
+          }
+        });
+      }
+    },
+    onComplete: function() {
+      if (!this.editing) {
+        this.store();
+      } else {
+        this.update();
+      }
+    },
+    setLoading: function(value) {
+      this.loadingWizard = value;
+    },
+    handleValidation: function(isValid, tabIndex) {
+      // console.log('Tab: '+tabIndex+ ' valid: '+isValid)
+    },
+    handleErrorMessage: function(errorMsg) {
+      this.errorMsg = errorMsg;
+    },
+    setData: function(data, tipo) {
+      if (data.type) {
+        if (data.type == "c") {
+          this.consignee = data;
+          this.datos_consignee =
+            data.name +
+            "\nPhone: " +
+            data.telefono +
+            "\n" +
+            (data.contacto != null ? "Contact: " + data.contacto : "") +
+            "\n" +
+            data.direccion +
+            "\n" +
+            data.ciudad +
+            ", " +
+            data.estado +
+            " " +
+            data.pais +
+            " " +
+            (data.zip != null ? data.zip : "");
+        } else if (data.type == "cr") {
+          this.carrier = data;
+          this.datos_carrier =
+            data.name +
+            "\nPhone: " +
+            data.telefono +
+            "\n" +
+            (data.contacto != null ? "Contact: " + data.contacto : "") +
+            "\n" +
+            data.direccion +
+            "\n" +
+            data.ciudad +
+            ", " +
+            data.estado +
+            " " +
+            data.pais +
+            " " +
+            (data.zip != null ? data.zip : "");
+        } else {
+          this.shipper = data;
+          this.datos_shipper =
+            data.name +
+            "\nPhone: " +
+            data.telefono +
+            "\n" +
+            (data.contacto != null ? "Contact: " + data.contacto : "") +
+            "\n" +
+            data.direccion +
+            "\n" +
+            data.ciudad +
+            ", " +
+            data.estado +
+            " " +
+            data.pais +
+            " " +
+            (data.zip != null ? data.zip : "");
         }
       } else {
         if (data == "c") {
@@ -1413,7 +1505,6 @@ export default {
     update: function() {
       axios
         .put("/master/" + this.master, {
-          num_master: this.num_master,
           shipper_id: this.shipper.id,
           shipper: this.datos_shipper,
           consignee_id: this.consignee.id,

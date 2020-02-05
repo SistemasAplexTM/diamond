@@ -156,7 +156,8 @@ var objVue = new Vue({
         table_edit: null,
         edit_consignee: false,
         edit_shipper: false,
-        loading_add_tracking: false
+        loading_add_tracking: false,
+        date_document: ''
 
     },
     methods: {
@@ -753,14 +754,8 @@ var objVue = new Vue({
                     data: 'nombre_full',
                     name: 'shipper.nombre_full',
                 }, {
-                    data: 'telefono',
-                    name: 'shipper.telefono',
-                }, {
                     data: 'ciudad',
                     name: 'localizacion.nombre'
-                }, {
-                    data: 'correo',
-                    name: 'shipper.correo',
                 }, {
                     data: 'agencia',
                     name: 'agencia.descripcion',
@@ -803,14 +798,8 @@ var objVue = new Vue({
                     data: 'nombre_full',
                     name: 'consignee.nombre_full'
                 }, {
-                    data: 'telefono',
-                    name: 'consignee.telefono'
-                }, {
                     data: 'ciudad',
                     name: 'localizacion.nombre'
-                }, {
-                    data: 'correo',
-                    name: 'consignee.correo'
                 }, {
                     data: 'agencia',
                     name: 'agencia.descripcion',

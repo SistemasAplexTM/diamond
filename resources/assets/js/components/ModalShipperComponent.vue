@@ -67,9 +67,9 @@
                 <tr>
                   <th>Acción</th>
                   <th>Nombre</th>
-                  <th>Teléfono</th>
+                  <!-- <th>Teléfono</th> -->
                   <th>Ciudad</th>
-                  <th>Correo</th>
+                  <!-- <th>Correo</th> -->
                   <th>Agencia</th>
                 </tr>
               </thead>
@@ -88,7 +88,7 @@
 export default {
   methods: {
     closeModal() {
-      // $("#show-all").bootstrapToggle("off");
+      $("#show-all").bootstrapToggle("off");
       //   setTimeout(() => {
       $("#modalShipper").modal("hide");
       //   }, 200);

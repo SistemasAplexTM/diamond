@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use Neodynamic\SDK\Web\WebClientPrint;
-use Neodynamic\SDK\Web\Utils;
-use Neodynamic\SDK\Web\DefaultPrinter;
-use Neodynamic\SDK\Web\InstalledPrinter;
-use Neodynamic\SDK\Web\PrintFile;
-use Neodynamic\SDK\Web\PrintFilePDF;
-use Neodynamic\SDK\Web\PrintFileTXT;
-use Neodynamic\SDK\Web\PrintRotation;
-use Neodynamic\SDK\Web\PrintOrientation;
-use Neodynamic\SDK\Web\TextAlignment;
-use Neodynamic\SDK\Web\ClientPrintJob;
+// use Neodynamic\SDK\Web\WebClientPrint;
+// use Neodynamic\SDK\Web\Utils;
+// use Neodynamic\SDK\Web\DefaultPrinter;
+// use Neodynamic\SDK\Web\InstalledPrinter;
+// use Neodynamic\SDK\Web\PrintFile;
+// use Neodynamic\SDK\Web\PrintFilePDF;
+// use Neodynamic\SDK\Web\PrintFileTXT;
+// use Neodynamic\SDK\Web\PrintRotation;
+// use Neodynamic\SDK\Web\PrintOrientation;
+// use Neodynamic\SDK\Web\TextAlignment;
+// use Neodynamic\SDK\Web\ClientPrintJob;
 use Session;
 
 use Auth;
@@ -69,60 +69,60 @@ class DocumentoController extends Controller
 
     public function printFile(Request $request)
     {
-        $consolidado = null;
-        $id_detalle = null;
-        $id_detail_consol = null;
-        if ($request->input('consolidado')) {
-            $consolidado = 'consolidado';
-        }
-        if ($request->input('id_detail')) {
-            $id_detalle = $request->input('id_detail');
-        }
-        if ($request->input('id_detail_consol')) {
-            $id_detail_consol = $request->input('id_detail_consol');
-        }
+        // $consolidado = null;
+        // $id_detalle = null;
+        // $id_detail_consol = null;
+        // if ($request->input('consolidado')) {
+        //     $consolidado = 'consolidado';
+        // }
+        // if ($request->input('id_detail')) {
+        //     $id_detalle = $request->input('id_detail');
+        // }
+        // if ($request->input('id_detail_consol')) {
+        //     $id_detail_consol = $request->input('id_detail_consol');
+        // }
 
-        // VALIDAR SI ES UN LABEL O UN DOCUMENTO A IMPRIMIR
-        if ($request->input('label')) {
-            $this->pdfLabel($request->input('id'), $request->input('document'), $id_detalle, $consolidado, $id_detail_consol);
-            $print = $request->input('printerName');
-        } else {
-            $this->pdf($request->input('id'), $request->input('document'), $id_detalle, false);
-            $print = $request->input('printerName');
-        }
-        if ($request->exists(WebClientPrint::CLIENT_PRINT_JOB)) {
-            $useDefaultPrinter = ($request->input('useDefaultPrinter') === 'checked');
-            // $printerName = urldecode($request->input('printerName'));
-            $printerName = urldecode($print);
-            $filetype = $request->input('filetype');
-            $fileName = uniqid() . '.' . $filetype;
+        // // VALIDAR SI ES UN LABEL O UN DOCUMENTO A IMPRIMIR
+        // if ($request->input('label')) {
+        //     $this->pdfLabel($request->input('id'), $request->input('document'), $id_detalle, $consolidado, $id_detail_consol);
+        //     $print = $request->input('printerName');
+        // } else {
+        //     $this->pdf($request->input('id'), $request->input('document'), $id_detalle, false);
+        //     $print = $request->input('printerName');
+        // }
+        // if ($request->exists(WebClientPrint::CLIENT_PRINT_JOB)) {
+        //     $useDefaultPrinter = ($request->input('useDefaultPrinter') === 'checked');
+        //     // $printerName = urldecode($request->input('printerName'));
+        //     $printerName = urldecode($print);
+        //     $filetype = $request->input('filetype');
+        //     $fileName = uniqid() . '.' . $filetype;
 
-            $filePath = '';
-            $filePath = public_path() . '/files/File.pdf';
+        //     $filePath = '';
+        //     $filePath = public_path() . '/files/File.pdf';
 
-            if (!Utils::isNullOrEmptyString($filePath)) {
-                //Create a ClientPrintJob obj that will be processed at the client side by the WCPP
-                $cpj = new ClientPrintJob();
+        //     if (!Utils::isNullOrEmptyString($filePath)) {
+        //         //Create a ClientPrintJob obj that will be processed at the client side by the WCPP
+        //         $cpj = new ClientPrintJob();
 
-                $myfile = new PrintFilePDF($filePath, $fileName, null);
-                $myfile->printRotation = PrintRotation::None;
-                //$myfile->pagesRange = '1,2,3,10-15';
-                //$myfile->printAnnotations = true;
-                //$myfile->printAsGrayscale = true;
-                //$myfile->printInReverseOrder = true;
-                $cpj->printFile = $myfile;
+        //         $myfile = new PrintFilePDF($filePath, $fileName, null);
+        //         $myfile->printRotation = PrintRotation::None;
+        //         //$myfile->pagesRange = '1,2,3,10-15';
+        //         //$myfile->printAnnotations = true;
+        //         //$myfile->printAsGrayscale = true;
+        //         //$myfile->printInReverseOrder = true;
+        //         $cpj->printFile = $myfile;
 
-                if ($useDefaultPrinter || $printerName === 'null') {
-                    $cpj->clientPrinter = new DefaultPrinter();
-                } else {
-                    $cpj->clientPrinter = new InstalledPrinter($printerName);
-                }
+        //         if ($useDefaultPrinter || $printerName === 'null') {
+        //             $cpj->clientPrinter = new DefaultPrinter();
+        //         } else {
+        //             $cpj->clientPrinter = new InstalledPrinter($printerName);
+        //         }
 
-                //Send ClientPrintJob back to the client
-                return response($cpj->sendToClient())
-                    ->header('Content-Type', 'application/octet-stream');
-            }
-        }
+        //         //Send ClientPrintJob back to the client
+        //         return response($cpj->sendToClient())
+        //             ->header('Content-Type', 'application/octet-stream');
+        //     }
+        // }
     }
 
     public function index()
@@ -133,10 +133,10 @@ class DocumentoController extends Controller
               ->where([['deleted_at', null]])
               ->get();
 
-          $fFin = strtotime('+5 day' , strtotime(date('Y-m-d')));
-          $fFin = date('Y-m-d' , $fFin);
-          $nuevafecha = strtotime('-6 day' , strtotime($fFin));
-          $fIni = date('Y-m-d' , $nuevafecha);
+        //   $fFin = strtotime('+5 day' , strtotime(date('Y-m-d')));
+        //   $fFin = date('Y-m-d' , $fFin);
+        //   $nuevafecha = strtotime('-6 day' , strtotime($fFin));
+        //   $fIni = date('Y-m-d' , $nuevafecha);
           $pendientes = DB::table('documento AS a')
               ->leftJoin('documento_detalle AS b', 'a.id', 'b.documento_id')
               ->select(DB::raw('Count(a.num_warehouse) AS cantidad'))
@@ -146,7 +146,7 @@ class DocumentoController extends Controller
                   ['b.num_warehouse', null],
                   ['b.deleted_at', null]
               ])
-              ->whereBetween('a.created_at', [$fIni,$fFin])
+            //   ->whereBetween('a.created_at', [$fIni,$fFin])
               ->whereNotNull('a.num_warehouse')
               ->first();
           // OBTENER LA CONFIGURACION DE LA IMPRESORA
@@ -157,8 +157,8 @@ class DocumentoController extends Controller
               'print_documents'  => (($printers) ? $printers->default : ''),
               'print_format'  => 'PDF',
           ]);
-          $wcpScript = WebClientPrint::createScript(action('WebClientPrintController@processRequest'), action('DocumentoController@printFile'), Session::getId());
-          return view('templates.documento.index', compact('status_list', 'pendientes', 'wcpScript'));
+        //   $wcpScript = WebClientPrint::createScript(action('WebClientPrintController@processRequest'), action('DocumentoController@printFile'), Session::getId());
+          return view('templates.documento.index', compact('status_list', 'pendientes'));
         } catch (\Exception  $e) {
             \Log::debug('Test var fails: ' . $e->getMessage());
         }
@@ -455,6 +455,26 @@ class DocumentoController extends Controller
             ])
             ->first();
 
+            // $insert =  DB::table('consolidado_detalle AS a')
+            // ->join('documento_detalle AS b', 'a.documento_detalle_id', 'b.id')
+            // ->join('shipper AS c', 'b.shipper_id', 'c.id')
+            // ->leftJoin('shipper AS c2', 'a.shipper', 'c2.id')
+            // ->join('consignee AS d', 'b.consignee_id', 'd.id')
+            // ->leftJoin('consignee AS d2', 'a.consignee', 'd2.id')
+            // ->select(
+            //     'a.id',
+            //     DB::raw('(IF(a.shipper IS NULL,CONCAT_WS("\n", c.nombre_full, c.direccion, c.telefono),CONCAT_WS("\n", c2.nombre_full, c2.direccion, c2.telefono))) AS shipper_d'),
+            //     DB::raw('(IF(a.consignee IS NULL,CONCAT_WS("\n", d.nombre_full, d.direccion, d.telefono),CONCAT_WS("\n", d2.nombre_full, d2.direccion, d2.telefono))) AS consignee_d')
+            // )
+            // ->where([
+            //     ['a.consolidado_id', 155]
+            // ])
+            // ->get();
+
+            // foreach ($insert as $key => $value) {
+            //     DB::table('consolidado_detalle')->where([['id', $value->id]])->update(['shipper_data' => $value->shipper_d, 'consignee_data' => $value->consignee_d]);
+            // }
+
         // $funcionalidades_doc = MaestraMultiple::select('id', 'nombre')
         //     ->where([['modulo', 7], ['deleted_at', null]])
         //     ->get();
@@ -544,11 +564,11 @@ class DocumentoController extends Controller
                 $consignee_old = $data->consignee_id;
                 if ($request->opEditarShip) {
                     //CREACION O ACTUALIZACION DEL SHIPPER O CONSIGNEE
-                    $idsShipCons      = $this->createOrUpdateShipperConsignee($request->all());
+                    // $idsShipCons      = $this->createOrUpdateShipperConsignee($request->all());
                     $data->shipper_id = $idsShipCons['shipper_id'];
                 } else {
                     if ($request->shipper_id == '') {
-                        $idsShipCons        = $this->createOrUpdateShipperConsignee($request->all());
+                        // $idsShipCons        = $this->createOrUpdateShipperConsignee($request->all());
                         $data->shipper_id   = $idsShipCons['shipper_id'];
                         $data->consignee_id = $idsShipCons['consig_id'];
                     } else {
@@ -557,11 +577,11 @@ class DocumentoController extends Controller
                 }
                 if ($request->opEditarCons) {
                     //CREACION O ACTUALIZACION DEL SHIPPER O CONSIGNEE
-                    $idsShipCons        = $this->createOrUpdateShipperConsignee($request->all());
+                    // $idsShipCons        = $this->createOrUpdateShipperConsignee($request->all());
                     $data->consignee_id = $idsShipCons['consig_id'];
                 } else {
                     if ($request->consignee_id == '' and  $data->consignee_id == '' and $data->shipper_id != '') {
-                        $idsShipCons        = $this->createOrUpdateShipperConsignee($request->all());
+                        // $idsShipCons        = $this->createOrUpdateShipperConsignee($request->all());
                         $data->consignee_id = $idsShipCons['consig_id'];
                     } else {
                         if ($request->consignee_id != '') {
@@ -1591,6 +1611,8 @@ class DocumentoController extends Controller
                                 'a.num_bolsa',
                                 'a.shipper AS shipper_json',
                                 'a.consignee AS consignee_json',
+                                'a.shipper_data',
+                                'a.consignee_data',
                                 'b.num_warehouse',
                                 'b.num_guia',
                                 'c.nombre_full as ship_nomfull',
@@ -1710,6 +1732,8 @@ class DocumentoController extends Controller
                                     'a.num_bolsa',
                                     'a.shipper AS shipper_json',
                                     'a.consignee AS consignee_json',
+                                    'a.shipper_data',
+                                    'a.consignee_data',
                                     'b.num_warehouse',
                                     'b.num_guia',
                                     'b.piezas',
@@ -1793,7 +1817,7 @@ class DocumentoController extends Controller
                                 } else {
                                     return view('pdf.manifiesto.guiasCuba', compact('documento', 'detalle', 'detalleConsolidado'));
                                 }
-                                $nameDocument = 'Guias -' . $documento->id;
+                                $nameDocument = $documento->num_master . 'Guias Hijas';
                             } else {
                                 $error = 'El peso o valor declarado supera lo permitido por cliente. Por favor revisar.';
                                 return view('errors/generalError', compact('error'));
@@ -1874,6 +1898,8 @@ class DocumentoController extends Controller
                                         'a.num_bolsa',
                                         'a.shipper AS shipper_json',
                                         'a.consignee AS consignee_json',
+                                        'a.shipper_data',
+                                        'a.consignee_data',
                                         'b.num_warehouse',
                                         'b.num_guia',
                                         'b.volumen',
@@ -1946,7 +1972,7 @@ class DocumentoController extends Controller
                                     $this->AddToLog('Impresion Consolidado (' . $id . ')');
                                     if (env('APP_TYPE') === 'courier') {
                                         if (env('APP_CLIENT') === 'colombiana' || env('APP_CLIENT') === 'diamond') {
-                                            $pdf          = PDF::loadView('pdf.consolidadoPdfColombiana', compact('documento', 'detalle', 'detalleConsolidado'));
+                                            $pdf          = PDF::loadView('pdf.consolidadoPdfColombiana', compact('documento', 'detalle', 'detalleConsolidado'))->setPaper('a4', 'landscape');
                                         } else {
                                             if ($documento->pais_id_document === $pais_id_puntos) {
                                                 //FORMATO PARA CUBA
@@ -1970,6 +1996,7 @@ class DocumentoController extends Controller
                                     $error = 'El peso o valor declarado supera lo permitido por cliente. Por favor revisar.';
                                     return view('errors/generalError', compact('error'));
                                 }
+                                $nameDocument = $documento->num_master . ' Consolidado';
                             }
                         }
                     }
@@ -2195,96 +2222,125 @@ class DocumentoController extends Controller
     {
 
         $detalle = DocumentoDetalle::join('documento as b', 'documento_detalle.documento_id', 'b.id')
-            ->select('documento_detalle.id', 'documento_detalle.agrupado', 'documento_detalle.flag', 'documento_detalle.declarado2', 'b.consignee_id')
+            ->leftJoin('shipper', 'b.shipper_id', 'shipper.id')
+            ->leftJoin('consignee', 'b.consignee_id', 'consignee.id')
+            ->leftJoin('localizacion as ciudad_consignee', 'consignee.localizacion_id', 'ciudad_consignee.id')
+            ->leftJoin('localizacion as ciudad_shipper', 'shipper.localizacion_id', 'ciudad_shipper.id')
+            ->leftJoin('deptos as deptos_consignee', 'ciudad_consignee.deptos_id', 'deptos_consignee.id')
+            ->leftJoin('deptos as deptos_shipper', 'ciudad_shipper.deptos_id', 'deptos_shipper.id')
+            ->select('documento_detalle.id', 'documento_detalle.agrupado', 'documento_detalle.flag', 'documento_detalle.declarado2', 'b.consignee_id',
+            'shipper.nombre_full as ship_nomfull',
+              'shipper.direccion as ship_dir',
+              'shipper.telefono as ship_tel',
+              'shipper.correo as ship_email',
+              'shipper.zip as ship_zip',
+              'ciudad_shipper.nombre as ship_ciudad',
+              'deptos_shipper.descripcion as ship_depto',
+              'consignee.nombre_full as cons_nomfull',
+              'consignee.direccion as cons_dir',
+              'consignee.telefono as cons_tel',
+              'consignee.documento as cons_documento',
+              'consignee.correo as cons_email',
+              'consignee.zip as cons_zip',
+              'consignee.po_box as cons_pobox',
+              'ciudad_consignee.nombre as cons_ciudad',
+              'deptos_consignee.descripcion as cons_depto')
             ->where([
                 ['documento_detalle.deleted_at', null],
             ])
             ->whereRaw('(documento_detalle.num_warehouse = "' . $num_guia . '" or documento_detalle.num_guia = "' . $num_guia . '")')
             ->first();
         if ($detalle) {
-            // VERIFICAR SI EL NUMERO INGRESADO NO ESTE DENTRO DE UNA MINTIC
-            if ($detalle->id == $detalle->agrupado and $detalle->flag == 0) {
-                /* VERIFICAR QUE EL NUMERO INGRESADO NO ESTE EN OTRO CONSOLIDADO O YA ESTE INGRESADO */
-                $cons_detail = DB::table('consolidado_detalle as a')
-                    ->join('documento as b', 'a.consolidado_id', 'b.id')
-                    ->select('a.consolidado_id', 'b.consecutivo')
-                    ->where([['a.deleted_at', null], ['a.documento_detalle_id', $detalle->id]])
+          // VERIFICAR SI EL NUMERO INGRESADO NO ESTE DENTRO DE UNA MINTIC
+          if($detalle->id == $detalle->agrupado and $detalle->flag == 0){
+            /* VERIFICAR QUE EL NUMERO INGRESADO NO ESTE EN OTRO CONSOLIDADO O YA ESTE INGRESADO */
+            $cons_detail = DB::table('consolidado_detalle as a')
+                ->join('documento as b', 'a.consolidado_id', 'b.id')
+                ->select('a.consolidado_id', 'b.consecutivo')
+                ->where([['a.deleted_at', null], ['a.documento_detalle_id', $detalle->id]])
+                ->first();
+
+            if (!$cons_detail) {
+                /* VERIFICAR SI LA GUIA O WAREHOUSE INGRESADO PERTENECE AL PAIS DEL CONSOLIDADO */
+                $cons = DB::table('consignee as a')
+                    ->join('localizacion as b', 'a.localizacion_id', 'b.id')
+                    ->join('deptos as c', 'b.deptos_id', 'c.id')
+                    ->select(
+                        'c.pais_id'
+                    )
+                    ->where([
+                        ['a.id', $detalle->consignee_id],
+                    ])
                     ->first();
+                if ($cons->pais_id == $pais_id) {
+                    /* VALIDAR QUE EL DECLARADO NO ESTE EN CERO */
+                    // if($detalle->declarado2 == 0 ){
+                      /* SI ESTA EN CERO SE ASIGNA UN VALOR ALEATORIO DEACUERDO AL RANGO DADO */
+                      $range = explode(',', $range_value);
+                      $r1=rand($range[0],$range[1]).'.'.rand($range[0],$range[1]);
+                      $detalle->declarado2 = $r1;
+                      $detalle->save();
+                    // }
 
-                if (!$cons_detail) {
-                    /* VERIFICAR SI LA GUIA O WAREHOUSE INGRESADO PERTENECE AL PAIS DEL CONSOLIDADO */
-                    $cons = DB::table('consignee as a')
-                        ->join('localizacion as b', 'a.localizacion_id', 'b.id')
-                        ->join('deptos as c', 'b.deptos_id', 'c.id')
-                        ->select(
-                            'c.pais_id'
-                        )
-                        ->where([
-                            ['a.id', $detalle->consignee_id],
-                        ])
-                        ->first();
-                    if ($cons->pais_id == $pais_id) {
-                        /* VALIDAR QUE EL DECLARADO NO ESTE EN CERO */
-                        if ($detalle->declarado2 == 0) {
-                            /* SI ESTA EN CERO SE ASIGNA UN VALOR ALEATORIO DEACUERDO AL RANGO DADO */
-                            $range = explode(',', $range_value);
-                            $r1 = rand($range[0], $range[1]) . '.' . rand($range[0], $range[1]);
-                            $detalle->declarado2 = $r1;
-                            $detalle->save();
-                        }
-
-                        /* INSERTAR EN TABLA CONSOLIDADO DETALLE */
-                        $id_detail = DB::table('consolidado_detalle')->insertGetId(
-                            [
-                                'consolidado_id'       => $id,
-                                'documento_detalle_id' => $detalle->id,
-                                'agrupado'             => $detalle->id,
-                                'num_bolsa'            => $num_bolsa,
-                                'created_at'           => date('Y-m-d H:i:s'),
-                            ]
-                        );
-                        /* ACTUALIZAR CAMPO consolidado EN DETALLE DOCUMENTO */
-                        $datad              = DocumentoDetalle::findOrFail($detalle->id);
-                        $datad->consolidado = 1;
-                        $datad->save();
-                        /* AGREGAR ESTATUS AL DETALLE */
-                        DB::table('status_detalle')->insert([
-                            [
-                                'status_id'            => 5, // 5 ES CONSOLIDADO
-                                'usuario_id'           => Auth::user()->id,
-                                'documento_detalle_id' => $detalle->id,
-                                'codigo'               => $datad->num_guia,
-                                'fecha_status'         => date('Y-m-d H:i:s'),
-                            ],
-                        ]);
-                        /* BUSCAR GUIAS AGRUPADAS EN LA GUIA CONSOLIDADA */
-                        $this->guidesGroups($detalle->id, 1);
-                        $answer = array(
-                            "code" => 200,
-                            "data" => $detalle
-                        );
-                    } else {
-                        $answer = array(
-                            "code" => 600,
-                            "data" => 'El país de destino de el documento ingresado no coincide con el país de este consolidado',
-                        );
-                    }
+                    /* INSERTAR EN TABLA CONSOLIDADO DETALLE */
+                    $id_detail = DB::table('consolidado_detalle')->insertGetId(
+                        [
+                            'consolidado_id'       => $id,
+                            'documento_detalle_id' => $detalle->id,
+                            'agrupado'             => $detalle->id,
+                            'num_bolsa'            => $num_bolsa,
+                            'shipper_data'         => $detalle->ship_nomfull . 
+                                                "\n" . $detalle->ship_dir .
+                                                "\n" . $detalle->ship_tel,
+                            'consignee_data'       => $detalle->cons_nomfull . 
+                                                "\n" . $detalle->cons_dir .
+                                                "\n" . $detalle->cons_tel,
+                            'created_at'           => date('Y-m-d H:i:s'),
+                        ]
+                    );
+                    /* ACTUALIZAR CAMPO consolidado EN DETALLE DOCUMENTO */
+                    $datad              = DocumentoDetalle::findOrFail($detalle->id);
+                    $datad->consolidado = 1;
+                    $datad->save();
+                    /* AGREGAR ESTATUS AL DETALLE */
+                    DB::table('status_detalle')->insert([
+                        [
+                            'status_id'            => 5, // 5 ES CONSOLIDADO
+                            'usuario_id'           => Auth::user()->id,
+                            'documento_detalle_id' => $detalle->id,
+                            'codigo'               => $datad->num_guia,
+                            'fecha_status'         => date('Y-m-d H:i:s'),
+                        ],
+                    ]);
+                    /* BUSCAR GUIAS AGRUPADAS EN LA GUIA CONSOLIDADA */
+                    $this->guidesGroups($detalle->id, 1);
+                    $answer = array(
+                        "code" => 200,
+                        "data" => $detalle,
+                    );
                 } else {
                     $answer = array(
                         "code" => 600,
-                        "data" => 'El número de Guía / WRH ingresado, ya se encuentra registrado en el consolidado # ' . $cons_detail->consecutivo,
+                        "data" => 'El país de destino de el documento ingresado no coincide con el país de este consolidado',
                     );
                 }
             } else {
-                $det = DB::table('documento_detalle as a')
-                    ->select('a.mintic')
-                    ->where([['a.id', $detalle->agrupado]])
-                    ->first();
                 $answer = array(
                     "code" => 600,
-                    "data" => 'El documento ingresado esta dentro de la ' . $det->mintic
+                    "data" => 'El número de Guía / WRH ingresado, ya se encuentra registrado en el consolidado # ' . $cons_detail->consecutivo,
                 );
             }
+          }else{
+            $det = DB::table('documento_detalle as a')
+                ->select('a.mintic')
+                ->where([['a.id', $detalle->agrupado]])
+                ->first();
+            $answer = array(
+                "code" => 600,
+                "data" => 'El documento ingresado esta dentro de la ' . $det->mintic
+            );
+          }
+
         } else {
             $answer = array(
                 "code" => 600,
@@ -2400,9 +2456,9 @@ class DocumentoController extends Controller
                 'a.num_bolsa',
                 'c.num_warehouse',
                 'c.num_guia',
+                'a.shipper_data',
+                'a.consignee_data',
                 'c.peso2 AS peso2',
-                // 'a.shipper AS shipper_json',
-                // 'a.consignee AS consignee_json',
                 'd.id as shipper_id',
                 'd.nombre_full as shipper',
                 'd.contactos_json as shipper_contactos',
@@ -2473,52 +2529,96 @@ class DocumentoController extends Controller
     {
         try {
             // $data = DocumentoDetalle::findOrFail($request->rowData['documento_detalle_id']);
-            $data = DocumentoDetalle::findOrFail($request->pk);
-
-            if (isset($request->rowData['option']) and $request->rowData['option'] == 'shipper') {
-                $data->shipper_id = $request->rowData['id'];
-            } else {
-                if (isset($request->rowData['option']) and $request->rowData['option'] == 'consignee') {
-                    $data->consignee_id = $request->rowData['id'];
-                } else {
-                    if (isset($request->value) and $request->name === 'peso2') {
-                        $data->peso2 = $request->value;
-                    }
-                    if (isset($request->value) and $request->name === 'contenido2') {
-                        $data->contenido2 = $request->value;
-                    }
-                    if (isset($request->value) and $request->name === 'declarado2') {
-                        $data->declarado2 = $request->value;
-                    }
-                }
+            if ($request->id_detail != null) {
+                $data = DocumentoDetalle::findOrFail($request->id_detail);
             }
-
-            if ($data->save()) {
-                $this->AddToLog('Consolidado detalle editado (' . $data->id . ')');
+            $answer = array(
+                "datos"  => '',
+                "code"   => 200,
+                "status" => 200,
+            );
+            if (isset($request->option) and $request->option == 'shipper') {
+                // $data->shipper_id = $request->rowData['id'];
+                DB::table('consolidado_detalle')->where('id', $request->id)->update([
+                        'shipper_data'  => $request->data
+                ]);
+                $this->AddToLog('Consolidado detalle editado (' . $request->id . ')');
                 $answer = array(
-                    "datos"  => $data,
+                    "datos"  => $request->id,
                     "code"   => 200,
                     "status" => 200,
                 );
+                // $data->shipper_data = $request->data;
             } else {
-                $answer = array(
-                    "error"  => 'Error al intentar Eliminar el registro.',
-                    "code"   => 600,
-                    "status" => 500,
-                );
-            }
-            return $answer;
-        } catch (\Exception $e) {
-            $error = '';
-            if (isset($e->errorInfo) and $e->errorInfo) {
-                foreach ($e->errorInfo as $key => $value) {
-                    $error .= $key . ' - ' . $value . ' <br> ';
+                if (isset($request->option) and $request->option == 'consignee') {
+                    // $data->consignee_id = $request->rowData['id'];
+                    DB::table('consolidado_detalle')->where('id', $request->id)->update([
+                        'consignee_data'  => $request->data
+                    ]);
+                    $this->AddToLog('Consolidado detalle editado (' . $request->id . ')');
+                    $answer = array(
+                        "datos"  => $request->id,
+                        "code"   => 200,
+                        "status" => 200,
+                    );
+                } else {
+                    if (isset($request->option) and $request->option === 'peso') {
+                        $data->peso2 = $request->data;
+                        $data->save();
+                        $this->AddToLog('Consolidado detalle editado (' . $request->id . ')');
+                        $answer = array(
+                            "datos"  => $request->id,
+                            "code"   => 200,
+                            "status" => 200,
+                        );
+                    }
+                    if (isset($request->option) and $request->option === 'contenido') {
+                        $data->contenido2 = $request->data;
+                        $data->save();
+                        $this->AddToLog('Consolidado detalle editado (' . $request->id . ')');
+                        $answer = array(
+                            "datos"  => $request->id,
+                            "code"   => 200,
+                            "status" => 200,
+                        );
+                    }
+                    if (isset($request->option) and $request->option === 'declarado') {
+                        $data->declarado2 = $request->data;
+                        $data->save();
+                        $this->AddToLog('Consolidado detalle editado (' . $request->id . ')');
+                        $answer = array(
+                            "datos"  => $request->id,
+                            "code"   => 200,
+                            "status" => 200,
+                        );
+                    }
                 }
-            } else {
-                $error = $e;
             }
+
+            // if ($data->save()) {
+            //     $this->AddToLog('Consolidado detalle editado (' . $data->id . ')');
+            //     $answer = array(
+            //         "datos"  => $data,
+            //         "code"   => 200,
+            //         "status" => 200,
+            //     );
+            // } else {
+            //     $answer = array(
+            //         "error"  => 'Error al intentar Eliminar el registro.',
+            //         "code"   => 600,
+            //         "status" => 500,
+            //     );
+            // }
+            return $answer;
+        } catch (Exception $e) {
+            $error = '';
+            // if (isset($e->errorInfo) and $e->errorInfo) {
+            //     foreach ($e->errorInfo as $key => $value) {
+            //         $error .= $key . ' - ' . $value . ' <br> ';
+            //     }
+            // } else { $error = $e;}
             $answer = array(
-                "error"  => $error,
+                "error"  => $e,
                 "code"   => 600,
                 "status" => 500,
             );
@@ -2896,10 +2996,44 @@ class DocumentoController extends Controller
     {
         $id_change = $request->all()['id_change'];
         $data   = $request->all()['data'];
-        $this->updateIdConsigneeContactConsolidate(false, $data['option'], $data['id'], $id_change);
-        DB::table('consolidado_detalle')
-            ->where('id', $data['id'])
-            ->update([$data['option'] => $id_change]);
+        // $this->updateIdConsigneeContactConsolidate(false, $data['option'], $data['id'], $id_change);
+        // $dat = explode("-", $data['id_data']);
+        // $id_dat = $dat[0];
+       
+       $sql = DB::table($data['option'])
+        ->join('localizacion', $data['option'] . '.localizacion_id', 'localizacion.id')
+        ->join('deptos', 'localizacion.deptos_id', 'deptos.id')
+        ->join('pais', 'deptos.pais_id', 'pais.id')
+        ->select(
+            $data['option'] . '.nombre_full',
+            $data['option'] . '.direccion',
+            $data['option'] . '.telefono'
+        )
+        ->where($data['option'] .'.id', $id_change)
+        ->first();
+        if ($data['option'] === 'shipper') {
+            $id_detail = DB::table('consolidado_detalle')->where('id', $data['id'])
+            ->update(
+                [
+                    'shipper_data'         => $sql->nombre_full . 
+                                        "\n" . $sql->direccion .
+                                        "\n" . $sql->telefono
+                ]
+            );
+        }else{
+            $id_detail = DB::table('consolidado_detalle')->where('id', $data['id'])
+            ->update(
+                [
+                    'consignee_data'       => $sql->nombre_full . 
+                                        "\n" . $sql->direccion .
+                                        "\n" . $sql->telefono
+                ]
+            );
+        }
+        
+        // DB::table('consolidado_detalle')
+        //     ->where('id', $data['id'])
+        //     ->update([$data['option'] => $id_change]);
         $answer = array(
             'code' => 200,
         );
@@ -2908,7 +3042,63 @@ class DocumentoController extends Controller
 
     public function restoreShipperConsignee($id, $idD, $table)
     {
-        $this->updateIdConsigneeContactConsolidate(true, $table, $idD);
+        $id_detail_document = DB::table('consolidado_detalle AS a')
+            ->select('a.documento_detalle_id')
+            ->where('a.id', $idD)
+            ->first();
+        $detalle = DocumentoDetalle::join('documento as b', 'documento_detalle.documento_id', 'b.id')
+            ->leftJoin('shipper', 'b.shipper_id', 'shipper.id')
+            ->leftJoin('consignee', 'b.consignee_id', 'consignee.id')
+            ->leftJoin('localizacion as ciudad_consignee', 'consignee.localizacion_id', 'ciudad_consignee.id')
+            ->leftJoin('localizacion as ciudad_shipper', 'shipper.localizacion_id', 'ciudad_shipper.id')
+            ->leftJoin('deptos as deptos_consignee', 'ciudad_consignee.deptos_id', 'deptos_consignee.id')
+            ->leftJoin('deptos as deptos_shipper', 'ciudad_shipper.deptos_id', 'deptos_shipper.id')
+            ->select('documento_detalle.id', 'documento_detalle.agrupado', 'documento_detalle.flag', 'documento_detalle.declarado2', 'b.consignee_id',
+            'shipper.nombre_full as ship_nomfull',
+              'shipper.direccion as ship_dir',
+              'shipper.telefono as ship_tel',
+              'shipper.correo as ship_email',
+              'shipper.zip as ship_zip',
+              'ciudad_shipper.nombre as ship_ciudad',
+              'deptos_shipper.descripcion as ship_depto',
+              'consignee.nombre_full as cons_nomfull',
+              'consignee.direccion as cons_dir',
+              'consignee.telefono as cons_tel',
+              'consignee.documento as cons_documento',
+              'consignee.correo as cons_email',
+              'consignee.zip as cons_zip',
+              'consignee.po_box as cons_pobox',
+              'ciudad_consignee.nombre as cons_ciudad',
+              'deptos_consignee.descripcion as cons_depto')
+            ->where([
+                ['documento_detalle.deleted_at', null],
+            ])
+            ->whereRaw('(documento_detalle.id = "' . $id_detail_document->documento_detalle_id . '")')
+            ->first();
+
+        /* ACTUALIZAMOS EL CAMPO SHIPPER O CONSIGNEE DEL DETALLE DEL CONSOLIDADO */
+        if ($table === 'shipper') {
+            $id_detail = DB::table('consolidado_detalle')->where('id', $idD)
+            ->update(
+                [
+                    'shipper_data'         => $detalle->ship_nomfull . 
+                                        "\n" . $detalle->ship_dir .
+                                        "\n" . $detalle->ship_tel
+                ]
+            );
+        }else{
+            $id_detail = DB::table('consolidado_detalle')->where('id', $idD)
+            ->update(
+                [
+                    'consignee_data'       => $detalle->cons_nomfull . 
+                                        "\n" . $detalle->cons_dir .
+                                        "\n" . $detalle->cons_tel
+                ]
+            );
+        }
+        
+        
+        // $this->updateIdConsigneeContactConsolidate(true, $table, $idD);
         DB::table('consolidado_detalle')
             ->where('id', $idD)
             ->update([$table => null]);
@@ -2932,7 +3122,9 @@ class DocumentoController extends Controller
             $dat = explode("-", (($table === 'consignee') ? $data->consignee_id : $data->shipper_id));
             $id_dat = $dat[0];
         } else {
-            $id_dat = (($table === 'consignee') ? $data->consignee_id : $data->shipper_id) . '-' . $id_change;
+            $dat = explode("-", (($table === 'consignee') ? $data->consignee_id : $data->shipper_id));
+            $id_dat = $dat[0];
+            $id_dat = $id_dat . '-' . $id_change;
         }
 
         DB::table('documento_detalle AS a')
@@ -3505,8 +3697,7 @@ class DocumentoController extends Controller
             ->leftJoin('deptos AS k', 'j.deptos_id', 'k.id')
             ->leftJoin('pais AS l', 'k.pais_id', 'l.id')
             ->select(
-                'docu.consecutivo AS consecutivo_documento',
-                'doc.consecutivo',
+                // 'doc.consecutivo',
                 'b.num_warehouse',
                 'b.num_guia',
                 'c.pa',
@@ -3531,6 +3722,7 @@ class DocumentoController extends Controller
                 'l.descripcion AS cons_pais',
                 'i.telefono AS cons_tel',
                 'i.zip AS cons_zip',
+                'docu.consecutivo AS consecutivo_documento',
                 DB::raw("(SELECT rr.num_guia FROM documento_detalle AS rr WHERE rr.id = a.agrupado and a.flag = 1) as mintic"),
                 DB::raw("(SELECT GROUP_CONCAT(tracking.codigo) FROM tracking WHERE tracking.documento_detalle_id = b.id) as tracking")
             )
@@ -3539,6 +3731,11 @@ class DocumentoController extends Controller
                 ['b.deleted_at', null],
                 ['a.consolidado_id', $id],
             ])->orderBy('b.num_warehouse', 'ASC')->get();
+
+            // echo '<pre>';
+            // print_r($data);
+            // echo '</pre>';
+            // exit();
         return Excel::download(
             new ConsolidadoExport('exports.excelBodega', array('datos' => $data,)),
             'Excel Bodega '. $data[0]->consecutivo_documento.'.xlsx',

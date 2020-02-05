@@ -577,7 +577,6 @@
 @endsection
 
 @section('scripts')
-{{-- {!! $wcpScript !!} --}}
 <script src="{{ asset('js/plugins/zip.js-master/scripts/JSPrintManager.js') }}"></script>
 <script src="{{ asset('js/plugins/zip.js-master/scripts/zip.js') }}"></script>
 <script src="{{ asset('js/plugins/zip.js-master/scripts/zip-ext.js') }}"></script>

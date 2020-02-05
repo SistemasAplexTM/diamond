@@ -531,4 +531,14 @@ class ConsigneeController extends Controller
       ->orderBy($table . '.primer_nombre')->get();
     return $sql;
   }
+
+  public function removeContact($id)
+    {
+        $data             = Consignee::findOrFail($id);
+        $data->parent_id = null;
+        $data->save();
+        return $answer = array(
+            'code'  => 200
+        );
+    }
 }

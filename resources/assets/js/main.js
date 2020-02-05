@@ -1,20 +1,20 @@
 /*-- Acá van las funciones que se ejecutan al cargar el documento --*/
 /* funcion para los tooltips de los botones */
-Number.prototype.padLeft = function (base, chr) {
+Number.prototype.padLeft = function(base, chr) {
     var len = (String(base || 10).length - String(this).length) + 1;
     return len > 0 ? new Array(len).join(chr || '0') + this : this;
 }
-$(function () {
+$(function() {
     $('body').tooltip({
         selector: 'a[rel="tooltip"], [data-toggle="tooltip"]'
     });
 });
-$(document).ready(function () {
+$(document).ready(function() {
     //-->
     // $('.ladda-button').ladda('bind', {
     //     timeout: 5000
     // });
-    // $.fn.select2.defaults.set("theme", "bootstrap");
+    $.fn.select2.defaults.set("theme", "bootstrap");
 
     if (typeof lang != 'undefined' && lang == 'es') {
         $.extend(true, $.fn.dataTable.defaults, {
@@ -38,16 +38,16 @@ $(document).ready(function () {
             LengthChange: false
         });
     } else {
-        // $.extend(true, $.fn.dataTable.defaults, {
-        //     processing: true,
-        //     serverSide: true,
-        //     searching: true,
-        //     LengthChange: false
-
-        // });
+        $.extend(true, $.fn.dataTable.defaults, {
+            processing: true,
+            serverSide: true,
+            searching: true,
+            LengthChange: false
+            
+        });
     }
     /* ESTILO CHOSEN SELECT2 A UN SELECT */
-    // $('.select2').select2();
+    $('.select2').select2();
     var config = {
         '.chosen-select': {},
         '.chosen-select-deselect': {
@@ -63,9 +63,9 @@ $(document).ready(function () {
             width: "100%"
         }
     }
-    // for (var selector in config) {
-    //     $(selector).chosen(config[selector]);
-    // }
+    for (var selector in config) {
+        $(selector).chosen(config[selector]);
+    }
 });
 /*-- Función para llenar select --*/
 /*el idCondition se utiliza para mandar el id del pais para buscar los deptos de ese pais*/
@@ -83,13 +83,13 @@ function llenarSelect(module, tableName, idSelect, length, idCondition) {
             url: url,
             dataType: 'json',
             delay: 250,
-            data: function (params) {
+            data: function(params) {
                 return {
                     term: params.term, // search term
                     page: params.page
                 };
             },
-            processResults: function (data, params) {
+            processResults: function(data, params) {
                 params.page = params.page || 1;
                 return {
                     results: data.items,
@@ -100,11 +100,11 @@ function llenarSelect(module, tableName, idSelect, length, idCondition) {
             },
             cache: true
         },
-        escapeMarkup: function (markup) {
+        escapeMarkup: function(markup) {
             return markup;
         }, // let our custom formatter work
         minimumInputLength: length,
-    }).on("change", function (e) {
+    }).on("change", function(e) {
         // console.log(e);
         $('.select2-selection').css('border-color', '');
         $('#' + idSelect).siblings('small').css('display', 'none');
@@ -186,34 +186,34 @@ function show5() {
 }
 
 function number_format(amount) {
-    var decimals = 0;
-    var separator = '.';
-    var separator_decimals = ',';
-    // var data = getFormatNumber();
-    // console.log('local ', decimals);
-    // var decimals = data.decimals;
-    // var separator = data.separator;
-    // var separator_decimals = data.separator_decimals;
+  var decimals = 0;
+  var separator = '.';
+  var separator_decimals = ',';
+  // var data = getFormatNumber();
+  // console.log('local ', decimals);
+  // var decimals = data.decimals;
+  // var separator = data.separator;
+  // var separator_decimals = data.separator_decimals;
 
-    amount += ''; // por si pasan un numero en vez de un string
-    amount = parseFloat(amount.replace(/[^0-9\.]/g, '')); // elimino cualquier cosa que no sea numero o punto
+  amount += ''; // por si pasan un numero en vez de un string
+  amount = parseFloat(amount.replace(/[^0-9\.]/g, '')); // elimino cualquier cosa que no sea numero o punto
 
-    decimals = decimals || 0; // por si la variable no fue fue pasada
+  decimals = decimals || 0; // por si la variable no fue fue pasada
 
-    // si no es un numero o es igual a cero retorno el mismo cero
-    if (isNaN(amount) || amount === 0)
-        return parseFloat(0).toFixed(decimals);
+  // si no es un numero o es igual a cero retorno el mismo cero
+  if (isNaN(amount) || amount === 0)
+      return parseFloat(0).toFixed(decimals);
 
-    // si es mayor o menor que cero retorno el valor formateado como numero
-    amount = '' + amount.toFixed(decimals);
+  // si es mayor o menor que cero retorno el valor formateado como numero
+  amount = '' + amount.toFixed(decimals);
 
-    var amount_parts = amount.split('.'),
-        regexp = /(\d+)(\d{3})/;
+  var amount_parts = amount.split('.'),
+      regexp = /(\d+)(\d{3})/;
 
-    while (regexp.test(amount_parts[0]))
-        amount_parts[0] = amount_parts[0].replace(regexp, '$1' + separator + '$2');
+  while (regexp.test(amount_parts[0]))
+      amount_parts[0] = amount_parts[0].replace(regexp, '$1' + separator + '$2');
 
-    return amount_parts.join(separator_decimals);
+  return amount_parts.join(separator_decimals);
 }
 // function getFormatNumber(){
 //   $.ajax({
@@ -227,7 +227,7 @@ function number_format(amount) {
 window.onload = show5
 /*Funciones globales para vue js*/
 Vue.mixin({
-    data: function () {
+    data: function() {
         return {
             get required() {
                 return 0;
@@ -239,16 +239,16 @@ Vue.mixin({
             let val = (value / 1).toFixed(2).replace('.', ',')
             return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
         },
-        formatNumber(data) {
-            return new Intl.NumberFormat("en-IN").format(data);
+        formatNumber(data){
+          return new Intl.NumberFormat("en-IN").format(data);
         },
         getTime() {
             var d = new Date,
                 dformat = [d.getFullYear(), (d.getMonth() + 1).padLeft(),
-                d.getDate().padLeft()
+                    d.getDate().padLeft()
                 ].join('-') + ' ' + [d.getHours().padLeft(),
-                d.getMinutes().padLeft(),
-                d.getSeconds().padLeft()
+                    d.getMinutes().padLeft(),
+                    d.getSeconds().padLeft()
                 ].join(':');
             return dformat;
         }

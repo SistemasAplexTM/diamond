@@ -104,7 +104,7 @@ class MasterController extends Controller
                 ->select(DB::raw("ROUND(Sum(b.peso2) * 0.453592) AS peso_total"))
                 ->where([['b.deleted_at', null], ['a.deleted_at', null], ['a.consolidado_id', $consolidado_id]])
                 ->first();
-            if ($peso_consolidado and $peso_consolidado != null) {
+            if ($peso_consolidado and $peso_consolidado != null and $peso_consolidado->peso_total != '') {
                 $peso = $peso_consolidado->peso_total;
             }
 
@@ -239,6 +239,7 @@ class MasterController extends Controller
             ->leftJoin('deptos', 'localizacion.deptos_id', '=', 'deptos.id')
             ->leftJoin('pais AS x', 'deptos.pais_id', 'x.id')
             ->select(
+                'a.daughter_guide AS hija',
                 'a.agencia_id',
                 'a.num_master',
                 'a.master_id',

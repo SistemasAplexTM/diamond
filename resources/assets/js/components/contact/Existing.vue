@@ -5,7 +5,7 @@
       v-model="datos.nombre_full"
       :fetch-suggestions="querySearch"
       :trigger-on-focus="false"
-      placeholder="Buscar consignee"
+      :placeholder="'Buscar ' + this.table"
       @select="assignContact"
     >
       <template slot-scope="{ item }">
