@@ -1287,8 +1287,10 @@ export default {
           // " " +
           // (data.zip != null ? data.zip : "");
         } else {
-          this.shipper.id = data.id;
-          this.shipper.name = data.nombre;
+          this.shipper = {
+            id: data.id,
+            name: data.name
+          };
           // this.shipper = data;
           this.datos_shipper =
             "\nEmail: " +
@@ -1310,8 +1312,8 @@ export default {
           // data.pais +
           // " " +
           // (data.zip != null ? data.zip : "");
-          this.total_other_charge_due_carrier = total_c;
-          this.total_other_charge_due_agent = total_a;
+          // this.total_other_charge_due_carrier = total_c;
+          // this.total_other_charge_due_agent = total_a;
         }
       }
     },
@@ -1343,73 +1345,73 @@ export default {
     handleErrorMessage: function(errorMsg) {
       this.errorMsg = errorMsg;
     },
-    setData: function(data, tipo) {
-      if (data.type) {
-        if (data.type == "c") {
-          this.consignee = data;
-          this.datos_consignee =
-            data.name +
-            "\nPhone: " +
-            data.telefono +
-            "\n" +
-            (data.contacto != null ? "Contact: " + data.contacto : "") +
-            "\n" +
-            data.direccion +
-            "\n" +
-            data.ciudad +
-            ", " +
-            data.estado +
-            " " +
-            data.pais +
-            " " +
-            (data.zip != null ? data.zip : "");
-        } else if (data.type == "cr") {
-          this.carrier = data;
-          this.datos_carrier =
-            data.name +
-            "\nPhone: " +
-            data.telefono +
-            "\n" +
-            (data.contacto != null ? "Contact: " + data.contacto : "") +
-            "\n" +
-            data.direccion +
-            "\n" +
-            data.ciudad +
-            ", " +
-            data.estado +
-            " " +
-            data.pais +
-            " " +
-            (data.zip != null ? data.zip : "");
-        } else {
-          this.shipper = data;
-          this.datos_shipper =
-            data.name +
-            "\nPhone: " +
-            data.telefono +
-            "\n" +
-            (data.contacto != null ? "Contact: " + data.contacto : "") +
-            "\n" +
-            data.direccion +
-            "\n" +
-            data.ciudad +
-            ", " +
-            data.estado +
-            " " +
-            data.pais +
-            " " +
-            (data.zip != null ? data.zip : "");
-        }
-      } else {
-        if (data == "c") {
-          this.consignee = {};
-        } else if (data == "cr") {
-          this.carrier = {};
-        } else {
-          this.shipper = {};
-        }
-      }
-    },
+    // setData: function(data, tipo) {
+    //   if (data.type) {
+    //     if (data.type == "c") {
+    //       this.consignee = data;
+    //       this.datos_consignee =
+    //         data.name +
+    //         "\nPhone: " +
+    //         data.telefono +
+    //         "\n" +
+    //         (data.contacto != null ? "Contact: " + data.contacto : "") +
+    //         "\n" +
+    //         data.direccion +
+    //         "\n" +
+    //         data.ciudad +
+    //         ", " +
+    //         data.estado +
+    //         " " +
+    //         data.pais +
+    //         " " +
+    //         (data.zip != null ? data.zip : "");
+    //     } else if (data.type == "cr") {
+    //       this.carrier = data;
+    //       this.datos_carrier =
+    //         data.name +
+    //         "\nPhone: " +
+    //         data.telefono +
+    //         "\n" +
+    //         (data.contacto != null ? "Contact: " + data.contacto : "") +
+    //         "\n" +
+    //         data.direccion +
+    //         "\n" +
+    //         data.ciudad +
+    //         ", " +
+    //         data.estado +
+    //         " " +
+    //         data.pais +
+    //         " " +
+    //         (data.zip != null ? data.zip : "");
+    //     } else {
+    //       this.shipper = data;
+    //       this.datos_shipper =
+    //         data.name +
+    //         "\nPhone: " +
+    //         data.telefono +
+    //         "\n" +
+    //         (data.contacto != null ? "Contact: " + data.contacto : "") +
+    //         "\n" +
+    //         data.direccion +
+    //         "\n" +
+    //         data.ciudad +
+    //         ", " +
+    //         data.estado +
+    //         " " +
+    //         data.pais +
+    //         " " +
+    //         (data.zip != null ? data.zip : "");
+    //     }
+    //   } else {
+    //     if (data == "c") {
+    //       this.consignee = {};
+    //     } else if (data == "cr") {
+    //       this.carrier = {};
+    //     } else {
+    //       this.shipper = {};
+    //     }
+    //   }
+    // },
     validar_primer_tab: function() {
       return new Promise((resolve, reject) => {
         this.$validator

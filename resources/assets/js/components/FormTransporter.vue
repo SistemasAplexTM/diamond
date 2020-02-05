@@ -24,9 +24,10 @@
       </el-col>
       <el-col :span="16">
         <el-input
-          placeholder="Información"
+          placeholder="Información..."
           v-model="form.info"
           size="medium"
+           :autosize="{ minRows: 5}"
           clearable
           type="textarea"
         ></el-input>
