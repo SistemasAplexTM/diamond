@@ -79,3 +79,6 @@ Vue.component('add-contact', require('./components/AddContactComponent.vue'));
 Vue.component('modal-change', require('./components/consolidado/ModalChangeShipperConsignee.vue'));
 Vue.component('change_agency', require('./components/document/form/ChangeAgency.vue'));
 Vue.component('casillero', require('./components/Casillero.vue'));
+
+
+Vue.component('form-transporter', require('./components/FormTransporter.vue')); 
