@@ -71,7 +71,7 @@ $(document).ready(function () {
           var btn_edit = '<li><a href="master/create/' + full.id + '"><i class="fal fa-pencil fa-lg"></i> Editar</a></li>';
         }
         if (permission_delete) {
-          var btn_delete = '<li style="color:#E34724;"><a onclick=\"modalEliminar()\"><i class="fal fa-trash-alt fa-lg"></i> Eliminar</a></li>';
+          var btn_delete = '<li style="color:#E34724;"><a onclick=\"deleteDocument(' + full.id + ')\"><i class="fal fa-trash-alt fa-lg"></i> Eliminar</a></li>';
         }
         var btn_cost = '<li><a onclick="createCost(' + full.id + ', \'' + full.num_master + '\', \'' + full.peso + '\', \'' + full.peso_kl + '\', \'' + full.tarifa + '\')"><i class="fal fa-file-invoice-dollar fa-lg"></i> Crear Costos</a></li>';
         var btn_xml = '<li><a href="master/generateXml/' + full.id + '" target="_blank"><i class="fal fa-file-export fa-lg"></i> Generar XML</a></li>';
@@ -117,6 +117,10 @@ $(document).ready(function () {
     ]
   });
 });
+
+function deleteDocument(id) {
+  objVue.deleteDocument(id);
+}
 
 function createHouse(id, master) {
   objVue.createHouseAwb(id, master);
@@ -357,6 +361,35 @@ var objVue = new Vue({
         consolidado_id = this.consolidado_id.id;
       }
       location.href = "master/create/" + null + '/' + consolidado_id;
-    }
+    },
+    deleteDocument(id) {
+      let me = this;
+      swal({
+        title: "<div><span style='color: rgb(212, 103, 82);'>Atención!</span></div>",
+        text: "¿Desea eliminar este documento?",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: "Si",
+        cancelButtonText: "No, Cancelar!",
+      }).then((result) => {
+        if (result.value) {
+          axios.get('master/delete/' + id + '/true').then(function (response) {
+            if (response.data.code === 200) {
+              refreshTable('tbl-master');
+              toastr.success('Documento eliminado exitosamente.');
+              toastr.options.closeButton = true;
+            } else {
+              toastr.warning('Atención! ha ocurrido un error.');
+            }
+          }).catch(function (error) {
+            console.log(error);
+            toastr.warning('Error.' + error);
+            toastr.options.closeButton = true;
+          });
+        }
+      });
+    },
   }
 });

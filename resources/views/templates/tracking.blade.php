@@ -445,6 +445,6 @@
 @endsection
 
 @section('scripts')
-{!! $wcpScript !!}
+{{-- {!! $wcpScript !!} --}}
 <script src="{{ asset('js/templates/tracking.js') }}"></script>
 @endsection

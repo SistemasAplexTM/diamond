@@ -1099,5 +1099,5 @@
 <script src="{{ asset('js/templates/documento/documentoForm/documento.js') }}"></script>
 <script src="{{ asset('js/templates/documento/documentoForm/totalizar.js') }}"></script>
 <script src="{{ asset('js/templates/documento/documentoForm/postalCode.js') }}"></script>
-<script src="{{ asset('js/templates/documento/documentoForm/editableConfig.js') }}"></script>
+{{-- <script src="{{ asset('js/templates/documento/documentoForm/editableConfig.js') }}"></script> --}}
 @endsection

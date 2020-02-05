@@ -28,7 +28,8 @@ class PrintConfigController extends Controller
     $datInsert = [
       'id' => 1,
       'label' => $request->data['labels'],
-      'default' => $request->data['default']
+      'default' => $request->data['default'],
+      'pc_name' => $request->data['pc_name']
     ];
     Session::put('printer', (object) $datInsert);
     $data = [$datInsert];
@@ -39,7 +40,7 @@ class PrintConfigController extends Controller
       $cont = 0;
       $cant = 1;
       foreach ($printers as $key => $value) {
-        if ($value->label == $request->data['labels'] and $value->default == $request->data['default']) {
+        if ($value->label == $request->data['labels'] and $value->default == $request->data['default'] and $value->pc_name == $request->data['pc_name']) {
           $cont++;
         }
         $cant++;

@@ -99,7 +99,8 @@ var objVue = new Vue({
     prints: [],
     printers: [],
     installedPrinter1: {},
-    installedPrinter2: {}
+    installedPrinter2: {},
+    pc_name: ''
   },
   created() {
     this.getPrintersSaved();
@@ -111,7 +112,8 @@ var objVue = new Vue({
       me.loading = true;
       var data = {
         default: me.installedPrinter1.name,
-        labels: me.installedPrinter2.name
+        labels: me.installedPrinter2.name,
+        pc_name: me.pc_name
       };
       axios
         .post("printConfig", {

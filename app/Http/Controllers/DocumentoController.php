@@ -455,22 +455,23 @@ class DocumentoController extends Controller
             ])
             ->first();
 
-            // $insert =  DB::table('consolidado_detalle AS a')
-            // ->join('documento_detalle AS b', 'a.documento_detalle_id', 'b.id')
-            // ->join('shipper AS c', 'b.shipper_id', 'c.id')
-            // ->leftJoin('shipper AS c2', 'a.shipper', 'c2.id')
-            // ->join('consignee AS d', 'b.consignee_id', 'd.id')
-            // ->leftJoin('consignee AS d2', 'a.consignee', 'd2.id')
-            // ->select(
-            //     'a.id',
-            //     DB::raw('(IF(a.shipper IS NULL,CONCAT_WS("\n", c.nombre_full, c.direccion, c.telefono),CONCAT_WS("\n", c2.nombre_full, c2.direccion, c2.telefono))) AS shipper_d'),
-            //     DB::raw('(IF(a.consignee IS NULL,CONCAT_WS("\n", d.nombre_full, d.direccion, d.telefono),CONCAT_WS("\n", d2.nombre_full, d2.direccion, d2.telefono))) AS consignee_d')
-            // )
-            // ->where([
-            //     ['a.consolidado_id', 155]
-            // ])
-            // ->get();
-
+        // DB::connection()->enableQueryLog();
+        // $insert =  DB::table('consolidado_detalle AS a')
+        // ->join('documento_detalle AS b', 'a.documento_detalle_id', 'b.id')
+        // ->join('shipper AS c', 'b.shipper_id', 'c.id')
+        // ->leftJoin('shipper AS c2', 'a.shipper', 'c2.id')
+        // ->join('consignee AS d', 'b.consignee_id', 'd.id')
+        // ->leftJoin('consignee AS d2', 'a.consignee', 'd2.id')
+        // ->select(
+        //     'a.id',
+        //     DB::raw('(IF(a.shipper IS NULL,CONCAT_WS("\n", c.nombre_full, c.direccion, c.telefono),CONCAT_WS("\n", c2.nombre_full, c2.direccion, c2.telefono))) AS shipper_d'),
+        //     DB::raw('(IF(a.consignee IS NULL,CONCAT_WS("\n", d.nombre_full, d.direccion, d.telefono),CONCAT_WS("\n", d2.nombre_full, d2.direccion, d2.telefono))) AS consignee_d')
+        // )
+        // ->where([
+        //     ['a.consolidado_id', 155]
+        // ])
+        // ->get();
+        //     return DB::getQueryLog();
             // foreach ($insert as $key => $value) {
             //     DB::table('consolidado_detalle')->where([['id', $value->id]])->update(['shipper_data' => $value->shipper_d, 'consignee_data' => $value->consignee_d]);
             // }
@@ -2292,10 +2293,10 @@ class DocumentoController extends Controller
                             'num_bolsa'            => $num_bolsa,
                             'shipper_data'         => $detalle->ship_nomfull . 
                                                 "\n" . $detalle->ship_dir .
-                                                "\n" . $detalle->ship_tel,
+                                                "\n" . $detalle->ship_ciudad,
                             'consignee_data'       => $detalle->cons_nomfull . 
                                                 "\n" . $detalle->cons_dir .
-                                                "\n" . $detalle->cons_tel,
+                                                "\n" . $detalle->cons_ciudad,
                             'created_at'           => date('Y-m-d H:i:s'),
                         ]
                     );
@@ -2644,6 +2645,11 @@ class DocumentoController extends Controller
             $filter[] = ['a.liquidado', 1];
         }
 
+        $fFin = strtotime('+1 day' , strtotime(date('Y-m-d')));
+        $fFin = date('Y-m-d' , $fFin);
+        $nuevafecha = strtotime('-7 day' , strtotime($fFin));
+        $fIni = date('Y-m-d' , $nuevafecha);
+
         $detalle = DB::table('documento_detalle AS a')
             ->join('documento as b', 'a.documento_id', 'b.id')
             ->join('agencia', 'b.agencia_id', 'agencia.id')
@@ -2676,6 +2682,7 @@ class DocumentoController extends Controller
                 'agencia'
             )
             ->where($filter)
+            ->whereBetween('b.created_at', [$fIni, date("Y-m-d",strtotime($fFin."+ 1 days"))])
             ->get();
         return \DataTables::of($detalle)->make(true);
     }
@@ -3084,7 +3091,7 @@ class DocumentoController extends Controller
                 [
                     'shipper_data'         => $detalle->ship_nomfull . 
                                         "\n" . $detalle->ship_dir .
-                                        "\n" . $detalle->ship_tel
+                                        "\n" . $detalle->ship_ciudad
                 ]
             );
         }else{
@@ -3093,7 +3100,7 @@ class DocumentoController extends Controller
                 [
                     'consignee_data'       => $detalle->cons_nomfull . 
                                         "\n" . $detalle->cons_dir .
-                                        "\n" . $detalle->cons_tel
+                                        "\n" . $detalle->cons_ciudad
                 ]
             );
         }
@@ -3677,7 +3684,7 @@ class DocumentoController extends Controller
             ])->orderBy('b.num_warehouse', 'ASC')->get();
         return Excel::download(
             new ConsolidadoExport('exports.excelLiquimp', array('datos' => $data,)),
-            'Excel Liquimp '. $data[0]->consecutivo.'.xlsx',
+            'Prevalidador '. $data[0]->consecutivo.'.xlsx',
             \Maatwebsite\Excel\Excel::XLSX
         );
     }
@@ -3686,7 +3693,8 @@ class DocumentoController extends Controller
     {
         $data = DB::table('consolidado_detalle AS a')
             ->join('documento AS docu', 'docu.id', 'a.consolidado_id')
-            ->join('documento_detalle AS b', 'a.documento_detalle_id', 'b.id')
+            ->join('documento_detalle AS bb', 'a.documento_detalle_id', 'bb.id')
+            ->join('documento_detalle AS b', 'bb.id', 'b.agrupado')
             ->join('documento AS doc', 'b.documento_id', 'doc.id')
             ->join('posicion_arancelaria AS c', 'c.id', 'b.arancel_id2')
             ->join('shipper AS d', 'd.id', 'b.shipper_id')
@@ -3724,7 +3732,7 @@ class DocumentoController extends Controller
                 'i.telefono AS cons_tel',
                 'i.zip AS cons_zip',
                 'docu.consecutivo AS consecutivo_documento',
-                DB::raw("(SELECT rr.num_guia FROM documento_detalle AS rr WHERE rr.id = a.agrupado and a.flag = 1) as mintic"),
+                DB::raw("(SELECT rr.num_guia FROM documento_detalle AS rr WHERE rr.id = b.agrupado) as mintic"),
                 DB::raw("(SELECT GROUP_CONCAT(tracking.codigo) FROM tracking WHERE tracking.documento_detalle_id = b.id) as tracking")
             )
             ->where([
@@ -3739,7 +3747,7 @@ class DocumentoController extends Controller
             // exit();
         return Excel::download(
             new ConsolidadoExport('exports.excelBodega', array('datos' => $data,)),
-            'Excel Bodega '. $data[0]->consecutivo_documento.'.xlsx',
+            'Manifiesto Interno '. $data[0]->consecutivo_documento.'.xlsx',
             \Maatwebsite\Excel\Excel::XLSX
         );
     }

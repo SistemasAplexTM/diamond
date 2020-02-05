@@ -1,6 +1,7 @@
 let modalName = '';
 
 $(document).ready(function () {
+
     $('#modalChangeShipperConsignee').on('hidden.bs.modal', function () {
         objVue.loading_save_ship = false;
         objVue.loading_save_cons = false;
@@ -31,11 +32,11 @@ $(document).ready(function () {
     // }, 1000);
     $('#tracking').tagsinput();
     //toggle `popup` / `inline` mode
-    $.fn.editable.defaults.mode = 'popup';
-    $.fn.editable.defaults.params = function (params) {
-        params._token = $('meta[name="csrf-token"]').attr('content');
-        return params;
-    };
+    // $.fn.editable.defaults.mode = 'popup';
+    // $.fn.editable.defaults.params = function (params) {
+    //     params._token = $('meta[name="csrf-token"]').attr('content');
+    //     return params;
+    // };
 
     $('#agencia_id').on('change', function () {
         objVue.resetFormsShipperConsignee(0);

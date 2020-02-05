@@ -65,8 +65,8 @@ class TrackingController extends Controller
             'print_documents'  => (($printers) ? $printers->default : ''),
             'print_format'  => 'PDF',
         ]);
-      $wcpScript = WebClientPrint::createScript(action('WebClientPrintController@processRequest'), action('DocumentoController@printFile'), Session::getId());
-      return view('templates/tracking', compact('agencias', 'role_admin', 'wcpScript'));
+      // $wcpScript = WebClientPrint::createScript(action('WebClientPrintController@processRequest'), action('DocumentoController@printFile'), Session::getId());
+      return view('templates/tracking', compact('agencias', 'role_admin'));
     }
 
     public function store(TrackingRequest $request)
@@ -285,7 +285,7 @@ class TrackingController extends Controller
             ->where([
                 ['a.deleted_at', null],
                 ['a.codigo', $request->tracking],
-                ['a.agencia_id', Auth::user()->agencia_id],
+                //['a.agencia_id', Auth::user()->agencia_id],
             ])
             ->first();
         if ($data != null) {

@@ -1,5 +1,5 @@
-$(document).ready(function() {});
-$(window).load(function() {
+$(document).ready(function () { });
+$(window).load(function () {
   getUsers(1, "user");
 });
 
@@ -25,7 +25,7 @@ function getUsers(data, table) {
       },
       {
         sortable: false,
-        render: function(data, type, full, meta) {
+        render: function (data, type, full, meta) {
           var btn_edit = "";
           var btn_delete = "";
           var cred_id = full.rol_id;
@@ -91,7 +91,7 @@ function edit(
 }
 var objVue = new Vue({
   el: "#user",
-  mounted: function() {
+  mounted: function () {
     this.getDataSelect();
     const dict = {
       custom: {
@@ -109,12 +109,12 @@ var objVue = new Vue({
           required: "La confirmación de la contraseña es obligatoria.",
           confirmed: "La confirmación de la contraseña no coincide."
         },
-        rol_id: {
-          required: "El rol es obligatorio."
-        },
-        agencia_id: {
-          required: "La dirección es obligatoria."
-        }
+        // rol_id: {
+        //   required: "El rol es obligatorio."
+        // },
+        // agencia_id: {
+        //   required: "La agencia es obligatoria."
+        // }
       }
     };
     this.$validator.localize("es", dict);
@@ -141,14 +141,14 @@ var objVue = new Vue({
         getUsers(op, table);
       }
     },
-    resetForm: function() {
+    resetForm: function () {
       this.id = null;
       this.email = null;
       this.name = null;
       this.password = null;
       this.password_confirm = null;
       this.rol_id = null;
-      this.agencia_id = null;
+      // this.agencia_id = null;
       this.actived = false;
       this.editar = 0;
       this.mostrar_password = true;
@@ -156,7 +156,7 @@ var objVue = new Vue({
       this.formErrors = {};
       this.listErrors = {};
     },
-    getDataSelect: function() {
+    getDataSelect: function () {
       axios.get("user/getDataSelect/agencia").then(response => {
         this.agencias = response.data.data;
         if (this.agencias.length == 1) {
@@ -171,9 +171,9 @@ var objVue = new Vue({
       });
     },
     /* metodo para eliminar el error de los campos del formulario cuando dan clic sobre el */
-    deleteError: function(element) {
+    deleteError: function (element) {
       let me = this;
-      $.each(me.listErrors, function(key, value) {
+      $.each(me.listErrors, function (key, value) {
         if (key !== element) {
           me.listErrors[key] = value;
         } else {
@@ -181,14 +181,14 @@ var objVue = new Vue({
         }
       });
     },
-    rollBackDelete: function(data) {
+    rollBackDelete: function (data) {
       var urlRestaurar = "user/restaurar/" + data.id;
       axios.get(urlRestaurar).then(response => {
         toastr.success("Registro restaurado.");
         this.updateTable();
       });
     },
-    updateTable: function() {
+    updateTable: function () {
       refreshTable("tbl-user");
       if ($.fn.DataTable.isDataTable("#tbl-user_agency")) {
         refreshTable("tbl-user_agency");
@@ -197,7 +197,7 @@ var objVue = new Vue({
         refreshTable("tbl-users_locker");
       }
     },
-    delete: function(data) {
+    delete: function (data) {
       this.formErrors = {};
       this.listErrors = {};
       if (data.logical === true) {
@@ -207,12 +207,12 @@ var objVue = new Vue({
             this.updateTable();
             toastr.success(
               "<div><p>Registro eliminado exitosamente.</p><button type='button' onclick='deshacerEliminar(" +
-                data.id +
-                ")' id='okBtn' class='btn btn-xs btn-danger pull-right'><i class='fal fa-reply'></i> Restaurar</button></div>"
+              data.id +
+              ")' id='okBtn' class='btn btn-xs btn-danger pull-right'><i class='fal fa-reply'></i> Restaurar</button></div>"
             );
             toastr.options.closeButton = true;
           })
-          .catch(function(error) {
+          .catch(function (error) {
             console.log(error);
             if (error.response.status === 403) {
               toastr.error("No tienes permisos para realizar esta acción.", {
@@ -232,7 +232,7 @@ var objVue = new Vue({
             toastr.success("Registro eliminado correctamente.");
             toastr.options.closeButton = true;
           })
-          .catch(function(error) {
+          .catch(function (error) {
             console.log(error);
             if (error.response.status === 403) {
               toastr.error("No tienes permisos para realizar esta acción.", {
@@ -246,7 +246,7 @@ var objVue = new Vue({
           });
       }
     },
-    create: function() {
+    create: function () {
       const isUnique = value => {
         return axios
           .post("user/validarUsername", {
@@ -288,7 +288,7 @@ var objVue = new Vue({
                 agencia_id: this.agencia_id.id,
                 actived: activo
               })
-              .then(function(response) {
+              .then(function (response) {
                 if (response.data["code"] == 200) {
                   toastr.success("Registro creado correctamente.");
                   toastr.options.closeButton = true;
@@ -299,7 +299,7 @@ var objVue = new Vue({
                 me.resetForm();
                 me.updateTable();
               })
-              .catch(function(error) {
+              .catch(function (error) {
                 if (error.response.status === 403) {
                   toastr.error(
                     "No tienes permisos para realizar esta acción.",
@@ -314,7 +314,7 @@ var objVue = new Vue({
                   me.formErrors = error.response.data; //guardo los errores
                   me.listErrors = me.formErrors.errors; //genero lista de errores
                 }
-                $.each(me.formErrors.errors, function(key, value) {
+                $.each(me.formErrors.errors, function (key, value) {
                   $(".result-" + key).html(value);
                 });
                 toastr.error("Error al registrar.", {
@@ -323,13 +323,13 @@ var objVue = new Vue({
               });
           }
         })
-        .catch(function(error) {
+        .catch(function (error) {
           toastr.warning("Error: Completa los campos obligatorios.");
         });
     },
-    update: function() {
+    update: function () {
       this.$validator
-        .validateAll(["agencia_id", "name", "email", "rol_id"])
+        .validateAll(["name", "email"])
         .then(result => {
           if (result) {
             var activo = 0;
@@ -353,7 +353,7 @@ var objVue = new Vue({
               .put("user/" + this.id, {
                 data
               })
-              .then(function(response) {
+              .then(function (response) {
                 if (response.data["code"] == 200) {
                   toastr.success("Registro Actualizado correctamente");
                   toastr.options.closeButton = true;
@@ -366,7 +366,7 @@ var objVue = new Vue({
                 me.resetForm();
                 me.updateTable();
               })
-              .catch(function(error) {
+              .catch(function (error) {
                 if (error.response.status === 403) {
                   toastr.error(
                     "No tienes permisos para realizar esta acción.",
@@ -380,7 +380,7 @@ var objVue = new Vue({
                   me.formErrors = error.response.data;
                   me.listErrors = me.formErrors.errors; //genero lista de errores
                 }
-                $.each(me.formErrors.errors, function(key, value) {
+                $.each(me.formErrors.errors, function (key, value) {
                   $(".result-" + key).html(value);
                 });
                 toastr.error("Porfavor completa los campos obligatorios.", {
@@ -389,12 +389,12 @@ var objVue = new Vue({
               });
           }
         })
-        .catch(function(error) {
+        .catch(function (error) {
           console.log(error);
           toastr.warning("Error: " + error);
         });
     },
-    edit: function(data) {
+    edit: function (data) {
       this.id = data["id"];
       this.name = data["name"];
       this.email = data["email"];
@@ -425,11 +425,11 @@ var objVue = new Vue({
       this.formErrors = {};
       this.listErrors = {};
     },
-    cancel: function() {
+    cancel: function () {
       var me = this;
       me.resetForm();
     },
-    changePassword: function() {
+    changePassword: function () {
       this.changue_password = false;
     }
   }

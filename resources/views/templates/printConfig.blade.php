@@ -49,6 +49,9 @@
                     </el-option>
                   </el-select>
                 </el-form-item>
+                <el-form-item label="Nombre del equipo:">
+                  <el-input placeholder="Nombre del Equipo" v-model="pc_name" clearable></el-input>
+                </el-form-item>
                 <el-form-item>
                   <el-button type="success" size="medium" @click="savePrint()" :loading="loading"><i
                       class="fal fa-save"></i>
@@ -66,14 +69,16 @@
                     <th>#</th>
                     <th>Impresora Labels</th>
                     <th>Impresora Por Defecto</th>
+                    <th>Equipo</th>
                     <th>@lang('general.actions')</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr v-for="(item, index) in printers">
                     <td>@{{ index + 1 }}</td>
-                    <td>@{{ item.label }}</td>
-                    <td>@{{ item.default }}</td>
+                    <td><i class="fal fa-scanner"></i> @{{ item.label }}</td>
+                    <td><i class="fal fa-print"></i> @{{ item.default }}</td>
+                    <td><i class="fal fa-laptop"></i> @{{ item.pc_name }}</td>
                     <td><a @click="deletePrint(index)" class="delete_btn" data-toggle="tooltip" data-placement="top"
                         title="" data-original-title="Eliminar"><i class="fal fa-trash-alt fa-lg"></i></a></td>
                   </tr>

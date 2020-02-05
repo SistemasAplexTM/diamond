@@ -33,24 +33,26 @@ export default {
   },
   methods: {
     querySearch(queryString, cb) {
-      var me = this;
-      axios
-        .get(
-          "/consignee/getExisting/" +
-            queryString +
-            "/" +
-            this.id_data +
-            "/" +
-            this.table
-        )
-        .then(function({ data }) {
-          me.options = data;
-          cb(me.options);
-        })
-        .catch(function(error) {
-          console.log(error);
-          toastr.warning("Error: -" + error);
-        });
+      if (queryString.length > 3) {
+        var me = this;
+        axios
+          .get(
+            "/consignee/getExisting/" +
+              queryString +
+              "/" +
+              this.id_data +
+              "/" +
+              this.table
+          )
+          .then(function({ data }) {
+            me.options = data;
+            cb(me.options);
+          })
+          .catch(function(error) {
+            console.log(error);
+            toastr.warning("Error: -" + error);
+          });
+      }
     },
     async assignContact(item) {
       try {

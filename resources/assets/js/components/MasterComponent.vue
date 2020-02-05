@@ -528,6 +528,7 @@
                 </div>
                 <div class="row">
                   <div class="col-lg-12">
+                    <div class="table-responsive">
                     <table class="table table-stripped">
                       <thead>
                         <tr>
@@ -610,6 +611,7 @@
                         </tr>
                       </tbody>
                     </table>
+                    </div>
                   </div>
                 </div>
                 <div class="row">
@@ -625,7 +627,8 @@
 
                   <div class="col-lg-9">
                     <label>Other charges</label><a class="pull-right" @click="addOtherChargue()">Add Row</a>
-                    <table class="table table-stripped table-hover table-bordered">
+                    <div class="table-responsive">
+                    <table class="table table-stripped table-hover table-bordered" width="100">
                       <thead>
                         <tr>
                           <th rowspan="2" class="text-center" style="width: 60%;">Descripction</th>
@@ -666,6 +669,7 @@
                         </tr>
                       </tbody>
                     </table>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -825,8 +829,6 @@
         };
       }
       if(this.peso_consolidado != 0 && this.peso_consolidado != ''){
-console.log(this.peso_consolidado);
-
         // this.peso = this.peso_consolidado;
       }
       if(this.piezas_consolidado != null){

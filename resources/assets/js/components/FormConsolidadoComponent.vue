@@ -263,10 +263,10 @@ a.badge:hover {
                         class="btn btn-primary btn-sm"
                         type="button"
                         data-toggle="tooltip"
-                        title="Descargar Excel Bodega"
+                        title="Descargar Manifiesto Interno"
                         @click="exportCellar()"
                       >
-                        <i class="fal fa-cloud-download-alt"></i> Excel Bodega
+                        <i class="fal fa-cloud-download-alt"></i> Manifiesto Interno
                       </button>
                       <!-- </div> -->
                       <!-- </div> -->
@@ -377,7 +377,8 @@ a.badge:hover {
                 </div>
                 <div class="row">
                   <div class="col-sm-12">
-                    <table
+                    <test></test>
+                    <!-- <table
                       id="tbl-consolidado"
                       class="table table-striped table-hover table-bordered dataTable"
                       style="width: 100%;margin-top: 30px;"
@@ -408,10 +409,9 @@ a.badge:hover {
                           <th id="Tdeclarado"></th>
                           <th id="Tpeso"></th>
                           <th id="TpesoR" colspan="2"></th>
-                          <!-- <th id="TpesoK"></th> -->
                         </tr>
                       </tfoot>
-                    </table>
+                    </table>-->
                   </div>
                 </div>
                 <div class="row">
@@ -742,7 +742,11 @@ a.badge:hover {
 </template>
 
 <script>
+import test from "./test";
 export default {
+  components: {
+    test
+  },
   props: {
     date_doc: {
       type: String,
@@ -995,7 +999,7 @@ export default {
       disabled_agencia: false,
       disabled_city: false,
       tituloModal: "",
-      show_buttons: false,
+      show_buttons: true,
       show_msn: false,
       close: false,
       localizacion_id: null,
@@ -1302,7 +1306,7 @@ export default {
                   this.disabled_agencia = true;
                   this.disabled_transporte = true;
                 }
-                me.updateTableDetail();
+                me.updateTableDetail(true);
                 toastr.success("Registro agregado correctamente.");
                 toastr.options.closeButton = true;
                 this.num_guia = "";
