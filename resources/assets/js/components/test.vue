@@ -40,14 +40,27 @@ export default {
         className: "htMiddle htCenter",
         columns: [
           { data: "num_bolsa" },
-          { data: "num_warehouse", readOnly: true },
+          {
+            data: "num_warehouse",
+            readOnly: true,
+            readOnlyCellClassName: "is-readOnly"
+          },
           { data: "shipper_data", width: "250", className: "htLeft" },
           { data: "consignee_data", width: "250", className: "htLeft" },
-          { data: "pa", width: "150", readOnly: true },
+          {
+            data: "pa",
+            width: "150",
+            readOnly: true,
+            readOnlyCellClassName: "is-readOnly"
+          },
           { data: "contenido2", width: "400", className: "htLeft" },
           { data: "declarado2" },
           { data: "peso2_sum" },
-          { data: "peso" },
+          {
+            data: "peso",
+            readOnly: true,
+            readOnlyCellClassName: "is-readOnly"
+          },
           {
             data: "id",
             renderer: btnRenderer,

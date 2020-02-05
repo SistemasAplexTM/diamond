@@ -6,6 +6,11 @@ body {
   font-family: "Roboto Condensed";
 }
 
+.is-readOnly {
+  background-color: #f7f7f7 !important;
+
+}
+
 .icon_lsave {
   color: #fc7351;
 }
