@@ -1167,8 +1167,8 @@ export default {
   },
   methods: {
     open(type, create) {
-      this.shipper.name = "";
-      this.shipper.id = "";
+      // this.shipper.name = "";
+      // this.shipper.id = "";
       var data = {
         component: "form-transporter",
         title: "Transportador",
