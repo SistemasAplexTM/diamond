@@ -207,7 +207,7 @@ class UserController extends Controller
         if($data == 2){
           $where[] = ['users.agencia_id', '<>', Auth::user()->agencia_id];
         }
-
+        // DB::connection()->enableQueryLog();
         $data = User::leftjoin('agencia as a', 'users.agencia_id', 'a.id')
             ->leftJoin('role_user as b', 'users.id', 'b.user_id')
             ->leftJoin('roles as c', 'c.id', 'b.role_id')
@@ -222,6 +222,7 @@ class UserController extends Controller
               }
             })
             ->get();
+            // return DB::getQueryLog();
         return \DataTables::of($data)->make(true);
     }
 

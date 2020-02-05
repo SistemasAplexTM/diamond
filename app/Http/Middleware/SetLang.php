@@ -30,7 +30,7 @@ class SetLang
             }
         }
         JavaScript::put([
-            'lang'          => $lang,
+            'lang'          => 'es',
             'app_label'     => env('APP_LABEL'),
             'app_type'      => env('APP_TYPE'),
             'app_client'    => env('APP_CLIENT'),

@@ -719,60 +719,65 @@ span.error {
                 </div>
                 <div class="row">
                   <div class="col-lg-12">
-                    <table class="table table-stripped">
-                      <thead>
-                        <tr>
-                          <th>N° of Pieces RCP</th>
-                          <th width="15%">Gross Weigth</th>
-                          <th width="9%">Rate Class</th>
-                          <th>Chargeable Weigth</th>
-                          <th>Rate Charge</th>
-                          <th>Total</th>
-                          <th width="40%">Nature and Quantity of Goods(Incl. Dimensions or Volume)</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <td>
-                            <div class="form-group" :class="{'has-error': errors.has('piezas') }">
-                              <input
-                                v-validate="'required'"
-                                name="piezas"
-                                v-model="piezas"
-                                type="number"
-                                class="form-control"
-                              />
-                            </div>
-                          </td>
-                          <td>
-                            <div class="form-group" :class="{'has-error': errors.has('peso') }">
-                              <div class="input-group">
+                    <div class="table-responsive">
+                      <table class="table table-stripped">
+                        <thead>
+                          <tr>
+                            <th>N° of Pieces RCP</th>
+                            <th width="15%">Gross Weigth</th>
+                            <th width="9%">Rate Class</th>
+                            <th>Chargeable Weigth</th>
+                            <th>Rate Charge</th>
+                            <th>Total</th>
+                            <th width="40%">Nature and Quantity of Goods(Incl. Dimensions or Volume)</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>
+                              <div class="form-group" :class="{'has-error': errors.has('piezas') }">
                                 <input
                                   v-validate="'required'"
-                                  name="peso"
-                                  v-model="peso"
+                                  name="piezas"
+                                  v-model="piezas"
                                   type="number"
                                   class="form-control"
-                                  placeholder="Kl"
                                 />
-                                <span class="input-group-btn">
-                                  <select class="btn" name="unidad_medida" v-model="unidad_medida">
-                                    <option value="Kl">Kl</option>
-                                    <!-- <option value="Lb">Lb</option> -->
-                                  </select>
-                                </span>
                               </div>
-                            </div>
-                          </td>
-                          <td>
-                            <div class="form-group">
-                              <input
-                                type="text"
-                                class="form-control"
-                                name="rate_class"
-                                v-model="rate_class"
-                              />
-                              <!-- <select class="form-control" name="rate_class" v-model="rate_class">
+                            </td>
+                            <td>
+                              <div class="form-group" :class="{'has-error': errors.has('peso') }">
+                                <div class="input-group">
+                                  <input
+                                    v-validate="'required'"
+                                    name="peso"
+                                    v-model="peso"
+                                    type="number"
+                                    class="form-control"
+                                    placeholder="Kl"
+                                  />
+                                  <span class="input-group-btn">
+                                    <select
+                                      class="btn"
+                                      name="unidad_medida"
+                                      v-model="unidad_medida"
+                                    >
+                                      <option value="Kl">Kl</option>
+                                      <!-- <option value="Lb">Lb</option> -->
+                                    </select>
+                                  </span>
+                                </div>
+                              </div>
+                            </td>
+                            <td>
+                              <div class="form-group">
+                                <input
+                                  type="text"
+                                  class="form-control"
+                                  name="rate_class"
+                                  v-model="rate_class"
+                                />
+                                <!-- <select class="form-control" name="rate_class" v-model="rate_class">
                                     <option value=""></option>
                                     <option value="M">M</option>
                                     <option value="N">N</option>
@@ -787,83 +792,84 @@ span.error {
                                     <option value="X">X</option>
                                     <option value="Y">Y</option>
                                     <option value="Z">Z</option>
-                              </select>-->
-                            </div>
-                          </td>
-                          <td>
-                            <div
-                              class="form-group"
-                              :class="{'has-error': errors.has('peso_cobrado') }"
-                            >
-                              <input
-                                v-validate="'required'"
-                                name="peso_cobrado"
-                                v-model="peso_cobrado"
-                                type="number"
-                                class="form-control"
-                              />
-                            </div>
-                          </td>
-                          <td>
-                            <div class="form-group" :class="{'has-error': errors.has('tarifa') }">
-                              <div class="input-group">
+                                </select>-->
+                              </div>
+                            </td>
+                            <td>
+                              <div
+                                class="form-group"
+                                :class="{'has-error': errors.has('peso_cobrado') }"
+                              >
                                 <input
-                                  v-validate="{ rules: { required: !this.min} }"
-                                  name="tarifa"
-                                  v-model="tarifa"
+                                  v-validate="'required'"
+                                  name="peso_cobrado"
+                                  v-model="peso_cobrado"
                                   type="number"
                                   class="form-control"
                                 />
-                                <span
-                                  class="input-group-addon"
-                                  data-toggle="tooltip"
-                                  data-placement="top"
-                                  title="MIN"
-                                >
-                                  <i
-                                    class="fal fa-check"
-                                    @click.prevent="min = true;"
-                                    v-show="!min"
-                                  ></i>
-                                  <i
-                                    class="fal fa-times"
-                                    @click.prevent="min = false;"
-                                    v-show="min"
-                                  ></i>
-                                </span>
                               </div>
-                            </div>
-                          </td>
-                          <td>
-                            <div class="form-group" :class="{'has-error': errors.has('total') }">
-                              <input
-                                v-validate="'required'"
-                                name="total"
-                                v-model="total"
-                                type="number"
-                                class="form-control"
-                                :readonly="!min"
-                              />
-                            </div>
-                          </td>
-                          <td>
-                            <div
-                              class="form-group"
-                              :class="{'has-error': errors.has('descripcion') }"
-                            >
-                              <textarea
-                                v-validate="'required'"
-                                name="descripcion"
-                                v-model="descripcion"
-                                class="form-control"
-                                cols="30"
-                                rows="5"
-                              ></textarea>
-                            </div>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
+                            </td>
+                            <td>
+                              <div class="form-group" :class="{'has-error': errors.has('tarifa') }">
+                                <div class="input-group">
+                                  <input
+                                    v-validate="{ rules: { required: !this.min} }"
+                                    name="tarifa"
+                                    v-model="tarifa"
+                                    type="number"
+                                    class="form-control"
+                                  />
+                                  <span
+                                    class="input-group-addon"
+                                    data-toggle="tooltip"
+                                    data-placement="top"
+                                    title="MIN"
+                                  >
+                                    <i
+                                      class="fal fa-check"
+                                      @click.prevent="min = true;"
+                                      v-show="!min"
+                                    ></i>
+                                    <i
+                                      class="fal fa-times"
+                                      @click.prevent="min = false;"
+                                      v-show="min"
+                                    ></i>
+                                  </span>
+                                </div>
+                              </div>
+                            </td>
+                            <td>
+                              <div class="form-group" :class="{'has-error': errors.has('total') }">
+                                <input
+                                  v-validate="'required'"
+                                  name="total"
+                                  v-model="total"
+                                  type="number"
+                                  class="form-control"
+                                  :readonly="!min"
+                                />
+                              </div>
+                            </td>
+                            <td>
+                              <div
+                                class="form-group"
+                                :class="{'has-error': errors.has('descripcion') }"
+                              >
+                                <textarea
+                                  v-validate="'required'"
+                                  name="descripcion"
+                                  v-model="descripcion"
+                                  class="form-control"
+                                  cols="30"
+                                  rows="5"
+                                ></textarea>
+                              </div>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
                 </div>
                 <div class="row">
@@ -892,79 +898,81 @@ span.error {
                   <div class="col-lg-9">
                     <label>Other charges</label>
                     <a class="pull-right" @click="addOtherChargue()">Add Row</a>
-                    <table class="table table-stripped table-hover table-bordered">
-                      <thead>
-                        <tr>
-                          <th rowspan="2" class="text-center" style="width: 60%;">Descripction</th>
-                          <th colspan="2" class="text-center">Due</th>
-                          <th rowspan="2" class="text-center">Amount</th>
-                          <th rowspan="2"></th>
-                        </tr>
-                        <tr>
-                          <th class="text-center">Agent</th>
-                          <th class="text-center">Carrier</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr v-for="(find, index) in other_c" :key="index">
-                          <td>
-                            <div class :class="{'has-error': errors.has('oc_description') }">
+                    <div class="table-responsive">
+                      <table class="table table-stripped table-hover table-bordered" width="100">
+                        <thead>
+                          <tr>
+                            <th rowspan="2" class="text-center" style="width: 60%;">Descripction</th>
+                            <th colspan="2" class="text-center">Due</th>
+                            <th rowspan="2" class="text-center">Amount</th>
+                            <th rowspan="2"></th>
+                          </tr>
+                          <tr>
+                            <th class="text-center">Agent</th>
+                            <th class="text-center">Carrier</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr v-for="(find, index) in other_c" :key="index">
+                            <td>
+                              <div class :class="{'has-error': errors.has('oc_description') }">
+                                <input
+                                  type="text"
+                                  class="form-control"
+                                  name="oc_description"
+                                  v-model="find.oc_description"
+                                  v-validate="'required'"
+                                />
+                              </div>
+                            </td>
+                            <td class="text-center">
+                              <div class="radio radio-info">
+                                <input
+                                  type="radio"
+                                  value="0"
+                                  :name="'agent'+index"
+                                  aria-label="Single radio Two"
+                                  v-model="find.oc_due"
+                                  v-on:change="setDueAgent()"
+                                />
+                                <label></label>
+                              </div>
+                            </td>
+                            <td class="text-center">
+                              <div class="radio radio-info">
+                                <input
+                                  type="radio"
+                                  value="1"
+                                  :name="'carrier'+index"
+                                  aria-label="Single radio Two"
+                                  v-model="find.oc_due"
+                                  v-on:change="setDueAgent()"
+                                />
+                                <label></label>
+                              </div>
+                            </td>
+                            <td>
                               <input
-                                type="text"
+                                type="number"
                                 class="form-control"
-                                name="oc_description"
-                                v-model="find.oc_description"
-                                v-validate="'required'"
+                                v-model="find.oc_value"
+                                v-on:keyup="setDueAgent()"
                               />
-                            </div>
-                          </td>
-                          <td class="text-center">
-                            <div class="radio radio-info">
-                              <input
-                                type="radio"
-                                value="0"
-                                :name="'agent'+index"
-                                aria-label="Single radio Two"
-                                v-model="find.oc_due"
-                                v-on:change="setDueAgent()"
-                              />
-                              <label></label>
-                            </div>
-                          </td>
-                          <td class="text-center">
-                            <div class="radio radio-info">
-                              <input
-                                type="radio"
-                                value="1"
-                                :name="'carrier'+index"
-                                aria-label="Single radio Two"
-                                v-model="find.oc_due"
-                                v-on:change="setDueAgent()"
-                              />
-                              <label></label>
-                            </div>
-                          </td>
-                          <td>
-                            <input
-                              type="number"
-                              class="form-control"
-                              v-model="find.oc_value"
-                              v-on:keyup="setDueAgent()"
-                            />
-                          </td>
-                          <td style="vertical-align: middle;">
-                            <a
-                              class="delete_btn"
-                              @click="deleteRow(index)"
-                              data-toggle="tooltip"
-                              title="Eliminar"
-                            >
-                              <i class="fal fa-trash-alt fa-lg"></i>
-                            </a>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
+                            </td>
+                            <td style="vertical-align: middle;">
+                              <a
+                                class="delete_btn"
+                                @click="deleteRow(index)"
+                                data-toggle="tooltip"
+                                title="Eliminar"
+                              >
+                                <i class="fal fa-trash-alt fa-lg"></i>
+                              </a>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -1099,6 +1107,9 @@ export default {
     tarifa: function() {
       if (this.tarifa !== "" && this.tarifa !== null && this.tarifa != 0) {
         this.total = isInteger(this.peso_cobrado * this.tarifa);
+      }
+      if (this.peso_consolidado != 0 && this.peso_consolidado != "") {
+        // this.peso = this.peso_consolidado;
       }
     },
     write: function(value) {

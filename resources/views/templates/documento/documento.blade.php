@@ -238,7 +238,8 @@
         <div class="col-lg-2" style="padding-right: 0px;">
           <div class="form-group">
             <span class="">&nbsp;</span>
-            <el-date-picker v-model="date_document" type="date" size="medium" placeholder="Seleccionar Fecha">
+            <el-date-picker v-model="date_document" type="date" size="medium" placeholder="Seleccionar Fecha"
+              format="yyyy-MM-dd" value-format="yyyy-MM-dd">
             </el-date-picker>
           </div>
         </div>
@@ -257,10 +258,11 @@
     </div>
     {{-- FORMULARIO DE CONSOLIDADO --}}
     @if(!Auth::user()->isRole('bodega'))
-    <formconsolidado-component :pais_id_config="pais_id_config" :app_type="'{{ env('APP_TYPE') }}'"
-      :app_client="'{{ env('APP_CLIENT') }}'" :documento="{{ json_encode($documento) }}" :contactos="contactos"
-      :restore="restoreShipperConsignee" :agrupar="datosAgrupar" :removeragrupado="removerAgrupado"
-      :permission='permissions' v-if="mostrar.includes(24)" :close_document="close"></formconsolidado-component>
+    <formconsolidado-component :date_doc="date_document" :pais_id_config="pais_id_config"
+      :app_type="'{{ env('APP_TYPE') }}'" :app_client="'{{ env('APP_CLIENT') }}'"
+      :documento="{{ json_encode($documento) }}" :contactos="contactos" :restore="restoreShipperConsignee"
+      :agrupar="datosAgrupar" :removeragrupado="removerAgrupado" :permission='permissions' v-if="mostrar.includes(24)"
+      :close_document="close"></formconsolidado-component>
     @else
     <consol_bodega-component :app_type="'{{ env('APP_TYPE') }}'" :documento="{{ json_encode($documento) }}"
       :contactos="contactos" :restore="restoreShipperConsignee" :agrupar="datosAgrupar"
@@ -1097,5 +1099,5 @@
 <script src="{{ asset('js/templates/documento/documentoForm/documento.js') }}"></script>
 <script src="{{ asset('js/templates/documento/documentoForm/totalizar.js') }}"></script>
 <script src="{{ asset('js/templates/documento/documentoForm/postalCode.js') }}"></script>
-<script src="{{ asset('js/templates/documento/documentoForm/editableConfig.js') }}"></script>
+{{-- <script src="{{ asset('js/templates/documento/documentoForm/editableConfig.js') }}"></script> --}}
 @endsection

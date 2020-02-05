@@ -116,12 +116,12 @@ trait DocumentTrait
       if($filter['dates'] == '' and $filter['warehouse'] == '' and $filter['consignee_id'] == '' and $type != 4){
         $fFin = strtotime('+1 day' , strtotime(date('Y-m-d')));
         $fFin = date('Y-m-d' , $fFin);
-        $nuevafecha = strtotime('-2 day' , strtotime($fFin));
+        $nuevafecha = strtotime('-7 day' , strtotime($fFin));
         $fIni = date('Y-m-d' , $nuevafecha);
-        // $dates = array(
-        //   'inicio' => $fIni,
-        //   'fin' => $fFin,
-        // );
+        $dates = array(
+          'inicio' => $fIni,
+          'fin' => $fFin,
+        );
       }else{
         if($filter['dates'] != '' and $type != 4){
           $nuevafecha = strtotime('-2 day' , strtotime($filter['dates'][0]));
