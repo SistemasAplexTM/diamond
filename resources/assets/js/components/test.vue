@@ -13,12 +13,20 @@ import { HotTable } from "@handsontable/vue";
 export default {
   data: function() {
     function btnRenderer(instance, td, row, col, prop, value, cellProperties) {
-      // const button = document.createElement("button");
-      // button.type = "button";
       td.className = "htMiddle htCenter";
       td.innerHTML =
         '<button type="button" class="btn btn-success dropdown-toggle btn-circle-sm htMiddle" data-toggle="dropdown" ><i class="fal fa-ellipsis-v"></i></button>';
-      // td.appendChild(button);
+    }
+    function paRenderer(instance, td, row, col, prop, value, cellProperties) {
+      let dataRow = instance.getDataAtRow(row);
+      console.log(instance.getDataAtRow(row));
+
+      td.className = "htMiddle htCenter is-readOnly";
+      td.innerHTML =
+        value +
+        ' <a data-toggle="tooltip" title="" class="edit" style="float: right; color: rgb(255, 193, 7); " onclick="showModalArancel(' +
+        dataRow[9] +
+        ', \'tbl-consolidado\')" data-original-title="Cambiar"><i class="fal fa-pencil"></i></a>';
     }
     return {
       data: [],
@@ -34,7 +42,8 @@ export default {
           "Dec.",
           "Lb",
           "Lb R",
-          "Acción"
+          "Acción",
+          "documento_detalle_id"
         ],
         rowHeaders: true,
         className: "htMiddle htCenter",
@@ -50,8 +59,8 @@ export default {
           {
             data: "pa",
             width: "150",
-            readOnly: true,
-            readOnlyCellClassName: "is-readOnly"
+            renderer: paRenderer,
+            readOnly: true
           },
           { data: "contenido2", width: "400", className: "htLeft" },
           { data: "declarado2" },
@@ -65,6 +74,10 @@ export default {
             data: "id",
             renderer: btnRenderer,
             readOnly: true
+          },
+          {
+            data: "documento_detalle_id",
+            readOnly: true
           }
         ],
         rowHeights: 100,
@@ -73,10 +86,10 @@ export default {
         height: 600,
         afterChange: changes => {
           if (changes) {
-            console.log(this.data[changes[0][0]]);
+            // console.log(this.data[changes[0][0]]);
           }
 
-          console.log(changes);
+          // console.log(changes);
         }
       }
     };
