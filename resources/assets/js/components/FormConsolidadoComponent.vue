@@ -377,8 +377,8 @@ a.badge:hover {
                 </div>
                 <div class="row">
                   <div class="col-sm-12">
-                    <test></test>
-                    <!-- <table
+                    <!-- <test></test> -->
+                    <table
                       id="tbl-consolidado"
                       class="table table-striped table-hover table-bordered dataTable"
                       style="width: 100%;margin-top: 30px;"
@@ -411,7 +411,7 @@ a.badge:hover {
                           <th id="TpesoR" colspan="2"></th>
                         </tr>
                       </tfoot>
-                    </table>-->
+                    </table>
                   </div>
                 </div>
                 <div class="row">

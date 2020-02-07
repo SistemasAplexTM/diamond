@@ -19,14 +19,16 @@ export default {
     }
     function paRenderer(instance, td, row, col, prop, value, cellProperties) {
       let dataRow = instance.getDataAtRow(row);
-      console.log(instance.getDataAtRow(row));
-
       td.className = "htMiddle htCenter is-readOnly";
       td.innerHTML =
         value +
         ' <a data-toggle="tooltip" title="" class="edit" style="float: right; color: rgb(255, 193, 7); " onclick="showModalArancel(' +
-        dataRow[9] +
+        dataRow[10] +
         ', \'tbl-consolidado\')" data-original-title="Cambiar"><i class="fal fa-pencil"></i></a>';
+      // if (cellProperties.row == 0) {
+      //   cellProperties.instance.setDataAtCell(0, 4, "nuevo valor");
+      //   console.log(cellProperties);
+      // }
     }
     return {
       data: [],
@@ -80,6 +82,9 @@ export default {
             readOnly: true
           }
         ],
+        hiddenColumns: {
+          columns: [10]
+        },
         rowHeights: 100,
         width: "100%",
         fixedColumnsLeft: 2,
