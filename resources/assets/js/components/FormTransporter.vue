@@ -64,11 +64,15 @@ export default {
       me.onSubmit();
     });
     bus.$on("update", function(payload) {
+      me.update();
       // me.beforeSend(true);
     });
     bus.$on("cancel", function(payload) {
       me.resetForm();
     });
+    if (this.payload.field_id) {
+      this.getByID(this.payload.field_id);
+    }
   },
   methods: {
     onSubmit() {
@@ -90,6 +94,37 @@ export default {
         email: null,
         info: null
       };
+    },
+    getByID(id) {
+      axios
+        .get("/transportador/getForRigthMenu/" + id)
+        .then(({ data }) => {
+          this.form = {
+            id,
+            name: data.nombre,
+            email: data.email,
+            info: data.information,
+            shipper: data.shipper == 1 ? true : false,
+            consignee: data.consignee == 1 ? true : false,
+            carrier: data.carrier == 1 ? true : false
+          };
+          console.log(data);
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    update() {
+      axios
+        .post("/updateFromRigthMenu/transport", this.form)
+        .then(({ data }) => {
+          bus.$emit("assignTransport", data);
+          this.resetForm();
+          bus.$emit("close");
+        })
+        .catch(error => {
+          console.log(error);
+        });
     }
   }
 };

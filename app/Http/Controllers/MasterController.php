@@ -727,35 +727,43 @@ class MasterController extends Controller
     }
 
     public function destroy($id)
-  {
-    $data = Master::findOrFail($id);
-    $data->delete();
-    $this->AddToLog('Master Eliminada de base de datos id (' . $id . ')');
-  }
-
-  public function delete($id, $logical)
-  {
-
-    if (isset($logical) and $logical == 'true') {
-      $data             = Master::findOrFail($id);
-      $now              = new \DateTime();
-      $data->deleted_at = $now->format('Y-m-d H:i:s');
-      if ($data->save()) {
-        $this->AddToLog('Master Eliminada id (' . $id . ')');
-        $answer = array(
-          "datos" => 'Eliminación exitosa.',
-          "code"  => 200,
-        );
-      } else {
-        $answer = array(
-          "error" => 'Error al intentar Eliminar el registro.',
-          "code"  => 600,
-        );
-      }
-
-      return $answer;
-    } else {
-      $this->destroy($id);
+    {
+        $data = Master::findOrFail($id);
+        $data->delete();
+        $this->AddToLog('Master Eliminada de base de datos id (' . $id . ')');
     }
-  }
+
+    public function delete($id, $logical)
+    {
+
+        if (isset($logical) and $logical == 'true') {
+            $data             = Master::findOrFail($id);
+            $now              = new \DateTime();
+            $data->deleted_at = $now->format('Y-m-d H:i:s');
+            if ($data->save()) {
+                $this->AddToLog('Master Eliminada id (' . $id . ')');
+                $answer = array(
+                    "datos" => 'Eliminación exitosa.',
+                    "code"  => 200,
+                );
+            } else {
+                $answer = array(
+                    "error" => 'Error al intentar Eliminar el registro.',
+                    "code"  => 600,
+                );
+            }
+
+            return $answer;
+        } else {
+            $this->destroy($id);
+        }
+    }
+
+    public function asociarConsolidado(Request $request)
+    {
+        Documento::where('id', $request->consolidado_id)->update([
+            'master_id' => $request->master_id
+        ]);
+        return ['code' => 200];
+    }
 }

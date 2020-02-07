@@ -121,6 +121,47 @@
     </div>
   </div>
 
+  <!-- MODAL ASOCIAR CONSOLIDADO UPDATE -->
+  <div class="modal fade bs-example" id="modalAsociarConsolidado" tabindex="-1" role="dialog"
+    aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width:400px;">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+              class="sr-only">Close</span></button>
+          <h4 class="modal-title" id="myModalLabel">
+            <i class="fal fa-arrows-alt-h" style="font-size: 20px;"></i> Asociar consolidado
+          </h4>
+        </div>
+        <div class="modal-body">
+          <form id="formGuiasAgrupar">
+            <p>Si desea asociar un consolidado a esta master, por favor seleccionelo.</p>
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="form-group">
+                  <label for="status_id">Consolidado</label>
+                  <el-select clearable v-model="consolidado_id" filterable placeholder="Buscar Consolidado"
+                    :loading="loading" loading-text="Cargando..." no-data-text="No hay datos" value-key="id">
+                    <el-option v-for="item in options" :key="item.id" :label="item.consolidado" :value="item">
+                      <span style="float: left">Consolidado # @{{ item.consolidado }}</span>
+                      <span style="float: right; color: #8492a6; font-size: 13px"><i class="fal fa-calendar-alt"></i>
+                        @{{ item.fecha }} <i class="fal fa-map-marker-alt"></i> @{{ item.ciudad }}</span>
+                    </el-option>
+                  </el-select>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fal fa-times"></i>
+            Cerrar</button>
+          <a @click="associateConsolidado()" class="btn btn-primary"><i class="fal fa-plus"></i> Aceptar</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- MODAL IMPRIMIR LABELS POR BOLSA -->
   <div class="modal fade bs-example" id="modalPrintLabelsMaster" tabindex="-1" role="dialog"
     aria-labelledby="myModalLabel" aria-hidden="true">

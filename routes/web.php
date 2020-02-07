@@ -109,6 +109,7 @@ Route::group(['middleware' => 'auth'], function () {
   Route::delete('master/deleteCost/{id}', 'MasterController@deleteCost');
   Route::get('master/generateXml/{id}', 'MasterController@generateXml');
   Route::get('master/printDelivery/{id_master}', 'MasterController@printDelivery');
+  Route::post('master/asociar_consolidado', 'MasterController@asociarConsolidado');
 
   /*--- MODULO TRACKINGS ---*/
   Route::resource('tracking', 'TrackingController', ['except' => ['show', 'create', 'edit', 'update']]);
@@ -193,6 +194,7 @@ Route::group(['middleware' => 'auth'], function () {
   Route::get('transport/{type}/restaurar/{id}', 'AerolineasAeropuertosController@restaurar');
   Route::get('transport/selectInput/{tableName}', 'AerolineasAeropuertosController@selectInput');
   Route::post('saveFromRigthMenu/transport', 'TransportadorController@saveFromRigthMenu');
+  Route::post('updateFromRigthMenu/transport', 'TransportadorController@updateFromRigthMenu');
 
   /*--- MODULO SERVICIOS ---*/
   Route::resource('servicios', 'ServiciosController', ['except' => ['show', 'create', 'edit']]);
@@ -203,6 +205,7 @@ Route::group(['middleware' => 'auth'], function () {
 
   /*--- MODULO TRANSPORTADOR ---*/
   Route::resource('transportador', 'TransportadorController', ['except' => ['show', 'create', 'edit']]);
+  Route::get('transportador/getForRigthMenu/{id}', 'TransportadorController@getForRigthMenu');
   Route::get('transportador/all', 'TransportadorController@getAll')->name('datatable/all');
   Route::get('transportador/delete/{id}/{logical?}', 'TransportadorController@delete')->name('transportador.delete');
   Route::get('transportador/restaurar/{id}', 'TransportadorController@restaurar');

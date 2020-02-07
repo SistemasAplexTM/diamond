@@ -73,6 +73,8 @@ $(document).ready(function () {
         if (permission_delete) {
           var btn_delete = '<li style="color:#E34724;"><a onclick=\"deleteDocument(' + full.id + ')\"><i class="fal fa-trash-alt fa-lg"></i> Eliminar</a></li>';
         }
+        var btn_relacionar_consolidado = "<li><a  onclick=\'asociarConsolidado(" + full.id + ")\'  ><i class='fal fa-arrows-alt-h'></i> Relacionar consolidado </i></span ></a ></li>";
+
         var btn_cost = '<li><a onclick="createCost(' + full.id + ', \'' + full.num_master + '\', \'' + full.peso + '\', \'' + full.peso_kl + '\', \'' + full.tarifa + '\')"><i class="fal fa-file-invoice-dollar fa-lg"></i> Crear Costos</a></li>';
         var btn_xml = '<li><a href="master/generateXml/' + full.id + '" target="_blank"><i class="fal fa-file-export fa-lg"></i> Generar XML</a></li>';
         if (full.consolidado_id != null) {
@@ -92,6 +94,7 @@ $(document).ready(function () {
           '<li role="separator" class="divider"></li>' +
           btn_cost +
           // btn_xml +
+          btn_relacionar_consolidado +
           '<li role="separator" class="divider"></li>' +
           btn_delete +
           "</ul></div>";
@@ -124,6 +127,13 @@ function deleteDocument(id) {
 
 function createHouse(id, master) {
   objVue.createHouseAwb(id, master);
+}
+
+function asociarConsolidado(id) {
+  // data - toggle='tooltip' title = 'Relacionar consolidado' > <span data-toggle='modal' data-target='#modalAsociarConsolidado'
+  $('#modalAsociarConsolidado').modal('show');
+  objVue.master_asociar = id;
+
 }
 
 function createTax(id, master, peso, peso_kl, tarifa, trm, fecha_liquidacion) {
@@ -172,6 +182,7 @@ var objVue = new Vue({
     },
   },
   data: {
+    master_asociar: null,
     options: [],
     consolidado_id: null,
     list: [],
@@ -205,6 +216,18 @@ var objVue = new Vue({
     text_cost: 'Seleccionar Costo o Gasto',
   },
   methods: {
+    associateConsolidado() {
+      let data = {
+        consolidado_id: this.consolidado_id,
+        master_id: this.master_asociar
+      }
+      axios.post('/master/asociar_consolidado', data).then(response => {
+        $('#modalAsociarConsolidado').modal('hide');
+      }).catch(error => {
+        console.log(error);
+      });
+
+    },
     deleteCost(id) {
       let me = this;
       axios.delete('master/deleteCost/' + id).then(function (response) {
