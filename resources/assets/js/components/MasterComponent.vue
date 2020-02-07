@@ -63,23 +63,23 @@ span.error {
             <div class="panel-heading">
               Shipper's Name and Address
               <button
-                @click="open('s', true)"
+                @click="open('s', false)"
                 class="btn btn-xs btn-primary btn-action pull-right"
                 type="button"
               >
                 <i class="fal fa-user-plus"></i>&nbsp;
               </button>
-              <!-- <button
-                @click="open('s', false)"
+              <button
+                @click="open('s', true)"
                 class="btn btn-xs btn-warning btn-action pull-right mr-10"
                 type="button"
                 style="margin-right: 10px"
               >
                 <i class="fal fa-edit"></i>&nbsp;
-              </button>-->
+              </button>
               <!-- <div class="checkbox checkbox-primary checkbox-inline pull-right">
-                  <input type="checkbox" id="crearS" value="true" v-model="shipper.disabled">
-                  <label for="crearS"> Crear </label>
+                <input type="checkbox" id="crearS" value="true" v-model="shipper.disabled" />
+                <label for="crearS">Crear</label>
               </div>-->
             </div>
             <div class="panel-body">
@@ -171,11 +171,19 @@ span.error {
             <div class="panel-heading">
               Consignee's Name and Address
               <button
-                @click="open('c', true)"
+                @click="open('c', false)"
                 class="btn btn-xs btn-primary btn-action pull-right"
                 type="button"
               >
                 <i class="fal fa-user-plus"></i>&nbsp;
+              </button>
+              <button
+                @click="open('c', true)"
+                class="btn btn-xs btn-warning btn-action pull-right mr-10"
+                type="button"
+                style="margin-right: 10px"
+              >
+                <i class="fal fa-edit"></i>&nbsp;
               </button>
             </div>
             <div class="panel-body">
@@ -266,11 +274,19 @@ span.error {
             <div class="panel-heading">
               Issuing Carrier's Agent Name and City
               <button
-                @click="open('cr', true)"
+                @click="open('cr', false)"
                 class="btn btn-xs btn-primary btn-action pull-right"
                 type="button"
               >
                 <i class="fal fa-user-plus"></i>&nbsp;
+              </button>
+              <button
+                @click="open('cr', true)"
+                class="btn btn-xs btn-warning btn-action pull-right mr-10"
+                type="button"
+                style="margin-right: 10px"
+              >
+                <i class="fal fa-edit"></i>&nbsp;
               </button>
             </div>
             <div class="panel-body">
@@ -1166,17 +1182,17 @@ export default {
     });
   },
   methods: {
-    open(type, create) {
+    open(type, edit) {
       // this.shipper.name = "";
       // this.shipper.id = "";
       var data = {
         component: "form-transporter",
         title: "Transportador",
         icon: "fal fa-user",
-        field_id: create ? null : this.shipper.id,
+        field_id: edit ? this.shipper.id : null,
         table: "shipper",
         hidden_btn: true,
-        edit: create ? false : true,
+        edit: edit,
         type: type
       };
       bus.$emit("open", data);

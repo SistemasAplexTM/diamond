@@ -201,4 +201,23 @@ class TransportadorController extends Controller
         ]);
         return $data;
     }
+
+    public function updateFromRigthMenu(Request $request)
+    {
+        $data = Transportador::where('id', $request->id)->update([
+            'nombre' => $request->name,
+            'email' => $request->email,
+            'information' => $request->info,
+            'shipper' => $request->shipper,
+            'consignee' => $request->consignee,
+            'carrier' => $request->carrier,
+        ]);
+        return $data;
+    }
+
+    public function getForRigthMenu($id)
+    {
+        $data = Transportador::where('id', $id)->first();
+        return $data;
+    }
 }
