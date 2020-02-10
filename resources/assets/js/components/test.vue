@@ -91,10 +91,17 @@ export default {
         height: 600,
         afterChange: changes => {
           if (changes) {
+            // console.log(changes);
+            var row = this.data[changes[0][0]];
             // console.log(this.data[changes[0][0]]);
+            var data = {
+              id: row["id"],
+              option: changes[0][1],
+              id_detail: row["documento_detalle_id"],
+              data: changes[0][3]
+            };
+            this.updateDataDetailNew(data);
           }
-
-          // console.log(changes);
         }
       }
     };
@@ -115,6 +122,24 @@ export default {
         })
         .catch(error => {
           console.log(error);
+        });
+    },
+    updateDataDetailNew(data) {
+      let me = this;
+      axios
+        .post("updateDetailConsolidado", data)
+        .then(response => {
+          if (response.data.code == 200) {
+            toastr.success("Actualizado con éxito");
+            this.getData();
+            console.log("success!", data);
+          } else {
+            console.log("error");
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+          toastr.warning("Error: -" + error);
         });
     }
   }
