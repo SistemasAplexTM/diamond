@@ -23,7 +23,7 @@
           </div>
           <div class="col-lg-4">
             <label class="control-label" style="width: 100%;">&nbsp;</label>
-            <el-button type="success" id="tracking_save" :loading="loading_add_tracking"
+            <el-button type="success" id="tracking_save" size="small" :loading="loading_add_tracking"
               @click="addTrackingToDocument('create')"><i class="fal fa-plus"></i> Agregar</el-button>
           </div>
         </div>

@@ -1545,6 +1545,7 @@ export default {
           account_information: this.account_information,
           agent_iata_data: this.agent_iata_data,
           num_account: this.num_account,
+          num_master: this.num_master,
           reference_num: this.reference_num,
           optional_shipping_info: this.optional_shipping_info,
           amount_insurance: this.amount_insurance,

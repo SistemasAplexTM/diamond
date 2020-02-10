@@ -331,7 +331,7 @@ var objVue = new Vue({
                     me.tracking_number = null;
                     me.addTrackings(me.id_detalle)
                     refreshTable('whgTable');
-                    toastr.success(response.data.message);
+                    // toastr.success(response.data.message);
                     toastr.options.closeButton = true;
                     $('#window-load').hide();
                 } else {
