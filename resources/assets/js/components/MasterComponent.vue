@@ -1534,6 +1534,10 @@ export default {
     update: function() {
       axios
         .put("/master/" + this.master, {
+          aerolinea_inventario_id: !this.write
+            ? this.aerolinea_inventario_id.id
+            : "",
+          aerolineas_id: this.aerolinea.id,
           shipper_id: this.shipper.id,
           shipper: this.datos_shipper,
           consignee_id: this.consignee.id,
@@ -1585,7 +1589,7 @@ export default {
     edit(id) {
       let me = this;
       axios.get("../" + id).then(response => {
-        this.disableAerolinea = true;
+        // this.disableAerolinea = true;
         this.editing = true;
         this.shipper.disabled = false;
 
