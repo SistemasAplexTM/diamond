@@ -258,8 +258,8 @@
     </div>
     {{-- FORMULARIO DE CONSOLIDADO --}}
     @if(!Auth::user()->isRole('bodega'))
-    <formconsolidado-component :date_doc="date_document" :pais_id_config="pais_id_config"
-      :app_type="'{{ env('APP_TYPE') }}'" :app_client="'{{ env('APP_CLIENT') }}'"
+    <formconsolidado-component :update_detail="updateConsolidatedDetail" :date_doc="date_document"
+      :pais_id_config="pais_id_config" :app_type="'{{ env('APP_TYPE') }}'" :app_client="'{{ env('APP_CLIENT') }}'"
       :documento="{{ json_encode($documento) }}" :contactos="contactos" :restore="restoreShipperConsignee"
       :agrupar="datosAgrupar" :removeragrupado="removerAgrupado" :permission='permissions' v-if="mostrar.includes(24)"
       :close_document="close"></formconsolidado-component>

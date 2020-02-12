@@ -2598,6 +2598,17 @@ class DocumentoController extends Controller
                             "status" => 200,
                         );
                     }
+                    if (isset($request->option) and $request->option === "num_bolsa") {
+                        DB::table('consolidado_detalle')->where('id', $request->id)->update([
+                            'num_bolsa'  => $request->data
+                        ]);
+                        $this->AddToLog('Consolidado detalle editado (' . $request->id . ')');
+                        $answer = array(
+                            "datos"  => $request->id,
+                            "code"   => 200,
+                            "status" => 200,
+                        );
+                    }
                 }
             }
 

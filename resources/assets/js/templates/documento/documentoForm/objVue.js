@@ -157,7 +157,8 @@ var objVue = new Vue({
         edit_consignee: false,
         edit_shipper: false,
         loading_add_tracking: false,
-        date_document: objVue.getTime() // la funcion esta en el main.js en los mixins de vue
+        date_document: objVue.getTime(), // la funcion esta en el main.js en los mixins de vue
+        updateConsolidatedDetail: true
 
     },
     methods: {
@@ -399,9 +400,10 @@ var objVue = new Vue({
                     axios.get('deleteDetailConsolidado/' + data.id + '/' + data.logical).then(response => {
                         toastr.success("Registro eliminado exitosamente.");
                         toastr.options.closeButton = true;
-                        var table = $('#tbl-consolidado').DataTable();
-                        table.ajax.reload();
+                        // var table = $('#tbl-consolidado').DataTable();
+                        // table.ajax.reload();
                         me.refreshBoxes = !me.refreshBoxes;
+                        me.updateConsolidatedDetail = !me.updateConsolidatedDetail;
                     });
                 }
             });
@@ -808,6 +810,8 @@ var objVue = new Vue({
             });
         },
         modalArancel: function (id, table_) {
+            console.log(id, table_);
+
             let me = this;
             $('#modalArancel').modal('show');
             if ($('#tbl-modalArancel tbody').length > 0) {
@@ -838,6 +842,7 @@ var objVue = new Vue({
                 if (id) {
                     /* SE EJECUTA ESTA FUNCION CUANDO LA MODAL SE ABRE DESDE EL CONSOLIDADO */
                     me.updatePADetailConsolidado(id, data['id'], table_);
+                    me.updateConsolidatedDetail = !me.updateConsolidatedDetail
                     $("#tbl-modalArancel tbody").off('click', 'tr');
                 } else {
                     $('#pa_id').val(data['id']);

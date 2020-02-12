@@ -377,7 +377,7 @@ a.badge:hover {
                 </div>
                 <div class="row">
                   <div class="col-sm-12">
-                    <detail></detail>
+                    <detail :update_detail="update_detail_consolidated"></detail>
                     <!-- <table
                       id="tbl-consolidado"
                       class="table table-striped table-hover table-bordered dataTable"
@@ -748,6 +748,9 @@ export default {
     detail
   },
   props: {
+    update_detail: {
+      type: Boolean
+    },
     date_doc: {
       type: String,
       required: false
@@ -791,6 +794,9 @@ export default {
     }
   },
   watch: {
+    update_detail: function(val) {
+      this.update_detail_consolidated = val;
+    },
     date_doc: function(val) {
       console.log(val);
     },
@@ -1009,7 +1015,8 @@ export default {
       num_bolsa_selected: 0,
       bags: [],
       cant_bags: 0,
-      range_value: [30, 90]
+      range_value: [30, 90],
+      update_detail_consolidated: false
     };
   },
   methods: {
@@ -1306,9 +1313,9 @@ export default {
                   this.disabled_agencia = true;
                   this.disabled_transporte = true;
                 }
-                me.updateTableDetail(true);
-                toastr.success("Registro agregado correctamente.");
-                toastr.options.closeButton = true;
+                me.updateTableDetail(false);
+                // toastr.success("Registro agregado correctamente.");
+                // toastr.options.closeButton = true;
                 this.num_guia = "";
               } else {
                 if (response.data.code === 600) {
@@ -1330,8 +1337,9 @@ export default {
       if (!op) {
         this.getModalGuias();
       }
-      var table = $("#tbl-consolidado").DataTable();
-      table.ajax.reload();
+      this.update_detail_consolidated = !this.update_detail_consolidated;
+      // var table = $("#tbl-consolidado").DataTable();
+      // table.ajax.reload();
     },
     increaseBoxes() {
       this.num_bolsa = parseInt(this.num_bolsa) + 1;
