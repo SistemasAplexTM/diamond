@@ -377,7 +377,7 @@ a.badge:hover {
                 </div>
                 <div class="row">
                   <div class="col-sm-12">
-                    <test></test>
+                    <detail></detail>
                     <!-- <table
                       id="tbl-consolidado"
                       class="table table-striped table-hover table-bordered dataTable"
@@ -411,7 +411,7 @@ a.badge:hover {
                           <th id="TpesoR" colspan="2"></th>
                         </tr>
                       </tfoot>
-                    </table> -->
+                    </table>-->
                   </div>
                 </div>
                 <div class="row">
@@ -742,10 +742,10 @@ a.badge:hover {
 </template>
 
 <script>
-import test from "./test";
+import detail from "./DetailConsolidated";
 export default {
   components: {
-    test
+    detail
   },
   props: {
     date_doc: {
@@ -2000,32 +2000,32 @@ export default {
         type: type,
         offset: 70
       });
-    },
-    updateDataDetailNew(data, el) {
-      let me = this;
-      axios
-        .post("updateDetailConsolidado", data)
-        .then(response => {
-          if (response.data.code == 200) {
-            var datos =
-              data.data === "" || data.data === "null" ? "NULL" : data.data;
-            // console.log("success!", data, datos);
-            setTimeout(() => {
-              //Cargamos finalmente el contenido deseado
-              $(el)
-                .siblings(".edit_full_inline")
-                .fadeIn(1000)
-                .html(datos);
-            }, 300);
-          } else {
-            console.log("err0r");
-          }
-        })
-        .catch(function(error) {
-          console.log(error);
-          toastr.warning("Error: -" + error);
-        });
     }
+    // updateDataDetailNew(data, el) {
+    //   let me = this;
+    //   axios
+    //     .post("updateDetailConsolidado", data)
+    //     .then(response => {
+    //       if (response.data.code == 200) {
+    //         var datos =
+    //           data.data === "" || data.data === "null" ? "NULL" : data.data;
+    //         // console.log("success!", data, datos);
+    //         setTimeout(() => {
+    //           //Cargamos finalmente el contenido deseado
+    //           $(el)
+    //             .siblings(".edit_full_inline")
+    //             .fadeIn(1000)
+    //             .html(datos);
+    //         }, 300);
+    //       } else {
+    //         console.log("err0r");
+    //       }
+    //     })
+    //     .catch(function(error) {
+    //       console.log(error);
+    //       toastr.warning("Error: -" + error);
+    //     });
+    // }
   }
 };
 </script>

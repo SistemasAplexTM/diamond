@@ -230,7 +230,7 @@
                         <label for="prefijo_pobox" class="control-label">
                           <div class="col-sm-12" data-trigger="hover" data-container="body" data-toggle="popover"
                             data-placement="rigth"
-                            data-content="Si no se ingresa ningun dato aqui, el PoBox de los clientes se creara automaticamente."
+                            data-content="Si no se ingresa ningun dato aqui, el PoBox de los clientes se creara automaticamente. Max 5 caracteres"
                             style="padding-left: 0px; padding-right: 0px;">
                             @lang('general.pobox_prefix')
                             <i class="fal fa-question-circle" style="cursor: pointer; color: coral;"></i>
@@ -238,7 +238,7 @@
                         </label>
                       </div>
                       <div class="col-lg-8">
-                        <input type="text" class="form-control" id="prefijo_pobox" name="prefijo_pobox"
+                        <input type="text" class="form-control" maxlength="5" id="prefijo_pobox" name="prefijo_pobox"
                           value="{{ (isset($agencia) and $agencia) ? $agencia->prefijo_pobox : '' }}"
                           placeholder="Para el código de los clientes">
                       </div>
