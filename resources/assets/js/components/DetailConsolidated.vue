@@ -27,9 +27,9 @@ export default {
       td.className = "htMiddle htCenter";
       let dataRow = instance.getDataAtRow(row);
       let btn_delete =
-        '<a onclick="eliminarConsolidado(' +
+        '<button onclick="eliminarConsolidado(' +
         dataRow[9] +
-        ', false)" class="delete_btn" data-toggle="tooltip" data-original-title="Eliminar"><i class="fal fa-trash-alt fa-lg"></i></a>';
+        ', false)" class="btn btn-danger btn-circle" type="button" data-toggle="tooltip" data-original-title="Eliminar"><i class="fal fa-trash-alt"></i></button>';
       let btn_print_label =
         '<a href="../../impresion-documento-label/' +
         dataRow[11] +
@@ -37,13 +37,13 @@ export default {
         dataRow[10] +
         "/consolidado/" +
         dataRow[9] +
-        '" class="print_btn" target="blank_" data-toggle="tooltip" data-original-title="Label"><i class="fal fa-barcode fa-lg"></i></a>';
+        '" class="btn btn-circle btn-default btn-outline" type="button" data-toggle="tooltip" data-original-title="Label" target="blank_"><i class="fal fa-barcode"></i></a>';
       let btn_print_invoice =
         '<a href="../../impresion-documento/' +
         dataRow[11] +
         "/invoice/" +
         dataRow[10] +
-        '" class="print_btn" target="blank_" data-toggle="tooltip" data-original-title="Factura"><i class="fal fa-file fa-lg"></i></a>';
+        '" class="btn btn-circle btn-default btn-outline" type="button" data-toggle="tooltip" data-original-title="Factura" target="blank_"><i class="fal fa-file"></i></a>';
       td.innerHTML =
         btn_print_label + " " + btn_print_invoice + " " + btn_delete;
     }

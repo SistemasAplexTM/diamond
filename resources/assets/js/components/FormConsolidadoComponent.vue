@@ -795,7 +795,7 @@ export default {
   },
   watch: {
     update_detail: function(val) {
-      this.update_detail_consolidated = val;
+      this.update_detail_consolidated = !this.update_detail_consolidated;
     },
     date_doc: function(val) {
       console.log(val);
@@ -814,29 +814,6 @@ export default {
         option: option.opcion,
         open: true
       };
-      // this.contactos_fields = null;
-      // if (option.opcion === "shipper") {
-      //   var id = option.idShipCons;
-      //   $("#modalShipperConsigneeConsolidado").modal("show");
-      //   this.tituloModal = "Remitente (Shipper)";
-      //   var contact = this.shipper_contactos[id];
-      //   if (contact != null) {
-      //     this.contactos_fields = JSON.parse(
-      //       contact.replace(/&quot;/g, '"')
-      //     ).campos;
-      //   }
-      // }
-      // if (option.opcion === "consignee") {
-      //   var id = option.idShipCons;
-      //   $("#modalShipperConsigneeConsolidado").modal("show");
-      //   this.tituloModal = "Destinatario (Consignee)";
-      //   var contact = this.consignee_contactos[id];
-      //   if (contact != null) {
-      //     this.contactos_fields = JSON.parse(
-      //       contact.replace(/&quot;/g, '"')
-      //     ).campos;
-      //   }
-      // }
     },
     restore: function(option) {
       let me = this;
