@@ -671,10 +671,7 @@
 					    <td class="left_line bg_azul" style="border-left: 1px solid {{ $color }};background-color:{{ $background }};">&nbsp;</td>
 					    <td valign="top" rowspan="2" class="left_line" style="border-left: 1px solid {{ $color }};width:200px;">
 					    	<div id="nature_goods" class="margin_div text_regular_l">
-									<pre>
-										{{ $detalle->descripcion }}
-										{{-- productos cosmeticos: preparaciones para manicuras y/o pedicuros, Esmaltes, pestaña, lámparas, herramientas y pulidoras, maletines y porta pinceles, moldes, apoya brazos, monomero, nail prep, acetona, polvo acrilico, jarra plastica, esponjas, instrumentos	manicura y pedicura, pañitos limpieza, display, limas, primer, aspiradora, removedor, moldes de papel, tip uñas, kit caja uñas,	papel foil, porta pinceles, kit spa. --}}
-									</pre>
+									<pre>{{ $detalle->descripcion }}</pre>
 									</div>
 					    </td>
 					  </tr>

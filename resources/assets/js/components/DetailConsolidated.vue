@@ -9,13 +9,43 @@
 
 <script>
 import { HotTable } from "@handsontable/vue";
+import Handsontable from "handsontable";
 
 export default {
+  props: {
+    update_detail: {
+      type: Boolean
+    }
+  },
+  watch: {
+    update_detail: function(val) {
+      this.getData();
+    }
+  },
   data: function() {
     function btnRenderer(instance, td, row, col, prop, value, cellProperties) {
       td.className = "htMiddle htCenter";
+      let dataRow = instance.getDataAtRow(row);
+      let btn_delete =
+        '<a onclick="eliminarConsolidado(' +
+        dataRow[9] +
+        ', false)" class="delete_btn" data-toggle="tooltip" data-original-title="Eliminar"><i class="fal fa-trash-alt fa-lg"></i></a>';
+      let btn_print_label =
+        '<a href="../../impresion-documento-label/' +
+        dataRow[11] +
+        "/guia/" +
+        dataRow[10] +
+        "/consolidado/" +
+        dataRow[9] +
+        '" class="print_btn" target="blank_" data-toggle="tooltip" data-original-title="Label"><i class="fal fa-barcode fa-lg"></i></a>';
+      let btn_print_invoice =
+        '<a href="../../impresion-documento/' +
+        dataRow[11] +
+        "/invoice/" +
+        dataRow[10] +
+        '" class="print_btn" target="blank_" data-toggle="tooltip" data-original-title="Factura"><i class="fal fa-file fa-lg"></i></a>';
       td.innerHTML =
-        '<button type="button" class="btn btn-success dropdown-toggle btn-circle-sm htMiddle" data-toggle="dropdown" ><i class="fal fa-ellipsis-v"></i></button>';
+        btn_print_label + " " + btn_print_invoice + " " + btn_delete;
     }
     function paRenderer(instance, td, row, col, prop, value, cellProperties) {
       let dataRow = instance.getDataAtRow(row);
@@ -45,7 +75,8 @@ export default {
           "Lb",
           "Lb R",
           "Acción",
-          "documento_detalle_id"
+          "documento_detalle_id",
+          "documento_id"
         ],
         rowHeaders: true,
         className: "htMiddle htCenter",
@@ -80,10 +111,14 @@ export default {
           {
             data: "documento_detalle_id",
             readOnly: true
+          },
+          {
+            data: "documento_id",
+            readOnly: true
           }
         ],
         hiddenColumns: {
-          columns: [10]
+          columns: [10, 11]
         },
         rowHeights: 100,
         width: "100%",
@@ -113,12 +148,15 @@ export default {
     this.getData();
   },
   methods: {
+    deleteRow(data) {
+      console.log("delete_r: " + data);
+    },
     getData() {
       axios
         .get("getAllConsolidadoDetalle")
         .then(({ data }) => {
           this.data = data.data;
-          console.log(data);
+          // console.log(data);
         })
         .catch(error => {
           console.log(error);
@@ -132,7 +170,7 @@ export default {
           if (response.data.code == 200) {
             toastr.success("Actualizado con éxito");
             this.getData();
-            console.log("success!", data);
+            // console.log("success!", data);
           } else {
             console.log("error");
           }
