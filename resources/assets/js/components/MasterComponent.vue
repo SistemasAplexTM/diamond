@@ -1712,6 +1712,15 @@ export default {
     },
     getAerolineasInventario: function(val) {
       let me = this;
+      // console.log(
+      //   "ENsadklamsdlkamlkm",
+      //   me.aerolinea_inventario_id,
+      //   " - ",
+      //   me.num_master
+      // );
+
+      me.aerolinea_inventario_id = null;
+      me.num_master = "";
       if (val != null) {
         this.codigo = val.codigo;
         this.aerolinea = val;
