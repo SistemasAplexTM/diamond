@@ -635,6 +635,7 @@ var objVue = new Vue({
                             $('#shipper_id').val(id);
                             $('#modalShipper').modal('hide');
                         });
+                        me.addShipperConsigneeToDocument(id, table);
                     } else {
                         me.placeShipperConsignee(shipper_data, table);
                     }
@@ -649,6 +650,7 @@ var objVue = new Vue({
                             $('#consignee_id').val(id);
                             $('#modalConsignee').modal('hide');
                         });
+                        me.addShipperConsigneeToDocument(id, table);
                     } else {
                         me.placeShipperConsignee(consignee_data, table);
                     }
@@ -1036,6 +1038,18 @@ var objVue = new Vue({
             //     console.log(error);
             //     toastr.warning('Error: -' + error);
             // });
+        },
+        // ACTUALIZAR SHIPPERO O CONSIGNEE EN DOCUMENTO
+        addShipperConsigneeToDocument(id, table) {
+            axios.get('addShipperConsigneeToDocument/' + table + '/' + id).then(response => {
+                console.log('update: ' + response.data);
+
+                // data = response.data;
+                // me.consignee_data = data
+                // me.nombreD = data['nombre_full'];
+                // $('#consignee_id').val(id);
+                // $('#modalConsignee').modal('hide');
+            });
         },
     }
 });

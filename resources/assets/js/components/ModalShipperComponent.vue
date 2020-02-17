@@ -38,7 +38,7 @@
             <span class="sr-only">Close</span>
           </button>
           <h4 class="modal-title" id="myModalLabel">
-            Remitentes (Shippers)
+            Remitentes (Shippers) f
             <!-- <label for="buscarF" class="control-label gcore-label-top">
               Mostrar Todos:
               <input

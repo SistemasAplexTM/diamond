@@ -511,6 +511,17 @@ class DocumentoController extends Controller
         ));
     }
 
+    public function addShipperConsigneeToDocument($id, $table, $id_data)
+    {   
+        $data = Documento::findOrFail($id);
+        if ($table === 'shipper') {
+            $data->shipper_id = $id_data;
+        }else{
+            $data->consignee_id = $id_data;
+        }
+        $data->save();
+    }
+
     public function update(Request $request, $id)
     {
 
