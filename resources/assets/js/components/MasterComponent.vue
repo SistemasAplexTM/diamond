@@ -898,6 +898,7 @@ span.error {
                         name
                         id="total_other_charge_due_agent"
                         type="number"
+                        readonly
                       />
                       <br />
                       <label for="agent_iata_data">Total Other Charges Due Carrier</label>
@@ -907,6 +908,7 @@ span.error {
                         name
                         id="total_other_charge_due_carrier"
                         type="number"
+                        readonly
                       />
                     </div>
                   </div>
