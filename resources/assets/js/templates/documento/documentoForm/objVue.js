@@ -158,7 +158,8 @@ var objVue = new Vue({
         edit_shipper: false,
         loading_add_tracking: false,
         date_document: objVue.getTime(), // la funcion esta en el main.js en los mixins de vue
-        updateConsolidatedDetail: true
+        updateConsolidatedDetail: true,
+        updateDetail: true
 
     },
     methods: {

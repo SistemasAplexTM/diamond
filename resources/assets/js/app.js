@@ -81,4 +81,5 @@ Vue.component('change_agency', require('./components/document/form/ChangeAgency.
 Vue.component('casillero', require('./components/Casillero.vue'));
 
 
-Vue.component('form-transporter', require('./components/FormTransporter.vue')); 
+Vue.component('form-transporter', require('./components/FormTransporter.vue'));
+Vue.component('detail-document', require('./components/DetailDocument.vue')); 
