@@ -14,13 +14,15 @@ class ConsolidadoExport implements FromView, ShouldAutoSize
   public function __construct($view, $data = null)
   {
       $this->data = $data['datos'];
+      $this->mintics = (isset($data['mintics'])) ? $data['mintics'] : false;
       $this->view = $view;
   }
 
   public function view(): View
   {
       return view($this->view, [
-          'data' => $this->data
+          'data' => $this->data,
+          'mintics' => $this->mintics
       ]);
   }
 }

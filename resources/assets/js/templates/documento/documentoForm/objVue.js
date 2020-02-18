@@ -1043,13 +1043,7 @@ var objVue = new Vue({
         // ACTUALIZAR SHIPPERO O CONSIGNEE EN DOCUMENTO
         addShipperConsigneeToDocument(id, table) {
             axios.get('addShipperConsigneeToDocument/' + table + '/' + id).then(response => {
-                console.log('update: ' + response.data);
-
-                // data = response.data;
-                // me.consignee_data = data
-                // me.nombreD = data['nombre_full'];
-                // $('#consignee_id').val(id);
-                // $('#modalConsignee').modal('hide');
+                return true;
             });
         },
     }

@@ -3723,7 +3723,24 @@ class DocumentoController extends Controller
 
     public function exportCellar($id)
     {
-        $data = DB::table('consolidado_detalle AS a')
+        // DB::connection()->enableQueryLog();
+        $data = $this->exportCellarSql($id);
+        $mintics = $this->exportCellarSql($id, true);
+        // return DB::getQueryLog();
+        // echo '<pre>';
+        // print_r($data);
+        // echo '</pre>';
+        // exit();
+        return Excel::download(
+            new ConsolidadoExport('exports.excelBodega', array('datos' => $data, 'mintics' => $mintics)),
+            'Manifiesto Interno '. $data[0]->consecutivo_documento.'.xlsx',
+            \Maatwebsite\Excel\Excel::XLSX
+        );
+    }
+
+    public function exportCellarSql($id, $mintic = false)
+    {
+        return DB::table('consolidado_detalle AS a')
             ->join('documento AS docu', 'docu.id', 'a.consolidado_id')
             ->join('documento_detalle AS bb', 'a.documento_detalle_id', 'bb.id')
             ->join('documento_detalle AS b', 'bb.id', 'b.agrupado')
@@ -3764,24 +3781,24 @@ class DocumentoController extends Controller
                 'i.telefono AS cons_tel',
                 'i.zip AS cons_zip',
                 'docu.consecutivo AS consecutivo_documento',
-                DB::raw("(SELECT rr.num_guia FROM documento_detalle AS rr WHERE rr.id = b.agrupado) as mintic"),
-                DB::raw("(SELECT GROUP_CONCAT(tracking.codigo) FROM tracking WHERE tracking.documento_detalle_id = b.id) as tracking")
+                DB::raw("SUBSTR((SELECT rr.num_guia FROM documento_detalle AS rr WHERE rr.id = b.agrupado),4) as mintic"),
+                DB::raw("(SELECT GROUP_CONCAT(tracking.codigo) FROM tracking WHERE tracking.documento_detalle_id = b.id) as tracking"),
+                'b.mintic AS is_mintic',
+                'b.flag'
             )
             ->where([
                 ['a.deleted_at', null],
                 ['b.deleted_at', null],
                 ['a.consolidado_id', $id],
-            ])->orderBy('b.num_warehouse', 'ASC')->get();
-
-        // echo '<pre>';
-        // print_r($data);
-        // echo '</pre>';
-        // exit();
-        return Excel::download(
-            new ConsolidadoExport('exports.excelBodega', array('datos' => $data,)),
-            'Manifiesto Interno ' . $data[0]->consecutivo_documento . '.xlsx',
-            \Maatwebsite\Excel\Excel::XLSX
-        );
+            ])
+            ->when($mintic, function ($query) {
+                    return $query->whereRaw('(b.flag = 1 OR b.mintic IS NOT NULL)')
+                    ->orderBy('mintic', 'ASC')
+                    ->orderBy('flag', 'ASC');
+                }, function ($query) {
+                    return $query->whereRaw('(b.flag = 0 AND b.mintic IS NULL)')
+                    ->orderBy('b.num_warehouse', 'ASC');
+                })->get();
     }
 
     public function getStatusDocument($id)
