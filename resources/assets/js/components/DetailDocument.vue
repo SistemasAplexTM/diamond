@@ -32,21 +32,19 @@ export default {
         '<button onclick="eliminar(' +
         dataRow[6] +
         ', false)" class="btn btn-danger btn-circle" type="button" data-toggle="tooltip" data-original-title="Eliminar"><i class="fal fa-trash-alt"></i></button>';
-      // let btn_print_label =
-      //   '<a href="../../impresion-documento-label/' +
-      //   dataRow[11] +
-      //   "/guia/" +
-      //   dataRow[10] +
-      //   "/consolidado/" +
-      //   dataRow[9] +
-      //   '" class="btn btn-circle btn-default btn-outline" type="button" data-toggle="tooltip" data-original-title="Label" target="blank_"><i class="fal fa-barcode"></i></a>';
-      // let btn_print_invoice =
-      //   '<a href="../../impresion-documento/' +
-      //   dataRow[11] +
-      //   "/invoice/" +
-      //   dataRow[10] +
-      //   '" class="btn btn-circle btn-default btn-outline" type="button" data-toggle="tooltip" data-original-title="Factura" target="blank_"><i class="fal fa-file"></i></a>';
-      td.innerHTML = btn_delete;
+
+      let btn_track =
+        '<a class="btn btn-info btn-xs btn-actions addTrackings" type="button" id="btn_addtracking' +
+        dataRow[6] +
+        '" data-toggle="tooltip"' +
+        ' onclick="addTrackings(' +
+        dataRow[6] +
+        ')" data-original-title="Agregar tracking"><i class="fal fa-truck"></i> <span id="cant_tracking' +
+        dataRow[6] +
+        '">' +
+        dataRow[9] +
+        "</span></a>";
+      td.innerHTML = btn_track + " " + btn_delete;
     }
     function paRenderer(instance, td, row, col, prop, value, cellProperties) {
       let dataRow = instance.getDataAtRow(row);

@@ -318,13 +318,13 @@ a.badge:hover {
                             type="text"
                             class="form-control"
                             v-model="num_guia"
-                            @keyup.enter="addGuiasToConsolidado()"
+                            @keyup.enter="addGuiasToConsolidado(false, true)"
                             name="num_guia"
                           />
                           <span class="input-group-btn">
                             <button
                               class="btn btn-info"
-                              @click="addGuiasToConsolidado()"
+                              @click="addGuiasToConsolidado(false, true)"
                               type="button"
                               id="agregarBolsa"
                               data-toggle="tooltip"
@@ -1258,7 +1258,7 @@ export default {
           toastr.options.closeButton = true;
         });
     },
-    addGuiasToConsolidado: function(num_guia) {
+    addGuiasToConsolidado: function(num_guia, op) {
       if (num_guia) {
         this.num_guia = num_guia;
       }
@@ -1290,7 +1290,7 @@ export default {
                   this.disabled_agencia = true;
                   this.disabled_transporte = true;
                 }
-                me.updateTableDetail(false);
+                me.updateTableDetail(op);
                 // toastr.success("Registro agregado correctamente.");
                 // toastr.options.closeButton = true;
                 this.num_guia = "";
