@@ -3369,29 +3369,29 @@ class DocumentoController extends Controller
     public function updateDetailDocument(Request $request)
     {
         try {
-            $data = DocumentoDetalle::findOrFail($request->pk);
+            $data = DocumentoDetalle::findOrFail($request->id);
 
-            if (isset($request->value) and $request->name === 'peso') {
-                $data->peso = $request->value;
-                $data->peso2 = $request->value;
+            if (isset($request->data) and $request->option === 'peso') {
+                $data->peso = $request->data;
+                $data->peso2 = $request->data;
             }
-            if (isset($request->value) and $request->name === 'contenido') {
-                $data->contenido = $request->value;
-                $data->contenido2 = $request->value;
+            if (isset($request->data) and $request->option === 'contenido') {
+                $data->contenido = $request->data;
+                $data->contenido2 = $request->data;
             }
-            if (isset($request->value) and $request->name === 'declarado') {
-                $data->valor = $request->value;
-                $data->declarado2 = $request->value;
+            if (isset($request->data) and $request->option === 'valor') {
+                $data->valor = $request->data;
+                $data->declarado2 = $request->data;
             }
-            if (isset($request->value) and $request->name === 'piezas') {
-                $data->piezas = $request->value;
+            if (isset($request->data) and $request->option === 'piezas') {
+                $data->piezas = $request->data;
             }
-            if (isset($request->value) and $request->name === 'dimensiones') {
-                $data->largo = $request->value['largo'];
-                $data->ancho = $request->value['ancho'];
-                $data->alto = $request->value['alto'];
-                $data->dimensiones = $data->peso . ' Vol=' . $request->value['largo'] . 'x' . $request->value['ancho'] . 'x' . $request->value['alto'];
-                $data->volumen = ($request->value['largo'] * $request->value['ancho'] * $request->value['alto'] / 166);
+            if (isset($request->data) and $request->option === 'dimensiones') {
+                $data->largo = $request->data['largo'];
+                $data->ancho = $request->data['ancho'];
+                $data->alto = $request->data['alto'];
+                $data->dimensiones = $data->peso . ' Vol=' . $request->data['largo'] . 'x' . $request->data['ancho'] . 'x' . $request->data['alto'];
+                $data->volumen = ($request->data['largo'] * $request->data['ancho'] * $request->data['alto'] / 166);
             }
 
             if ($data->save()) {

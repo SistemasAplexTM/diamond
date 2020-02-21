@@ -274,8 +274,9 @@ var objVue = new Vue({
             });
         },
         refreshTableDetail: function () {
-            var table = $('#whgTable').DataTable();
-            table.ajax.reload();
+            this.updateDetail = !this.updateDetail;
+            // var table = $('#whgTable').DataTable();
+            // table.ajax.reload();
         },
         totalizeDocument: function () {
             setTimeout(function () {
@@ -332,7 +333,8 @@ var objVue = new Vue({
                 if (response.data.code == 200) {
                     me.tracking_number = null;
                     me.addTrackings(me.id_detalle)
-                    refreshTable('whgTable');
+                    me.updateDetail = !me.updateDetail
+                    // refreshTable('whgTable');
                     // toastr.success(response.data.message);
                     toastr.options.closeButton = true;
                     $('#window-load').hide();

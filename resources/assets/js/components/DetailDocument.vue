@@ -78,17 +78,36 @@ export default {
             readOnlyCellClassName: "is-readOnly"
           },
           {
-            data: "piezas"
+            data: "piezas",
+            type: "numeric",
+            numericFormat: {
+              pattern: "0,0",
+              culture: "en-US" // this is the default culture, set up for USD
+            }
           },
-          { data: "peso" },
-          { data: "contenido" },
+          {
+            data: "peso",
+            type: "numeric",
+            numericFormat: {
+              pattern: "0,0",
+              culture: "en-US" // this is the default culture, set up for USD
+            }
+          },
+          { data: "contenido", width: "250" },
           {
             data: "nom_pa",
-            width: "150",
+            width: "120",
             renderer: paRenderer,
             readOnly: true
           },
-          { data: "valor" },
+          {
+            data: "valor",
+            type: "numeric",
+            numericFormat: {
+              pattern: "$ 0,0",
+              culture: "en-US" // this is the default culture, set up for USD
+            }
+          },
           {
             data: "id",
             width: "100",
@@ -117,13 +136,10 @@ export default {
         height: "200",
         afterChange: changes => {
           if (changes) {
-            // console.log(changes);
             var row = this.data[changes[0][0]];
-            // console.log(this.data[changes[0][0]]);
             var data = {
               id: row["id"],
               option: changes[0][1],
-              id_detail: row["documento_detalle_id"],
               data: changes[0][3]
             };
             this.updateDataDetailNew(data);
@@ -155,21 +171,21 @@ export default {
     },
     updateDataDetailNew(data) {
       let me = this;
-      // axios
-      //   .post("updateDetailConsolidado", data)
-      //   .then(response => {
-      //     if (response.data.code == 200) {
-      //       toastr.success("Actualizado con éxito");
-      //       this.getData();
-      //       // console.log("success!", data);
-      //     } else {
-      //       console.log("error");
-      //     }
-      //   })
-      //   .catch(function(error) {
-      //     console.log(error);
-      //     toastr.warning("Error: -" + error);
-      //   });
+      axios
+        .post("updateDetailDocument", data)
+        .then(response => {
+          if (response.data.code == 200) {
+            toastr.success("Actualizado con éxito");
+            this.getData();
+            // console.log("success!", data);
+          } else {
+            console.log("error");
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+          toastr.warning("Error: -" + error);
+        });
     }
   }
 };

@@ -124,7 +124,8 @@ trait DocumentTrait
         );
       }else{
         if($filter['dates'] != '' and $type != 4){
-          $nuevafecha = strtotime('-2 day' , strtotime($filter['dates'][0]));
+          // $nuevafecha = strtotime('-2 day' , strtotime($filter['dates'][0]));
+          $nuevafecha = strtotime($filter['dates'][0]);
           $fIni = date('Y-m-d' , $nuevafecha);
           $dates = array(
             'inicio' => $fIni,
