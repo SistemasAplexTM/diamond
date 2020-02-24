@@ -30,19 +30,19 @@ export default {
       let dataRow = instance.getDataAtRow(row);
       let btn_delete =
         '<button onclick="eliminar(' +
-        dataRow[6] +
+        dataRow[9] +
         ', false)" class="btn btn-danger btn-circle" type="button" data-toggle="tooltip" data-original-title="Eliminar"><i class="fal fa-trash-alt"></i></button>';
 
       let btn_track =
         '<a class="btn btn-info btn-xs btn-actions addTrackings" type="button" id="btn_addtracking' +
-        dataRow[6] +
+        dataRow[9] +
         '" data-toggle="tooltip"' +
         ' onclick="addTrackings(' +
-        dataRow[6] +
-        ')" data-original-title="Agregar tracking"><i class="fal fa-truck"></i> <span id="cant_tracking' +
-        dataRow[6] +
-        '">' +
         dataRow[9] +
+        ')" data-original-title="Agregar tracking"><i class="fal fa-truck"></i> <span id="cant_tracking' +
+        dataRow[9] +
+        '">' +
+        dataRow[12] +
         "</span></a>";
       td.innerHTML = btn_track + " " + btn_delete;
     }
@@ -52,7 +52,7 @@ export default {
       td.innerHTML =
         value +
         ' <a data-toggle="tooltip" title="" class="edit" style="float: right; color: rgb(255, 193, 7); " onclick="showModalArancel(' +
-        dataRow[6] +
+        dataRow[9] +
         ', \'whgTable\')" data-original-title="Cambiar"><i class="fal fa-pencil"></i></a>';
     }
     return {
@@ -63,6 +63,9 @@ export default {
           "Código",
           "Pieza(s)",
           "Peso(Lb)",
+          "Alto",
+          "Largo",
+          "Ancho",
           "Contenido",
           "Cód. Aduana",
           "Valor US$",
@@ -87,6 +90,30 @@ export default {
           },
           {
             data: "peso",
+            type: "numeric",
+            numericFormat: {
+              pattern: "0,0",
+              culture: "en-US" // this is the default culture, set up for USD
+            }
+          },
+          {
+            data: "alto",
+            type: "numeric",
+            numericFormat: {
+              pattern: "0,0",
+              culture: "en-US" // this is the default culture, set up for USD
+            }
+          },
+          {
+            data: "largo",
+            type: "numeric",
+            numericFormat: {
+              pattern: "0,0",
+              culture: "en-US" // this is the default culture, set up for USD
+            }
+          },
+          {
+            data: "ancho",
             type: "numeric",
             numericFormat: {
               pattern: "0,0",
@@ -128,12 +155,19 @@ export default {
           }
         ],
         hiddenColumns: {
-          columns: [7, 8, 9]
+          columns: [10, 11, 12]
         },
         rowHeights: 40,
         // width: "100%",
         fixedColumnsLeft: 1,
-        height: "200",
+        height: function() {
+          // numero_filas * 40 + 40;
+          let hei = 800;
+          if ($(".ht_master .wtHider").height() <= 800) {
+            hei = parseInt($(".ht_master .wtHider").height()) + 20;
+          }
+          return hei;
+        },
         afterChange: changes => {
           if (changes) {
             var row = this.data[changes[0][0]];
@@ -163,7 +197,37 @@ export default {
         .get("getDataDetailDocument")
         .then(({ data }) => {
           this.data = data.data;
-          // console.log(data);
+          let piezas = 0;
+          let volumen = 0;
+          let peso = 0;
+          let valor = 0;
+          if (this.data) {
+            this.data.forEach(el => {
+              piezas += parseFloat(el.piezas);
+              volumen += parseFloat(el.volumen);
+              peso += parseFloat(el.peso);
+              valor += parseFloat(el.valor);
+            });
+            /*Update footer formatCurrency()*/
+            $("#piezas").html(parseFloat(isInteger(piezas)));
+            $("#volumen").html(parseFloat(isInteger(Math.ceil(volumen))));
+            $("#pie_ft").html(
+              parseFloat(isInteger(Math.ceil((volumen * 166) / 1728)))
+            );
+            $("#pesoDim").html(parseFloat(isInteger(peso)));
+            $("#valor_declarado_tbl").html(parseFloat(isInteger(valor)));
+
+            $("#piezas1").val(parseFloat(isInteger(piezas)));
+            $("#volumen1").val(parseFloat(isInteger(Math.ceil(volumen))));
+            $("#pie_ft1").val(
+              parseFloat(isInteger(Math.ceil((volumen * 166) / 1728)))
+            );
+            $("#pesoDim1").val(parseFloat(isInteger(peso)));
+            $("#valor_declarado_tbl1").val(parseFloat(isInteger(valor)));
+            setTimeout(function() {
+              totalizeDocument();
+            }, 1000);
+          }
         })
         .catch(error => {
           console.log(error);

@@ -867,6 +867,61 @@
                       <div class="form-group">
                         <div class="table-responsive">
                           <detail-document :update_detail="updateDetail"></detail-document>
+                          {{-- TOTALES DE LA TABLA --}}
+                          <table style="background-color: paleturquoise;width: 100%;">
+                            <tr>
+                              <td>
+                                <div class="col-lg-12">
+                                  <div style="text-align:center;font-weight:300;padding: 8px 0 8px 0;"><i
+                                      class="fal fa-box-check"></i>
+                                    : <label id="piezas">0.00</label>
+                                    @lang('documents.pieces')</div>
+                                  <input type="hidden" id="piezas1" name="piezas"
+                                    value="{{ isset($documento->piezas) ? $documento->piezas : 0 }}">
+                                </div>
+                              </td>
+                              <td>
+                                <div class="col-sm-12">
+                                  <div style="text-align:center;font-weight:300;padding: 8px 0 8px 0;"><i
+                                      class="fal fa-weight-hanging"></i>
+                                    :
+                                    <label id="pesoDim">0.00</label> Lbs
+                                  </div>
+                                  <input type="hidden" id="pesoDim1" name="pesoDim"
+                                    value="{{ isset($documento->peso) ? $documento->peso : 0 }}">
+                                </div>
+                              </td>
+                              <td>
+                                <div class="col-sm-12">
+                                  <div style="text-align:center;font-weight:300;padding: 8px 0 8px 0;"><i
+                                      class="fal fa-ruler-combined"></i>
+                                    :
+                                    <label id="volumen">0.00</label>
+                                    @lang('documents.volume')</div>
+                                  <input type="hidden" id="volumen1" name="volumen"
+                                    value="{{ isset($documento->volumen) ? $documento->volumen : 0 }}">
+                                </div>
+                              </td>
+                              <td>
+                                <div class="col-sm-12">
+                                  <div style="text-align:center;font-weight:300;padding: 8px 0 8px 0;"><i
+                                      class="fal fa-container-storage"></i> :
+                                    <label id="pie_ft">0.00</label>
+                                    @lang('documents.cubic_foot')</div>
+                                  <input type="hidden" id="pie_ft1" name="pie_ft"
+                                    value="{{ (isset($documento->volumen)) ? number_format(($documento->volumen * 166 / 1728), 2) : 0 }}">
+                                </div>
+                              </td>
+                              <td>
+                                <div class="col-lg-12">
+                                  <div style="text-align:center;font-weight:300;padding: 8px 0 8px 0;"><i
+                                      class="fal fa-dollar-sign"></i> :
+                                    <label id="valor_declarado_tbl">0.00</label></div>
+                                  <input type="hidden" id="valor_declarado_tbl1" value="0">
+                                </div>
+                              </td>
+                            </tr>
+                          </table>
                           {{-- <table class="table table-striped  table-hover" id="whgTable" style="width: 100%;">
                             <thead>
                               <tr>

@@ -60,6 +60,48 @@ export default {
       //   console.log(cellProperties);
       // }
     }
+    function shipperRenderer(
+      instance,
+      td,
+      row,
+      col,
+      prop,
+      value,
+      cellProperties
+    ) {
+      let dataRow = instance.getDataAtRow(row);
+      td.innerHTML =
+        value +
+        '<div style="width:20%;"><a  data-toggle="tooltip" title="Cambiar" class="edit" style="color:#FFC107;" onclick="showModalShipperConsigneeConsolidado(' +
+        dataRow[9] +
+        ", '" +
+        dataRow[12] +
+        '\', \'shipper\')"><i class="fal fa-pencil"></i></a> <a onclick="restoreShipperConsignee(' +
+        dataRow[9] +
+        ', \'shipper\')" class="delete" title="Restaurar original" data-toggle="tooltip" style="float:right;color:#2196F3;margin-right: 5px;">' +
+        '<i class="fal fa-sync-alt"></i></a></div>';
+    }
+    function consigneeRenderer(
+      instance,
+      td,
+      row,
+      col,
+      prop,
+      value,
+      cellProperties
+    ) {
+      let dataRow = instance.getDataAtRow(row);
+      td.innerHTML =
+        value +
+        '<div style="width:20%;"><a  data-toggle="tooltip" title="Cambiar" class="edit" style="color:#FFC107;" onclick="showModalShipperConsigneeConsolidado(' +
+        dataRow[9] +
+        ", '" +
+        dataRow[13] +
+        '\', \'consignee\')"><i class="fal fa-pencil"></i></a> <a onclick="restoreShipperConsignee(' +
+        dataRow[9] +
+        ', \'consignee\')" class="delete" title="Restaurar original" data-toggle="tooltip" style="float:right;color:#2196F3;margin-right: 5px;">' +
+        '<i class="fal fa-sync-alt"></i></a></div>';
+    }
     return {
       data: [],
       settings: {
@@ -88,8 +130,18 @@ export default {
             readOnly: true,
             readOnlyCellClassName: "is-readOnly"
           },
-          { data: "shipper_data", width: "250", className: "htLeft" },
-          { data: "consignee_data", width: "250", className: "htLeft" },
+          {
+            data: "shipper_data",
+            width: "250",
+            className: "htLeft",
+            renderer: shipperRenderer
+          },
+          {
+            data: "consignee_data",
+            width: "250",
+            className: "htLeft",
+            renderer: consigneeRenderer
+          },
           {
             data: "pa",
             width: "150",
@@ -116,10 +168,18 @@ export default {
           {
             data: "documento_id",
             readOnly: true
+          },
+          {
+            data: "shipper_id",
+            readOnly: true
+          },
+          {
+            data: "consignee_id",
+            readOnly: true
           }
         ],
         hiddenColumns: {
-          columns: [10, 11]
+          columns: [10, 11, 12, 13]
         },
         rowHeights: 100,
         width: "100%",
@@ -146,7 +206,11 @@ export default {
     HotTable
   },
   created() {
-    this.getData();
+    let me = this;
+    me.getData();
+    bus.$on("updatetableconsolidated", function(payload) {
+      me.getData();
+    });
   },
   methods: {
     deleteRow(data) {
@@ -157,7 +221,6 @@ export default {
         .get("getAllConsolidadoDetalle")
         .then(({ data }) => {
           this.data = data.data;
-          // console.log(data);
         })
         .catch(error => {
           console.log(error);

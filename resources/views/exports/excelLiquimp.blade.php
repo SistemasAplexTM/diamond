@@ -55,15 +55,15 @@
 				<td>{{ $value->pa }}</td>
 				<td>{{ $value->iva }}</td>
 				<td>
-					{{ $value->cons }}
+					{{ $value->cons_nomfull2 }}
 				</td>
-				<td>{{ $value->cons_dir }}</td>
+				<td>{{ $value->cons_dir2 }}</td>
 				<td>
-					{{ str_pad(($value->cons_ciu_codigo), 5, "0", STR_PAD_LEFT) }}
+					{{ str_pad(($value->cons_ciu_codigo2), 5, "0", STR_PAD_LEFT) }}
 				</td>
-				<td>{{ $value->cons_ciu }}</td>
+				<td>{{ $value->cons_ciudad2 }}</td>
 				<td>{{ $value->contenido }}</td>
-				<td>{{ $value->ship }}</td>
+				<td>{{ $value->ship_nomfull2 }}</td>
 				<td>{{ $value->piezas }}</td>
 				<td>{{ round((($value->rate == 0 || $value->rate == '') ? 1.5 : $value->rate) * $peso, 2) }}</td>
 				<td>{{ round($value->declarado, 2) }}</td>

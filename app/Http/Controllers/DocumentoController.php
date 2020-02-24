@@ -2240,12 +2240,9 @@ class DocumentoController extends Controller
             ->leftJoin('localizacion as ciudad_shipper', 'shipper.localizacion_id', 'ciudad_shipper.id')
             ->leftJoin('deptos as deptos_consignee', 'ciudad_consignee.deptos_id', 'deptos_consignee.id')
             ->leftJoin('deptos as deptos_shipper', 'ciudad_shipper.deptos_id', 'deptos_shipper.id')
-            ->select(
-                'documento_detalle.id',
-                'documento_detalle.agrupado',
-                'documento_detalle.flag',
-                'documento_detalle.declarado2',
-                'b.consignee_id',
+            ->select('documento_detalle.id', 'documento_detalle.agrupado', 'documento_detalle.flag', 'documento_detalle.declarado2',
+                'documento_detalle.shipper_id',
+                'documento_detalle.consignee_id',
                 'shipper.nombre_full as ship_nomfull',
                 'shipper.direccion as ship_dir',
                 'shipper.telefono as ship_tel',
@@ -2261,8 +2258,7 @@ class DocumentoController extends Controller
                 'consignee.zip as cons_zip',
                 'consignee.po_box as cons_pobox',
                 'ciudad_consignee.nombre as cons_ciudad',
-                'deptos_consignee.descripcion as cons_depto'
-            )
+                'deptos_consignee.descripcion as cons_depto')
             ->where([
                 ['documento_detalle.deleted_at', null],
             ])
@@ -2306,6 +2302,8 @@ class DocumentoController extends Controller
                                 'consolidado_id'       => $id,
                                 'documento_detalle_id' => $detalle->id,
                                 'agrupado'             => $detalle->id,
+                                'shipper'              => $detalle->shipper_id,
+                                'consignee'            => $detalle->consignee_id,
                                 'num_bolsa'            => $num_bolsa,
                                 'shipper_data'         => $detalle->ship_nomfull .
                                     "\n" . $detalle->ship_dir .
@@ -3035,39 +3033,40 @@ class DocumentoController extends Controller
         // $id_dat = $dat[0];
 
         $sql = DB::table($data['option'])
-            ->join('localizacion', $data['option'] . '.localizacion_id', 'localizacion.id')
-            ->join('deptos', 'localizacion.deptos_id', 'deptos.id')
-            ->join('pais', 'deptos.pais_id', 'pais.id')
-            ->select(
-                $data['option'] . '.nombre_full',
-                $data['option'] . '.direccion',
-                $data['option'] . '.telefono'
-            )
-            ->where($data['option'] . '.id', $id_change)
-            ->first();
+        ->join('localizacion', $data['option'] . '.localizacion_id', 'localizacion.id')
+        ->join('deptos', 'localizacion.deptos_id', 'deptos.id')
+        ->join('pais', 'deptos.pais_id', 'pais.id')
+        ->select(
+            $data['option'] . '.nombre_full',
+            $data['option'] . '.direccion',
+            $data['option'] . '.telefono',
+            'localizacion.nombre AS ciudad'
+        )
+        ->where($data['option'] .'.id', $id_change)
+        ->first();
         if ($data['option'] === 'shipper') {
             $id_detail = DB::table('consolidado_detalle')->where('id', $data['id'])
                 ->update(
                     [
-                        'shipper_data'         => $sql->nombre_full .
-                            "\n" . $sql->direccion .
-                            "\n" . $sql->telefono
+                        'shipper_data'         => $sql->nombre_full . 
+                                        "\n" . $sql->direccion .
+                                        "\n" . $sql->ciudad
                     ]
                 );
         } else {
             $id_detail = DB::table('consolidado_detalle')->where('id', $data['id'])
                 ->update(
                     [
-                        'consignee_data'       => $sql->nombre_full .
-                            "\n" . $sql->direccion .
-                            "\n" . $sql->telefono
+                        'consignee_data'       => $sql->nombre_full . 
+                                        "\n" . $sql->direccion .
+                                        "\n" . $sql->ciudad
                     ]
                 );
         }
 
-        // DB::table('consolidado_detalle')
-        //     ->where('id', $data['id'])
-        //     ->update([$data['option'] => $id_change]);
+        DB::table('consolidado_detalle')
+            ->where('id', $data['id'])
+            ->update([$data['option'] => $id_change]);
         $answer = array(
             'code' => 200,
         );
@@ -3092,7 +3091,8 @@ class DocumentoController extends Controller
                 'documento_detalle.agrupado',
                 'documento_detalle.flag',
                 'documento_detalle.declarado2',
-                'b.consignee_id',
+                'documento_detalle.consignee_id',
+                'documento_detalle.shipper_id',
                 'shipper.nombre_full as ship_nomfull',
                 'shipper.direccion as ship_dir',
                 'shipper.telefono as ship_tel',
@@ -3121,27 +3121,29 @@ class DocumentoController extends Controller
             $id_detail = DB::table('consolidado_detalle')->where('id', $idD)
                 ->update(
                     [
-                        'shipper_data'         => $detalle->ship_nomfull .
-                            "\n" . $detalle->ship_dir .
-                            "\n" . $detalle->ship_ciudad
+                        'shipper_data'         => $detalle->ship_nomfull . 
+                                        "\n" . $detalle->ship_dir .
+                                        "\n" . $detalle->ship_ciudad,
+                        'shipper' => $detalle->shipper_id
                     ]
                 );
         } else {
             $id_detail = DB::table('consolidado_detalle')->where('id', $idD)
                 ->update(
                     [
-                        'consignee_data'       => $detalle->cons_nomfull .
-                            "\n" . $detalle->cons_dir .
-                            "\n" . $detalle->cons_ciudad
+                        'consignee_data'       => $detalle->cons_nomfull . 
+                                        "\n" . $detalle->cons_dir .
+                                        "\n" . $detalle->cons_ciudad,
+                        'consignee' => $detalle->consignee_id
                     ]
                 );
         }
 
 
         // $this->updateIdConsigneeContactConsolidate(true, $table, $idD);
-        DB::table('consolidado_detalle')
-            ->where('id', $idD)
-            ->update([$table => null]);
+        // DB::table('consolidado_detalle')
+        //     ->where('id', $idD)
+        //     ->update([$table => null]);
         $answer = array(
             'code' => 200,
         );
@@ -3386,13 +3388,26 @@ class DocumentoController extends Controller
             if (isset($request->data) and $request->option === 'piezas') {
                 $data->piezas = $request->data;
             }
-            if (isset($request->data) and $request->option === 'dimensiones') {
-                $data->largo = $request->data['largo'];
-                $data->ancho = $request->data['ancho'];
-                $data->alto = $request->data['alto'];
-                $data->dimensiones = $data->peso . ' Vol=' . $request->data['largo'] . 'x' . $request->data['ancho'] . 'x' . $request->data['alto'];
-                $data->volumen = ($request->data['largo'] * $request->data['ancho'] * $request->data['alto'] / 166);
+
+            if (isset($request->data) and $request->option === 'alto') {
+                $data->alto = $request->data;
             }
+            if (isset($request->data) and $request->option === 'largo') {
+                $data->largo = $request->data;
+            }
+            if (isset($request->data) and $request->option === 'ancho') {
+                $data->ancho = $request->data;
+            }
+
+            $data->dimensiones = $data->peso . ' Vol=' . $data->alto . 'x' . $data->largo . 'x' . $data->ancho;
+            $data->volumen = ($data->largo * $data->ancho * $data->alto / 166);
+            // if (isset($request->data) and $request->option === 'dimensiones') {
+            //     $data->largo = $request->data['largo'];
+            //     $data->ancho = $request->data['ancho'];
+            //     $data->alto = $request->data['alto'];
+            //     $data->dimensiones = $data->peso . ' Vol=' . $request->data['largo'] . 'x' . $request->data['ancho'] . 'x' . $request->data['alto'];
+            //     $data->volumen = ($request->data['largo'] * $request->data['ancho'] * $request->data['alto'] / 166);
+            // }
 
             if ($data->save()) {
                 $this->AddToLog('Documento detalle editado (' . $data->id . ')');

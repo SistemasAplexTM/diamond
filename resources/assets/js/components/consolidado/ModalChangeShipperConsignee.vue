@@ -110,8 +110,9 @@ export default {
           .then(function(response) {
             toastr.success("Cambio Exitoso.");
             me.dialogTableVisible = false;
-            var table = $("#tbl-consolidado").DataTable();
-            table.ajax.reload();
+            bus.$emit("updatetableconsolidated");
+            // var table = $("#tbl-consolidado").DataTable();
+            // table.ajax.reload();
           })
           .catch(function(error) {
             console.log(error);
