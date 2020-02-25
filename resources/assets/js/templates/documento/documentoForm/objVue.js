@@ -815,8 +815,6 @@ var objVue = new Vue({
             });
         },
         modalArancel: function (id, table_) {
-            console.log(id, table_);
-
             let me = this;
             $('#modalArancel').modal('show');
             if ($('#tbl-modalArancel tbody').length > 0) {
@@ -848,6 +846,7 @@ var objVue = new Vue({
                     /* SE EJECUTA ESTA FUNCION CUANDO LA MODAL SE ABRE DESDE EL CONSOLIDADO */
                     me.updatePADetailConsolidado(id, data['id'], table_);
                     me.updateConsolidatedDetail = !me.updateConsolidatedDetail
+                    me.updateDetail = !me.updateDetail
                     $("#tbl-modalArancel tbody").off('click', 'tr');
                 } else {
                     $('#pa_id').val(data['id']);
