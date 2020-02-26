@@ -2142,10 +2142,10 @@ class DocumentoController extends Controller
         $this->AddToLog('Impresion labels (' . $documento->id . ')');
 
         if (env('APP_CLIENT') === 'colombiana') {
-            // $pdf = PDF::loadView('pdf.labelWGJyg', compact('documento', 'detalle', 'document', 'dato_consolidado', 'shipper', 'consignee'))
-            //     ->setPaper(array(25, -25, 260, 360), 'landscape');
-            $pdf = PDF::loadView('pdf.labelWGcolombiana', compact('documento', 'detalle', 'document', 'dato_consolidado', 'shipper', 'consignee' ))
-                ->setPaper(array(25, -25, 300, 300), 'portrait');
+            $pdf = PDF::loadView('pdf.labelWGJyg', compact('documento', 'detalle', 'document', 'dato_consolidado', 'shipper', 'consignee'))
+                ->setPaper(array(25, -25, 260, 360), 'landscape');
+            // $pdf = PDF::loadView('pdf.labelWGcolombiana', compact('documento', 'detalle', 'document', 'dato_consolidado', 'shipper', 'consignee' ))
+            //     ->setPaper(array(25, -25, 300, 300), 'portrait');
 
             $nameDocument = 'Label' . $document . '-' . $documento->id;
             $pdf->save(public_path() . '/files/File.pdf');
@@ -2159,6 +2159,7 @@ class DocumentoController extends Controller
                 } else {
                     $pdf = PDF::loadView('pdf.labelWG', compact('documento', 'detalle', 'document', 'consolidado', 'dato_consolidado', 'shipper', 'consignee'))
                         ->setPaper(array(25, -25, 260, 360), 'landscape');
+                    $pdf->save(public_path() . '/files/File.pdf');
                 }
 
                 $nameDocument = 'Label' . $document . '-' . $documento->id;

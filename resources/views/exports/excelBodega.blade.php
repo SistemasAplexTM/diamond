@@ -31,6 +31,9 @@
 				<td>Tracking</td>
 				<td>Peso lb</td>
 				<td>Nombre Destinatario</td>
+				<td>Direccion Destinatario</td>
+				<td>Ciudad Destinatario</td>
+				<td>Shipper</td>
 				<td>Observaciones</td>
 			</tr>
 		</thead>
@@ -43,6 +46,9 @@
 				<td>{{ $value->tracking }}</td>
 				<td>{{ $value->peso_lb }}</td>
 				<td>{{ $value->cons }}</td>
+				<td>{{ $value->cons_dir }}</td>
+				<td>{{ $value->cons_ciu }}</td>
+				<td>{{ $value->ship }}</td>
 				<td>&nbsp;</td>
 			</tr>
 			@endforeach
