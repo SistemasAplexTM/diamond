@@ -30,20 +30,27 @@ export default {
         '<button onclick="eliminarConsolidado(' +
         dataRow[9] +
         ', false)" class="btn btn-danger btn-circle" type="button" data-toggle="tooltip" data-original-title="Eliminar"><i class="fal fa-trash-alt"></i></button>';
-      let btn_print_label =
-        '<a href="../../impresion-documento-label/' +
+      // BTN LABEL - PRINTS
+      let url_print_label =
+        "../../impresion-documento-label/" +
         dataRow[11] +
         "/guia/" +
         dataRow[10] +
         "/consolidado/" +
-        dataRow[9] +
-        '" class="btn btn-circle btn-default btn-outline" type="button" data-toggle="tooltip" data-original-title="Label" target="blank_"><i class="fal fa-barcode"></i></a>';
+        dataRow[9];
+      let btn_print_label =
+        "<a onclick=\"printDocuments('" +
+        url_print_label +
+        "', 'label')\"" +
+        ' class="btn btn-circle btn-default btn-outline" type="button" data-toggle="tooltip" data-original-title="Label" target="blank_"><i class="fal fa-barcode"></i></a>';
+      // BTN DOCUMENT - PRINTS
+      let url_print_invoice =
+        "../../impresion-documento/" + dataRow[11] + "/invoice/" + dataRow[10];
       let btn_print_invoice =
-        '<a href="../../impresion-documento/' +
-        dataRow[11] +
-        "/invoice/" +
-        dataRow[10] +
-        '" class="btn btn-circle btn-default btn-outline" type="button" data-toggle="tooltip" data-original-title="Factura" target="blank_"><i class="fal fa-file"></i></a>';
+        "<a onclick=\"printDocuments('" +
+        url_print_invoice +
+        "', 'document')\"" +
+        ' class="btn btn-circle btn-default btn-outline" type="button" data-toggle="tooltip" data-original-title="Factura" target="blank_"><i class="fal fa-file"></i></a>';
       td.innerHTML =
         btn_print_label + " " + btn_print_invoice + " " + btn_delete;
     }
@@ -144,7 +151,7 @@ export default {
           },
           {
             data: "pa",
-            width: "150",
+            width: "120",
             renderer: paRenderer,
             readOnly: true
           },
@@ -184,7 +191,14 @@ export default {
         rowHeights: 100,
         width: "100%",
         fixedColumnsLeft: 2,
-        height: 600,
+        height: function() {
+          // numero_filas * 40 + 40;
+          let hei = 800;
+          if ($(".ht_master .wtHider").height() <= 800) {
+            hei = parseInt($(".ht_master .wtHider").height()) + 20;
+          }
+          return hei;
+        },
         afterChange: changes => {
           if (changes) {
             // console.log(changes);

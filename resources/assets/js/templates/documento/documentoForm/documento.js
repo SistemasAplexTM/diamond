@@ -606,3 +606,7 @@ function formatRepoSelectionPoints(repo) {
 function changueShipperConsignee(id, shipper_id, consignee_id) {
     objVue.changueShipperConsigneeDetail(id, shipper_id, consignee_id);
 }
+
+function printDocuments(url, document) {
+    objVue.printDocument(url, document);
+}

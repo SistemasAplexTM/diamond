@@ -494,6 +494,14 @@ class DocumentoController extends Controller
             'citys_data'  => json_decode(json_encode($citys)),
             'data_agencia' => $this->getNameAgencia(),
         ]);
+        // OBTENER LA CONFIGURACION DE LA IMPRESORA
+        $printers = Session::get('printer');
+
+        JavaScript::put([
+            'print_labels' => (($printers) ? $printers->label : ''),
+            'print_documents'  => (($printers) ? $printers->default : ''),
+            'print_format'  => 'PDF',
+        ]);
         $this->AddToLog('Documento ver (' . $id . ') consecutivo (' . $documento->consecutivo . ')');
         $role_admin = (Auth::user()->isRole('admin')) ? 1 : 0;
         return view('templates/documento/documento', compact(
@@ -2134,10 +2142,10 @@ class DocumentoController extends Controller
         $this->AddToLog('Impresion labels (' . $documento->id . ')');
 
         if (env('APP_CLIENT') === 'colombiana') {
-            $pdf = PDF::loadView('pdf.labelWGJyg', compact('documento', 'detalle', 'document', 'dato_consolidado', 'shipper', 'consignee'))
-                ->setPaper(array(25, -25, 260, 360), 'landscape');
-            // $pdf = PDF::loadView('pdf.labelWGcolombiana', compact('documento', 'detalle', 'document', 'dato_consolidado', 'shipper', 'consignee' ))
-            //     ->setPaper(array(25, -25, 300, 300), 'landscape');
+            // $pdf = PDF::loadView('pdf.labelWGJyg', compact('documento', 'detalle', 'document', 'dato_consolidado', 'shipper', 'consignee'))
+            //     ->setPaper(array(25, -25, 260, 360), 'landscape');
+            $pdf = PDF::loadView('pdf.labelWGcolombiana', compact('documento', 'detalle', 'document', 'dato_consolidado', 'shipper', 'consignee' ))
+                ->setPaper(array(25, -25, 300, 300), 'portrait');
 
             $nameDocument = 'Label' . $document . '-' . $documento->id;
             $pdf->save(public_path() . '/files/File.pdf');
@@ -2287,14 +2295,15 @@ class DocumentoController extends Controller
                         ])
                         ->first();
                     if ($cons->pais_id == $pais_id) {
+                        // $range = $this->getConfig('declared_consolidated_range');
                         /* VALIDAR QUE EL DECLARADO NO ESTE EN CERO */
-                        // if($detalle->declarado2 == 0 ){
-                        /* SI ESTA EN CERO SE ASIGNA UN VALOR ALEATORIO DEACUERDO AL RANGO DADO */
-                        $range = explode(',', $range_value);
-                        $r1 = rand($range[0], $range[1]) . '.' . rand($range[0], $range[1]);
-                        $detalle->declarado2 = $r1;
-                        $detalle->save();
-                        // }
+                        if($detalle->declarado2 == 0 ){
+                            /* SI ESTA EN CERO SE ASIGNA UN VALOR ALEATORIO DEACUERDO AL RANGO DADO */
+                            $range = explode(',', $range_value);
+                            $r1 = rand($range[0], $range[1]) . '.' . rand($range[0], $range[1]);
+                            $detalle->declarado2 = $r1;
+                            $detalle->save();
+                        }
 
                         /* INSERTAR EN TABLA CONSOLIDADO DETALLE */
                         $id_detail = DB::table('consolidado_detalle')->insertGetId(
@@ -4035,7 +4044,6 @@ class DocumentoController extends Controller
         );
         return \Response::json($answer);
     }
-
 
     public function internalManifest($id)
     {

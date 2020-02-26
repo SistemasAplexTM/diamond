@@ -55,22 +55,53 @@ export default {
         dataRow[9] +
         ', \'whgTable\')" data-original-title="Cambiar"><i class="fal fa-pencil"></i></a>';
     }
+    function contentRenderer(
+      instance,
+      td,
+      row,
+      col,
+      prop,
+      value,
+      cellProperties
+    ) {
+      // td.className = "htMiddle htCenter is-readOnly";
+      td.innerHTML = value;
+    }
     return {
       data: [],
       settings: {
         licenseKey: "non-commercial-and-evaluation",
-        colHeaders: [
-          "Código",
-          "Pieza(s)",
-          "Peso(Lb)",
-          "Alto",
-          "Largo",
-          "Ancho",
-          "Contenido",
-          "Cód. Aduana",
-          "Valor US$",
-          "Acción"
+        nestedHeaders: [
+          [
+            { rowspan: 2, colspan: 3 },
+            { label: "Dimensiones", colspan: 3 },
+            { rowspan: 2, colspan: 4 }
+          ],
+          [
+            "Código",
+            "Pieza(s)",
+            "Peso(Lb)",
+            "Alto",
+            "Largo",
+            "Ancho",
+            "Contenido",
+            "Cód. Aduana",
+            "Valor US$",
+            "Acción"
+          ]
         ],
+        // colHeaders: [
+        //   "Código",
+        //   "Pieza(s)",
+        //   "Peso(Lb)",
+        //   "Alto",
+        //   "Largo",
+        //   "Ancho",
+        //   "Contenido",
+        //   "Cód. Aduana",
+        //   "Valor US$",
+        //   "Acción"
+        // ],
         rowHeaders: true,
         stretchH: "all",
         className: "htMiddle htCenter",
@@ -120,7 +151,7 @@ export default {
               culture: "en-US" // this is the default culture, set up for USD
             }
           },
-          { data: "contenido", width: "250" },
+          { data: "contenido", width: "250", renderer: contentRenderer },
           {
             data: "nom_pa",
             width: "120",

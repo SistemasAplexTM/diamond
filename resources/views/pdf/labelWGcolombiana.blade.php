@@ -2,9 +2,10 @@
 <html>
 
 <head>
-    <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
     <title>
-        Label AWB
+        Label HAWB
     </title>
     <style type="text/css">
         body {
@@ -14,8 +15,10 @@
         }
 
         .titulos {
-            font-size: 9px;
+            font-size: 12px;
             font-weight: bold;
+            padding-top: 5px;
+            padding-bottom: 5px;
         }
 
         .titulo_grande {
@@ -27,6 +30,12 @@
 
         .border_bottom {
             border-bottom: solid 1px #000000;
+        }
+
+        .description {}
+
+        .dir {
+            font-size: 10px;
         }
     </style>
 </head>
@@ -61,7 +70,7 @@
             </tr>
             <tr>
                 <td class="titulo_grande border_bottom" colspan="3" width="50%">
-                    GUIA AWB:
+                    GUIA HAWB:
                 </td>
                 <td class="titulo_grande border_bottom">
                     {{ $value->codigo }}
@@ -85,17 +94,18 @@
                     <div>
                         <strong>{{ ($consignee) ? $consignee->nombre_full : $value->cons_nomfull }}</strong>
                     </div>
-                    <div>{{ ($consignee) ? $consignee->direccion : $value->cons_dir }}</div>
-                    <div>{{ ($consignee) ? $consignee->telefono : $value->cons_tel }}</div>
-                    <div>{{ ($consignee) ? $consignee->ciudad :$value->cons_ciudad }}</div>
+                    <div class="dir">{{ ($consignee) ? $consignee->direccion : $value->cons_dir }}</div>
+                    <div>{{ ($consignee) ? $consignee->telefono : $value->cons_tel }} -
+                        {{ ($consignee) ? $consignee->ciudad :$value->cons_ciudad }}</div>
+                    <div></div>
                 </td>
             </tr>
             <tr>
                 <td class="border_bottom" colspan="4">
                     <div class="titulos">
-                        Descripción - Contenido
+                        Descripci贸n - Contenido
                     </div>
-                    <div>
+                    <div class="description">
                         {{ $value->contenido2 }}
                     </div>
                 </td>
@@ -112,7 +122,7 @@
                 <td class="border_bottom" colspan="4">
                     <div style="text-align:center">
                         <strong>{{ ((isset($documento->agencia) and $documento->agencia != '') ? trim($documento->agencia) : '') }}
-                            Su mejor opción</strong>
+                            Su mejor opci贸n</strong>
                     </div>
                     {{-- <div style="text-align:center">
                            <strong> </strong>

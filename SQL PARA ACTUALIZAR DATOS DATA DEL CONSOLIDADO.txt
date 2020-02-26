@@ -1,0 +1,24 @@
+SELECT
+a.id,
+b.num_warehouse,
+CONCAT_WS(" \n", d.nombre_full, d.direccion, dc.nombre) AS ship,
+CONCAT_WS(" \n", c.nombre_full, c.direccion, cc.nombre) AS cons,
+CONCAT_WS(" \n", d1.nombre_full, d1.direccion, dc1.nombre) AS s_contact,
+CONCAT_WS(" \n", c1.nombre_full, c1.direccion, cc1.nombre) AS c_contact,
+IF(d1.nombre_full is null,d.id, d1.id) AS shipper,
+IF(c1.nombre_full is null,c.id, c1.id) AS consignee,
+IF( d1.nombre_full is null, CONCAT_WS(" \n", d.nombre_full, d.direccion, dc.nombre), CONCAT_WS(" \n", d1.nombre_full, d1.direccion, dc1.nombre)) AS shipper_data,
+IF( c1.nombre_full is null, CONCAT_WS(" \n", c.nombre_full, c.direccion, cc.nombre), CONCAT_WS(" \n", c1.nombre_full, c1.direccion, cc1.nombre)) AS consignee_data
+FROM
+consolidado_detalle AS a
+INNER JOIN documento_detalle AS b ON a.documento_detalle_id = b.id
+INNER JOIN consignee AS c ON c.id = b.consignee_id
+INNER JOIN shipper AS d ON d.id = b.shipper_id
+LEFT JOIN consignee AS c1 ON c1.id = a.consignee
+LEFT JOIN shipper AS d1 ON d1.id = a.shipper
+INNER JOIN localizacion AS dc ON d.localizacion_id = dc.id
+INNER JOIN localizacion AS cc ON c.localizacion_id = cc.id
+LEFT JOIN localizacion AS dc1 ON d1.localizacion_id = dc1.id
+LEFT JOIN localizacion AS cc1 ON c1.localizacion_id = cc1.id
+WHERE
+a.deleted_at IS NULL

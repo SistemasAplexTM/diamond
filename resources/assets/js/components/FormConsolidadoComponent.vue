@@ -416,7 +416,7 @@ a.badge:hover {
                 </div>
                 <div class="row">
                   <div class="form-group">
-                    <div class="col-sm-12 col-sm-offset-0 guardar">
+                    <div class="col-sm-12 col-sm-offset-0 guardar" style="margin-top: 20px;">
                       <button
                         type="button"
                         id="saveForm"
