@@ -1187,11 +1187,21 @@ export default {
     open(type, edit) {
       // this.shipper.name = "";
       // this.shipper.id = "";
+      let id = this.shipper.id;
+      let tableD = "shipper";
+      if (type == "c") {
+        id = this.consignee.id;
+        tableD = "consignee";
+      }
+      if (type == "cr") {
+        id = this.carrier.id;
+        tableD = "carrier";
+      }
       var data = {
         component: "form-transporter",
         title: "Transportador",
         icon: "fal fa-user",
-        field_id: edit ? this.shipper.id : null,
+        field_id: edit ? id : null,
         table: "shipper",
         hidden_btn: true,
         edit: edit,
@@ -1262,78 +1272,40 @@ export default {
       if (data.type) {
         if (data.type == "c") {
           this.consignee = data;
-          this.datos_consignee =
-            "\nEmail: " +
-            (data.email != null ? data.email : "") +
-            "\n" +
-            (data.information != null ? data.information : "");
-          // data.name +
-          // "\nPhone: " +
-          // data.telefono +
-          // "\n" +
-          // (data.contacto != null ? "Contact: " + data.contacto : "") +
-          // "\n" +
-          // data.direccion +
-          // "\n" +
-          // data.ciudad +
-          // ", " +
-          // data.estado +
-          // " " +
-          // data.pais +
-          // " " +
-          // (data.zip != null ? data.zip : "");
+          this.datos_consignee = this.setDataSending(data);
         } else if (data.type == "cr") {
           this.carrier = data;
-          this.datos_carrier =
-            "\nEmail: " +
-            (data.email != null ? data.email : "") +
-            "\n" +
-            (data.information != null ? data.information : "");
-          // data.name +
-          // "\nPhone: " +
-          // data.telefono +
-          // "\n" +
-          // (data.contacto != null ? "Contact: " + data.contacto : "") +
-          // "\n" +
-          // data.direccion +
-          // "\n" +
-          // data.ciudad +
-          // ", " +
-          // data.estado +
-          // " " +
-          // data.pais +
-          // " " +
-          // (data.zip != null ? data.zip : "");
+          this.datos_carrier = this.setDataSending(data);
         } else {
-          this.shipper = {
-            id: data.id,
-            name: data.name
-          };
-          // this.shipper = data;
-          this.datos_shipper =
-            "\nEmail: " +
-            (data.email != null ? data.email : "") +
-            "\n" +
-            (data.information != null ? data.information : "");
-          // data.name +
-          // "\nPhone: " +
-          // data.telefono +
-          // "\n" +
-          // (data.contacto != null ? "Contact: " + data.contacto : "") +
-          // "\n" +
-          // data.direccion +
-          // "\n" +
-          // data.ciudad +
-          // ", " +
-          // data.estado +
-          // " " +
-          // data.pais +
-          // " " +
-          // (data.zip != null ? data.zip : "");
-          // this.total_other_charge_due_carrier = total_c;
-          // this.total_other_charge_due_agent = total_a;
+          this.shipper = data;
+          this.datos_shipper = this.setDataSending(data);
         }
       }
+    },
+    setDataSending(data) {
+      let datos = null;
+      if (data.information != null) {
+        datos = data.information;
+      } else {
+        datos =
+          data.name +
+          "\n" +
+          "Phone: " +
+          data.telefono +
+          "\n" +
+          (data.contacto != null ? "Contact: " + data.contacto : "") +
+          "\n" +
+          data.direccion +
+          "\n" +
+          data.ciudad +
+          ", " +
+          data.estado +
+          " " +
+          data.pais +
+          " " +
+          (data.zip != null ? data.zip : "");
+      }
+      return datos;
     },
     getOtherCharges: function() {
       let url = null;

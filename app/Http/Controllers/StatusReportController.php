@@ -59,6 +59,12 @@ class StatusReportController extends Controller
                   }
                 }
 
+                if ($request->status_id == 5 || $request->status_id == 6 || $request->status_id == 7 || $request->status_id == 12 || $request->status_id == 13) {
+                    $doc = DocumentoDetalle::findOrFail($value['id']);
+                    $doc->consolidado = 1;
+                    $doc->save();
+                }
+
                 $this->AddToLog('Status creado id(' . $data->id . ')');
               }
               $answer = array(
@@ -101,6 +107,11 @@ class StatusReportController extends Controller
     public function destroy($id)
     {
         $data = StatusReport::findOrFail($id);
+        if ($data->status_id == 5 || $data->status_id == 6 || $data->status_id == 7 || $data->status_id == 12 || $data->status_id == 13) {
+            $doc = DocumentoDetalle::findOrFail($data->documento_detalle_id);
+            $doc->consolidado = 0;
+            $doc->save();
+        }
         $data->delete();
         $this->AddToLog('Status Eliminado fisicamente id(' . $id . ')');
     }

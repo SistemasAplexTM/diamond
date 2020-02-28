@@ -71,6 +71,9 @@
 				<td>{{ $value->tracking }}</td>
 				<td>{{ $value->peso_lb }}</td>
 				<td>{{ $value->cons }}</td>
+				<td>{{ $value->cons_dir }}</td>
+				<td>{{ $value->cons_ciu }}</td>
+				<td>{{ $value->ship }}</td>
 				<td>&nbsp;</td>
 			</tr>
 			@if($flag)
