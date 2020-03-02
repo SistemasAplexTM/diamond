@@ -2,35 +2,72 @@
   <div>
     <el-dialog
       :visible.sync="openGroup"
-      width="30%"
+      width="33%"
       :append-to-body="true"
       :before-close="closeModal"
     >
       <h3 slot="title">
         <i class="fal fa-cubes"></i> Documentos disponibles para agrupar
       </h3>
-      <p>Selecione los documentos que desea agrupar en este registro.</p>
-      <el-table
-        :data="gridData"
-        ref="multipleTable"
-        max-height="300"
-        @selection-change="handleSelectionChange"
-      >
-        <el-table-column type="selection" width="40"></el-table-column>
-        <el-table-column property="codigo" label="Documento" width="150"></el-table-column>
-        <el-table-column property="piezas" label="Piezas"></el-table-column>
-        <el-table-column label="Peso">
-          <template slot-scope="scope">
-            <span>{{ scope.row.peso }} lb</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="Declarado">
-          <template slot-scope="scope">
-            <i class="fal fa-dollar-sign"></i>
-            <span style="margin-left: 2px">{{ scope.row.declarado }}</span>
-          </template>
-        </el-table-column>
-      </el-table>
+      <el-tabs type="border-card" @tab-click="getDataTab">
+        <el-tab-pane>
+          <span slot="label">
+            <i class="fal fa-box-alt"></i> Guias Sin Agrupar
+          </span>
+          <p>Selecione los documentos que desea agrupar en este registro.</p>
+          <el-table
+            :data="gridData"
+            ref="multipleTable"
+            max-height="300"
+            @selection-change="handleSelectionChange"
+          >
+            <el-table-column type="selection" width="40"></el-table-column>
+            <el-table-column property="codigo" label="Documento" width="150"></el-table-column>
+            <el-table-column property="piezas" label="Piezas"></el-table-column>
+            <el-table-column label="Peso">
+              <template slot-scope="scope">
+                <span>{{ scope.row.peso }} lb</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="Declarado">
+              <template slot-scope="scope">
+                <i class="fal fa-dollar-sign"></i>
+                <span style="margin-left: 2px">{{ scope.row.declarado }}</span>
+              </template>
+            </el-table-column>
+          </el-table>
+        </el-tab-pane>
+        <!-- GUIAS AGRUPADAS -->
+        <el-tab-pane>
+          <span slot="label">
+            <i class="fal fa-boxes"></i> Guias Agrupadas
+          </span>
+          <p>Listado de guias agrupadas en este documento</p>
+          <el-table :data="gridDataGroup" ref="multipleTable" max-height="300">
+            <el-table-column property="codigo" label="Documento" width="150"></el-table-column>
+            <el-table-column property="piezas" label="Piezas"></el-table-column>
+            <el-table-column label="Peso">
+              <template slot-scope="scope">
+                <span>{{ scope.row.peso }} lb</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="Declarado">
+              <template slot-scope="scope">
+                <i class="fal fa-dollar-sign"></i>
+                <span style="margin-left: 2px">{{ scope.row.declarado }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column>
+              <template slot-scope="scope">
+                <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">
+                  <i class="fal fa-trash"></i>
+                </el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+        </el-tab-pane>
+      </el-tabs>
+
       <span slot="footer" class="dialog-footer">
         <el-button @click="closeModal">
           <i class="fal fa-times"></i> Cancelar
@@ -53,6 +90,7 @@ export default {
       openGroup: false,
       idDocument: null,
       gridData: [],
+      gridDataGroup: [],
       multipleSelection: []
     };
   },
@@ -64,6 +102,29 @@ export default {
     }
   },
   methods: {
+    getDataTab(data) {
+      if (data.index == 0) {
+        this.getDataTable();
+      }
+      if (data.index == 1) {
+        this.getDataGroups();
+      }
+    },
+    async getDataGroups() {
+      let me = this;
+      axios
+        .get("documento/getGuiasAgrupadas/" + this.id_document)
+        .then(
+          await function({ data }) {
+            me.gridDataGroup = data.data;
+          }
+        )
+        .catch(function(error) {
+          console.log(error);
+          toastr.warning("Error.", error.message);
+          toastr.options.closeButton = true;
+        });
+    },
     closeModal() {
       this.openGroup = false;
       this.$emit("set");
@@ -131,6 +192,13 @@ export default {
           toastr.warning("Error.");
           toastr.options.closeButton = true;
         });
+    },
+    async handleDelete(index, row) {
+      let me = this;
+      await removerDocumentoAgrupado(row.id);
+      setTimeout(() => {
+        me.getDataGroups();
+      }, 1000);
     }
   }
 };

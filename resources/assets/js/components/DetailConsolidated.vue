@@ -1,10 +1,18 @@
 <template>
-  <hot-table
-    :data="data"
-    :settings="settings"
-    :colHeaders="settings.colHeaders"
-    class="hot handsontable htRowHeaders htColumnHeaders"
-  ></hot-table>
+  <div>
+    <hot-table
+      :data="data"
+      :settings="settings"
+      :colHeaders="settings.colHeaders"
+      class="hot handsontable htRowHeaders htColumnHeaders"
+    ></hot-table>
+    <div style="text-align: end;font-size: 20px;">
+      <span style>Piezas: {{ formatNumber(piezas) }}</span>&nbsp;&nbsp;&nbsp;
+      <span style="color:tomato">Declarado: $ {{ formatNumber(declarado) }}</span>&nbsp;&nbsp;&nbsp;
+      <span style="color:blue">Peso: {{ formatNumber(peso) }}</span>&nbsp;&nbsp;&nbsp;
+      <span style>Peso Real: {{ formatNumber(peso_real) }}</span>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -111,6 +119,10 @@ export default {
     }
     return {
       data: [],
+      declarado: 0,
+      peso: 0,
+      peso_real: 0,
+      piezas: 0,
       settings: {
         licenseKey: "non-commercial-and-evaluation",
         colHeaders: [
@@ -156,12 +168,31 @@ export default {
             readOnly: true
           },
           { data: "contenido2", width: "400", className: "htLeft" },
-          { data: "declarado2" },
-          { data: "peso2_sum" },
+          {
+            data: "declarado2",
+            type: "numeric",
+            numericFormat: {
+              pattern: "$ 0,0",
+              culture: "en-US" // this is the default culture, set up for USD
+            }
+          },
+          {
+            data: "peso2_sum",
+            type: "numeric",
+            numericFormat: {
+              pattern: "0,0",
+              culture: "en-US" // this is the default culture, set up for USD
+            }
+          },
           {
             data: "peso",
             readOnly: true,
-            readOnlyCellClassName: "is-readOnly"
+            readOnlyCellClassName: "is-readOnly",
+            type: "numeric",
+            numericFormat: {
+              pattern: "0,0",
+              culture: "en-US" // this is the default culture, set up for USD
+            }
           },
           {
             data: "id",
@@ -193,8 +224,8 @@ export default {
         fixedColumnsLeft: 2,
         height: function() {
           // numero_filas * 40 + 40;
-          let hei = 800;
-          if ($(".ht_master .wtHider").height() <= 800) {
+          let hei = 5050;
+          if ($(".ht_master .wtHider").height() <= 5050) {
             hei = parseInt($(".ht_master .wtHider").height()) + 20;
           }
           return hei;
@@ -231,10 +262,21 @@ export default {
       console.log("delete_r: " + data);
     },
     getData() {
+      this.declarado = 0;
+      this.peso = 0;
+      this.peso_real = 0;
+      this.piezas = 0;
       axios
         .get("getAllConsolidadoDetalle")
         .then(({ data }) => {
           this.data = data.data;
+          if (this.data) {
+            this.data.forEach(el => {
+              this.declarado += parseFloat(el.declarado2);
+              this.peso += parseFloat(el.peso2);
+              this.piezas += parseFloat(el.piezas);
+            });
+          }
         })
         .catch(error => {
           console.log(error);

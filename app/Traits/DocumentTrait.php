@@ -118,10 +118,10 @@ trait DocumentTrait
         $fFin = date('Y-m-d' , $fFin);
         $nuevafecha = strtotime('-7 day' , strtotime($fFin));
         $fIni = date('Y-m-d' , $nuevafecha);
-        $dates = array(
-          'inicio' => $fIni,
-          'fin' => $fFin,
-        );
+        // $dates = array(
+        //   'inicio' => $fIni,
+        //   'fin' => $fFin,
+        // );
       }else{
         if($filter['dates'] != '' and $type != 4){
           // $nuevafecha = strtotime('-2 day' , strtotime($filter['dates'][0]));
@@ -150,56 +150,7 @@ trait DocumentTrait
       }else{
         $filter = false;
       }
-
-        $label_1 = "<a style='float:right;cursor:pointer;color:red' title='Quitar' data-toggle='tooltip' onclick='removerDocumentoAgrupado(";
-        $label_2 = ")'><i class='fa fa-times' style='font-size: 15px;'></i></a>";
-
-        $qr_group_1 = DB::raw('(
-                  SELECT
-                    GROUP_CONCAT(
-                      CONCAT(
-                        "<label>- ",
-                        x.num_warehouse,
-                        " (",
-                        x.peso,
-                        " lbs) ",
-                        " ($ ",
-                        x.valor,
-                        ".00) </label>",
-                        "'.$label_1.'",
-                        x.id,
-                        "'.$label_2.'"
-                      )
-                    ) AS groupy
-                  FROM
-                    documento_detalle AS x
-                  WHERE
-                    x.deleted_at IS NULL
-                  AND x.agrupado = a.id
-                  AND x.flag = 1
-                ) AS guias_agrupadas');
-
-        $qr_group = DB::raw('(
-                  SELECT
-                    GROUP_CONCAT(
-                      CONCAT(
-                        x.num_warehouse,
-                        "@",
-                        x.peso,
-                        "@",
-                        x.valor,
-                        "@",
-                        x.id
-                      )
-                    ) AS groupy
-                  FROM
-                    documento_detalle AS x
-                  WHERE
-                    x.deleted_at IS NULL
-                  AND x.agrupado = a.id
-                  AND x.flag = 1
-                ) AS guias_agrupadas');
-
+        
         $sql = DB::table('documento AS b')
           ->leftJoin('documento_detalle AS a', 'b.id', 'a.documento_id')
           ->leftJoin('consignee AS c', 'b.consignee_id', 'c.id')
@@ -271,7 +222,6 @@ trait DocumentTrait
                           AND z.id = a.agrupado
                           AND z.flag = 0
                         ) AS padre'),
-                $qr_group,
                 'a.mintic',
                 DB::raw('"ciudad" AS ciudad')
             )

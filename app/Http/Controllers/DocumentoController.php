@@ -1992,7 +1992,7 @@ class DocumentoController extends Controller
                                     $this->AddToLog('Impresion Consolidado (' . $id . ')');
                                     if (env('APP_TYPE') === 'courier') {
                                         if (env('APP_CLIENT') === 'colombiana' || env('APP_CLIENT') === 'diamond') {
-                                            $pdf          = PDF::loadView('pdf.consolidadoPdfColombiana', compact('documento', 'detalle', 'detalleConsolidado'))->setPaper('a4', 'landscape');
+                                            $pdf          = PDF::loadView('pdf.consolidadoPdfColombiana', compact('documento', 'detalle', 'detalleConsolidado'))->setPaper('a4', 'portrait');
                                         } else {
                                             if ($documento->pais_id_document === $pais_id_puntos) {
                                                 //FORMATO PARA CUBA
@@ -2142,10 +2142,10 @@ class DocumentoController extends Controller
         $this->AddToLog('Impresion labels (' . $documento->id . ')');
 
         if (env('APP_CLIENT') === 'colombiana') {
-            $pdf = PDF::loadView('pdf.labelWGJyg', compact('documento', 'detalle', 'document', 'dato_consolidado', 'shipper', 'consignee'))
-                ->setPaper(array(25, -25, 260, 360), 'landscape');
-            // $pdf = PDF::loadView('pdf.labelWGcolombiana', compact('documento', 'detalle', 'document', 'dato_consolidado', 'shipper', 'consignee' ))
-            //     ->setPaper(array(25, -25, 300, 300), 'portrait');
+            // $pdf = PDF::loadView('pdf.labelWGJyg', compact('documento', 'detalle', 'document', 'dato_consolidado', 'shipper', 'consignee'))
+            //     ->setPaper(array(25, -25, 260, 360), 'landscape');
+            $pdf = PDF::loadView('pdf.labelWGcolombiana', compact('documento', 'detalle', 'document', 'dato_consolidado', 'shipper', 'consignee' ))
+                ->setPaper(array(25, -25, 300, 300), 'portrait');
 
             $nameDocument = 'Label' . $document . '-' . $documento->id;
             $pdf->save(public_path() . '/files/File.pdf');
@@ -2545,7 +2545,7 @@ class DocumentoController extends Controller
               	) AS shipper_json')
             )
             ->where($where)
-            ->orderBy('c.num_guia', 'DESC')
+            ->orderBy('c.num_warehouse', 'ASC')
             ->get();
         return \DataTables::of($detalle)->make(true);
     }
@@ -2716,7 +2716,7 @@ class DocumentoController extends Controller
                 'agencia'
             )
             ->where($filter)
-            ->whereBetween('b.created_at', [$fIni, date("Y-m-d", strtotime($fFin . "+ 1 days"))])
+            // ->whereBetween('b.created_at', [$fIni, date("Y-m-d", strtotime($fFin . "+ 1 days"))])
             ->get();
         return \DataTables::of($detalle)->make(true);
     }
@@ -3254,6 +3254,29 @@ class DocumentoController extends Controller
                 ])
                 ->get();
         }
+        return \DataTables::of($detalle)->make(true);
+    }
+
+    public function getGuiasAgrupadas($id_detail)
+    {
+        $detalle = DB::table('documento_detalle AS a')
+                ->join('documento AS b', 'a.documento_id', 'b.id')
+                ->select(
+                    'a.id',
+                    'a.num_warehouse AS codigo',
+                    'a.liquidado',
+                    'a.piezas',
+                    'a.valor AS declarado',
+                    'a.peso'
+                )
+                ->where([
+                    ['a.deleted_at', null],
+                    ['a.id', '<>', $id_detail],
+                    ['a.agrupado', $id_detail],
+                    ['a.flag', 1]
+                ])
+                ->orderBy('codigo', 'DESC')
+                ->get();
         return \DataTables::of($detalle)->make(true);
     }
 

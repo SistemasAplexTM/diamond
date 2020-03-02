@@ -368,24 +368,11 @@ function numDocument(data, type, full, meta) {
     }
   }
   if (full.tipo_documento_id != 3 && full.tipo_documento_id != 4 && full.carga_courier == 1) {
-    var groupGuias = '';
     group = '';
-    // groupGuias = full.guias_agrupadas;
-    groupG = full.guias_agrupadas;
-    var btn_delete = "<a style='float: right;cursor:pointer;''><i class='material-icons'>clear</i></a>";
-    if (groupG != null && groupG != 'null' && groupG != '') {
-      // groupGuias = groupGuias.replace(/,/g, "<br>");
-      groupG = groupG.split(",");
-      if (groupG.length > 0) {
-        for (var i = 0; i < groupG.length; i++) {
-          var dat = groupG[i].split("@");
-          groupGuias += "<label>- " + dat[0] + " (" + dat[1] + " lb) ($ " + dat[2] + ")</label><a style='float:right;cursor:pointer;color:red' title='Quitar' data-toggle='tooltip' onclick='removerDocumentoAgrupado(" + dat[3] + ")'><i class='fal fa-times' style='font-size: 15px;'></i></a><br>";
-        }
-      }
-    }
-    if (full.consolidado_status === 0) {
-      group = ' onclick="agruparGuiasIndex(' + full.detalle_id + ')"';
-    }
+
+    // if (full.consolidado_status === 0) {
+    group = ' onclick="agruparGuiasIndex(' + full.detalle_id + ')"';
+    // }
     classText = color_badget;
     var status = '<div style="color:' + full.estatus_color + '"><small>' + ((full.estatus == null) ? '' : full.estatus) + '</small></div>';
     var st = ((full.estatus == null) ? '' : full.estatus);
@@ -398,7 +385,7 @@ function numDocument(data, type, full, meta) {
         mintic = '<div><small style="color: #23c6c8;padding-left:15px">' + str + '</small></div>';
       }
     }
-    return '<span class="" data-toggle="tooltip" title="' + st + '"><i class="fal fa-' + ((full.estatus == null) ? 'box' : ((full.agrupadas > 0) ? 'boxes' : ((full.flag == 1) ? 'minus' : 'box-open'))) + ' " style="color:' + ((full.flag == 1) ? '#E34724' : full.estatus_color) + '"></i> ' + ((codigo == null) ? full.warehouse : codigo) + '</span><a style="float: right;cursor:pointer;" class="badge badge-' + classText + ' pop" role="button" data-html="true" data-toggle="popover" data-trigger="hover" title="<b>Documentos agrupadas</b>" data-content="' + ((groupGuias == null) ? '' : groupGuias) + '" ' + group + '>' + ((full.agrupadas == null) ? '' : full.agrupadas) + '</a>' + mintic;
+    return '<span class="" data-toggle="tooltip" title="' + st + '"><i class="fal fa-' + ((full.estatus == null) ? 'box' : ((full.agrupadas > 0) ? 'boxes' : ((full.flag == 1) ? 'minus' : 'box-open'))) + ' " style="color:' + ((full.flag == 1) ? '#E34724' : full.estatus_color) + '"></i> ' + ((codigo == null) ? full.warehouse : codigo) + '</span><a style="float: right;cursor:pointer;" class="badge badge-' + classText + ' pop" role="button" ' + group + '>' + ((full.agrupadas == null) ? '' : full.agrupadas) + '</a>' + mintic;
   } else {
     icon = 'fal fa-boxes';
     if (full.transporte_id == 1) {

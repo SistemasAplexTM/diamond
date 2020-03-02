@@ -47,6 +47,10 @@
             padding-right: 3px;
             color: #1d1d1e;
         }
+
+        div {
+            white-space: pre-line;
+        }
     </style>
 
     {{-- CABECERA --}}
@@ -141,17 +145,17 @@
                 <th style="width: 150px">
                     <div id="t_detalle">CONSIGNEE</div>
                 </th>
-                <th style="width: 120px">
+                <th style="width: 25%">
                     <div id="t_detalle">NATURE OF GOODS</div>
                 </th>
-                <th style="width: 10px">
-                    <div id="t_detalle" style="text-align: center;">U.S COSTUM</div>
+                <th style="">
+                    <div id="t_detalle" style="text-align: center;">U.S<br>COSTUM</div>
                 </th>
                 <th>
                     <div id="t_detalle" style="text-align: center;">PCS</div>
                 </th>
                 <th>
-                    <div id="t_detalle" style="text-align: center;">GROSS WEIGHT</div>
+                    <div id="t_detalle" style="text-align: center;">GROSS<br>WEIGHT</div>
                 </th>
                 <th>
                     <div id="t_detalle" style="text-align: center;">FOB</div>
@@ -186,29 +190,16 @@
                     }
                 ?>
             <tr>
-                <td id="detalle" style="width: 13%;text-align: center;">{{ $val->num_guia }}</td>
-                <td style="width: 15%">
-                    {{-- <div id="detalle"> --}}
-                    <pre id="detalle">{{ $val->shipper_data }}</pre>
-                    {{-- </div> --}}
-                    {{-- <div id="detalle">{{ ($val->ship_nomfull2) ? $val->ship_nomfull2 : $val->nom_ship }}</div> --}}
-                    {{-- <div id="detalle">{{ ($val->ship_dir2) ? $val->ship_dir2 : $val->dir_ship }}</div>
-                    <div id="detalle">{{ ($val->ship_tel2) ? $val->ship_tel2 : $val->tel_ship }}</div> --}}
-                    {{-- <div id="detalle" >{{ ($val->shipper_json) ? $shipper_json->ciudad : $val->ciu_ship }} /
-                    {{ ($val->shipper_json) ? $shipper_json->pais : $val->pais_ship }}, {{ $val->zip_ship }}</div> --}}
+                <td id="detalle" style="text-align: center;">{{ $val->num_guia }}</td>
+                <td style="word-wrap: break-word;">
+                    <div id="detalle">{{ preg_replace('/<br[^>]*?>/si', "\n",nl2br($val->shipper_data)) }}</div>
                 </td>
-                <td id="detalle" style="width: 22%">
-                    {{-- <div id="detalle"> --}}
-                    <pre id="detalle">{{ $val->consignee_data }}</pre>
-                    {{-- </div> --}}
-                    {{-- <div id="detalle">{{ ($val->cons_nomfull2) ? $val->cons_nomfull2 : $val->nom_cons }}</div>
-                    <div id="detalle">{{ ($val->cons_dir2) ? $val->cons_dir2 : $val->dir_cons }}</div>
-                    <div id="detalle">{{ ($val->cons_tel2) ? $val->cons_tel2 : $val->tel_cons }}</div> --}}
-                    {{-- <div id="detalle" >{{ ($val->consignee_json) ? $consignee_json->ciudad : $val->ciu_cons }} /
-                    {{ ($val->consignee_json) ? $consignee_json->pais : $val->pais_cons }}, {{ $val->zip_cons }}</div>
-                    --}}
+                <td id="detalle" style="word-wrap: break-word;">
+                    <div id="detalle">{{ preg_replace('/<br[^>]*?>/si', "\n",nl2br($val->consignee_data)) }}</div>
                 </td>
-                <td id="detalle" style="width: 20%">{{ $val->contenido2 }}</td>
+                <td id="detalle">
+                    <div id="detalle">{{ preg_replace('/<br[^>]*?>/si', "\n",nl2br($val->contenido2)) }}</div>
+                </td>
                 <td id="detalle" style="text-align: center;"></td>
                 <td id="detalle" style="text-align: center;">{{ $piezas = number_format($val->piezas) }}</td>
                 <td id="detalle" style="text-align: center;">
@@ -266,7 +257,8 @@
                 </th>
                 <th>
                     <div style="margin-top:5px;text-align: center;font-size: 14px;color:#1d1d1e;">
-                        {{ round($peso * 0.453592, 2) }} KL</div>
+                        {{ number_format(round($peso, 2)) }} Lb <br> {{ number_format(round($peso * 0.453592, 2)) }} KL
+                    </div>
                 </th>
                 <th>
                     <div style="margin-top:5px;text-align: center;font-size: 14px;color:#1d1d1e;"></div>

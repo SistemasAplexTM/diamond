@@ -25,14 +25,9 @@ export default {
     }
   },
   data: function() {
-    function btnRenderer(instance, td, row, col, prop, value, cellProperties) {
-      td.className = "htMiddle htCenter";
+    function docRenderer(instance, td, row, col, prop, value, cellProperties) {
+      td.className = "htMiddle htCenter is-readOnly";
       let dataRow = instance.getDataAtRow(row);
-      let btn_delete =
-        '<button onclick="eliminar(' +
-        dataRow[9] +
-        ', false)" class="btn btn-danger btn-circle" type="button" data-toggle="tooltip" data-original-title="Eliminar"><i class="fal fa-trash-alt"></i></button>';
-
       let btn_track =
         '<a class="btn btn-info btn-xs btn-actions addTrackings" type="button" id="btn_addtracking' +
         dataRow[9] +
@@ -44,7 +39,17 @@ export default {
         '">' +
         dataRow[12] +
         "</span></a>";
-      td.innerHTML = btn_track + " " + btn_delete;
+      td.innerHTML = btn_track + " " + value;
+    }
+    function btnRenderer(instance, td, row, col, prop, value, cellProperties) {
+      td.className = "htMiddle htCenter";
+      let dataRow = instance.getDataAtRow(row);
+      let btn_delete =
+        '<button onclick="eliminar(' +
+        dataRow[9] +
+        ', false)" class="btn btn-danger btn-circle" type="button" data-toggle="tooltip" data-original-title="Eliminar"><i class="fal fa-trash-alt"></i></button>';
+
+      td.innerHTML = btn_delete;
     }
     function paRenderer(instance, td, row, col, prop, value, cellProperties) {
       let dataRow = instance.getDataAtRow(row);
@@ -109,7 +114,8 @@ export default {
           {
             data: "num_warehouse",
             readOnly: true,
-            readOnlyCellClassName: "is-readOnly"
+            readOnlyCellClassName: "is-readOnly",
+            renderer: docRenderer
           },
           {
             data: "piezas",

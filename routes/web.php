@@ -335,6 +335,7 @@ Route::group(['middleware' => 'auth'], function () {
   Route::get('documento/getHistoryConsignee/{id}', 'DocumentoController@getHistoryConsignee');
   Route::get('documento/getHistoryDocument/{document}', 'DocumentoController@getHistoryDocument');
   Route::get('documento/{id}/getGuiasAgrupar/{id_detalle}/{document?}', 'DocumentoController@getGuiasAgrupar');
+  Route::get('documento/getGuiasAgrupadas/{id_detalle}', 'DocumentoController@getGuiasAgrupadas');
   Route::put('documento/{id}/updatePositionArancel', 'DocumentoController@updatePositionArancel');
   Route::get('documento/{id}/getDataDetailDocument', 'DocumentoController@getDataDetailDocument');
   Route::get('documento/{id}/getBoxesConsolidado', 'DocumentoController@getBoxesConsolidado');
