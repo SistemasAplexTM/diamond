@@ -136,16 +136,16 @@
                 </th>
             </tr>
             <tr>
-                <th>
+                <th style="text-align: center;width: 100px">
                     <div id="t_detalle" style="text-align: center;">AWB</div>
                 </th>
-                <th style="width: 150px">
+                <th style="text-align: center;width: 150px">
                     <div id="t_detalle">SHIPPER</div>
                 </th>
-                <th style="width: 150px">
+                <th style="text-align: center;width: 150px">
                     <div id="t_detalle">CONSIGNEE</div>
                 </th>
-                <th style="width: 25%">
+                <th style="text-align: center;width: 250px">
                     <div id="t_detalle">NATURE OF GOODS</div>
                 </th>
                 <th style="">
@@ -190,7 +190,9 @@
                     }
                 ?>
             <tr>
-                <td id="detalle" style="text-align: center;">{{ $val->num_guia }}</td>
+                <td id="detalle" style="text-align: center;">
+                    {{ ($documento->tipo_consolidado_id == '') ? $val->num_guia : 'HAWB' . substr($val->num_guia,3) }}
+                </td>
                 <td style="word-wrap: break-word;">
                     <div id="detalle">{{ preg_replace('/<br[^>]*?>/si', "\n",nl2br($val->shipper_data)) }}</div>
                 </td>

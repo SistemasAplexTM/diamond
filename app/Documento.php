@@ -58,6 +58,7 @@ class Documento extends Model
         'paquete',
         'carga_courier',
         'tipo_consolidado',
+        'tipo_consolidado_id',
         'created_at'
     ];
 }

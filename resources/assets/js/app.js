@@ -39,7 +39,7 @@ Vue.component('autocomplete-component', require('./components/AutocompleteCompon
 Vue.component('contactos-component', require('./components/ContactosComponent.vue'));
 Vue.component('search-result', require('./components/SearchResult.vue'));
 Vue.component('master-component', require('./components/MasterComponent.vue'));
-Vue.component('master2-component', require('./components/Master2Component.vue'));
+// Vue.component('master2-component', require('./components/Master2Component.vue'));
 Vue.component('modalshipper-component', require('./components/ModalShipperComponent.vue'));
 Vue.component('modalconsignee-component', require('./components/ModalConsigneeComponent.vue'));
 Vue.component('modalarancel-component', require('./components/ModalArancelComponent.vue'));

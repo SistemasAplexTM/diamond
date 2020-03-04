@@ -4,7 +4,7 @@
 
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<title>{{ $data->num_master }} - AWB</title>
+	<title>{{ $detalleConsolidado[0]->num_master }} Manifiesto de Carga {{ $documento->consecutivo   }}</title>
 
 	<style>
 		:root {
@@ -341,16 +341,16 @@
 </head>
 
 <body id="imprimir">
-	@for($i = 1; $i <= $cantidad; $i++) @if($cantidad==1) <?php $i=8; ?> @endif <?php $color = '#000'; ?>
-		<?php $background = '#eaeaea'; ?> @if($i==1) <?php $destino = 'ORIGINAL COPY 1 (AIRPORT OF DESTINATION)' ?>
-		<?php $color = '#000'; ?> <?php $background = '#eaeaea'; ?> @elseif($i==2)
-		<?php $destino = 'ORIGINAL COPY 2 (FOR CONSIGNEE)' ?> <?php $color = '#ff0000'; ?> <?php $background = '#ffdfdf'; ?>
-		@elseif($i==3) <?php $destino = 'ORIGINAL COPY 3 (FOR ISSUING CARRIER)' ?> <?php $color = '#00CC00'; ?>
-		<?php $background = '#caffca'; ?> @elseif($i==4) <?php $destino = 'ORIGINAL COPY 4 (FOR SHIPPER)' ?>
-		<?php $color = '#000099'; ?> <?php $background = '#e1f0ff'; ?> @elseif($i==5)
-		<?php $destino = 'ORIGINAL COPY 5 (DELIVERY RECEIPT)' ?> <?php $color = '#FF9900'; ?>
-		<?php $background = '#ffd697'; ?> @elseif($i==6) <?php $destino = 'EXTRA COPY' ?> @elseif($i==7 || $i==8)
-		<?php $destino = 'EXTRA COPY' ?> @endif <div id="guia_master" style="">
+	@php
+	$color = '#000';
+	$background = '#eaeaea';
+	$destino = 'ORIGINAL COPY 1';
+	@endphp
+	@foreach ($detalleConsolidado as $data)
+	@php
+	$chgs_code = $data->tipo_pago;
+	@endphp
+	<div id="guia_master" style="">
 
 		<table border="0" cellpadding="0" cellspacing="0" id="tableContainer" style="page-break-after:always;">
 			<tr>
@@ -360,13 +360,11 @@
 							<td width="70%" style="font-size:18px">
 								<table width="50%" align="left">
 									<tr>
-										<td width="20%" align="center">{{ ($data->hija === 0) ? $data->codigo_aerolinea : '' }}</td>
+										<td width="20%" align="center"></td>
 										<td class="left_line" style="border-left: 1px solid {{ $color }};" style="text-align:center"
-											width="20%">{{ ($data->hija === 0) ? $data->prefijo : 'MIA' }}</td>
+											width="20%">{{ 'MIA' }}</td>
 										<td class="left_line" style="border-left: 1px solid {{ $color }};" width="60%">
-											<div style="padding-left:3px;">
-												{{ ($data->hija === 0) ? substr($data->num_master,3) : 'HAWB-'.substr($data->num_master,3) }}
-											</div>
+											<div style="padding-left:3px;">{{ substr($data->num_warehouse,2) }}</div>
 										</td>
 									</tr>
 								</table>
@@ -374,11 +372,9 @@
 							<td align="center">
 								<table width="40%" style="text-align:right; font-size:18px;">
 									<tr>
-										<td width="40%">
-											{{ ($data->master_id != '') ? 'HAWB' : '' }}{{ ($data->hija === 0) ? $data->codigo_aerolinea : 'HAWB'  }}
-										</td>
+										<td width="40%">HAWB</td>
 										<td width="5%"> - </td>
-										<td width="55%" align="center">{{ substr($data->num_master,3) }}</td>
+										<td width="55%" align="center">{{ substr($data->num_warehouse,2) }}</td>
 									</tr>
 								</table>
 							</td>
@@ -403,7 +399,7 @@
 										<td colspan="2">
 											<div class="" style="width:300px;">
 												<pre id="shipper_n" class="persons_data"
-													style="{{ (strlen($data->shipper) > 150) ? 'font-size:10px;' : '' }}">{{ $data->shipper }}</pre>
+													style="{{ (strlen($data->shipper_data) > 150) ? 'font-size:10px;' : '' }}">{{ $data->shipper_data }}</pre>
 											</div>
 										</td>
 									</tr>
@@ -419,14 +415,9 @@
 										<td valign="bottom">
 											<div id="aerolinea">
 												<span style="font-size:13px; font-weight:700;">
-													@if($data->hija === 0)
-													{{ $data->nombre_aerolinea }}
-													@else
 													<div>DIAMOND LOGISTICS SERVICES</div>
 													<div>4761 NW 72 Ave, Miami, FL 33166</div>
 													<div>PH: 305-640-0464</div>
-													@endif
-													{{-- {{ ($data->hija === 0) ? $data->nombre_aerolinea : '' }} --}}
 												</span>
 											</div>
 										</td>
@@ -438,9 +429,9 @@
 											<div style="color: {{ $color }}">Issued By</div>
 										</td>
 										<td class="bottom_line" style="border-bottom: 1px solid {{ $color }};">
-											<div id="direccion_aerolinea">{{ ($data->hija === 0) ? $data->dir_aerolinea : '' }}</div>
+											<div id="direccion_aerolinea">&nbsp;</div>
 											<div id="direccion_aerolinea2">&nbsp;</div>
-											<div id="direccion_aerolinea3">&nbsp;{{-- MIAMI, FL, 33122 --}}</div>
+											<div id="direccion_aerolinea3">&nbsp;</div>
 										</td>
 									</tr>
 									<tr>
@@ -471,7 +462,7 @@
 										<td height="70px" colspan="2">
 											<div class="" style="width:300px;">
 												<pre id="consignee_n" class="persons_data"
-													style="{{ (strlen($data->consignee) > 150) ? 'font-size:10px;' : '' }}">{{ $data->consignee }}</pre>
+													style="{{ (strlen($data->consignee_data) > 150) ? 'font-size:10px;' : '' }}">{{ $data->consignee_data }}</pre>
 											</div>
 										</td>
 									</tr>
@@ -497,30 +488,37 @@
 							<td height="70px" colspan="6" valign="top">
 								<div class="text_titles_tl" style="color: {{ $color }}">Issuing Carrier's Agent Name and City</div>
 								<div class="" style="width:300px;overflow: hidden;">
-									<pre id="carrier_n" class="persons_data_2">{{ $data->carrier }}</pre>
+									{{-- <pre id="carrier_n" class="persons_data_2"> --}}
+									<div id="persons_data" class="persons_data" style="margin-top: 5px;margin-bottom: 5px">
+										<div>DIAMOND LOGISTICS SERVICES , INC</div>
+										<div>Phone: 3056400464</div>
+										<div>4761 NW 72 Avenue</div>
+										<div>MIAMI, FL USA 33166</div>
+									</div>
+									{{-- </pre> --}}
 								</div>
 							</td>
 							<td width="51.5%" height="70px" valign="top" colspan="2" rowspan="2" class="left_line"
 								style="border-left: 1px solid {{ $color }};">
 								<div class="text_titles_tl margin_div" style="color: {{ $color }}">Accounting Information</div>
-								<div id="accounting_information" class="text_regular_l">{{ $data->account_information }}</div>
+								<div id="accounting_information" class="text_regular_l">&nbsp;</div>
 							</td>
 						</tr>
 						<tr class="bottom_line" style="border-bottom: 1px solid {{ $color }};">
-							<td width="24.5%" height="25px" valign="top" colspan="5">
+							<td width="24.5%" height="30px" valign="top" colspan="5">
 								<div class="text_titles_tl margin_div" style="color: {{ $color }}">Agent's AITA Code</div>
-								<div id="agent_iata" class="text_regular_l">{{ $data->agent_iata_code }}</div>
+								<div id="agent_iata" class="text_regular_l">&nbsp;</div>
 							</td>
 							<td width="24.5%" valign="top" class="left_line" style="border-left: 1px solid {{ $color }};">
 								<div class="text_titles_tl margin_div" style="color: {{ $color }}">Account No.</div>
-								<div id="account_number" class="text_regular_l">{{ $data->num_account }}</div>
+								<div id="account_number" class="text_regular_l">&nbsp;</div>
 							</td>
 						</tr>
 						<tr class="bottom_line" style="border-bottom: 1px solid {{ $color }};">
 							<td height="30px" colspan="6" valign="top">
 								<div class="text_titles_tl margin_div" style="color: {{ $color }}">Airport of Departure (Addr. of First
 									Carrier) and Requested Routing</div>
-								<div class="text_regular_l">{{ $data->nombre_aeropuerto }}</div>
+								<div class="text_regular_l">{{ $data->aeropuerto }}</div>
 							</td>
 							<td width="51.5%" colspan="2" class="left_line" style="border-left: 1px solid {{ $color }};">
 								<table width="100%">
@@ -546,7 +544,7 @@
 										</td>
 									</tr>
 									<tr>
-										<td width="33%" height="10px">
+										<td width="33%" height="20px">
 											<div id="reference_number" class="text_regular_c">NVD</div>
 										</td>
 										<td width="34%" align="center" valign="middle" class="left_line"
@@ -581,7 +579,7 @@
 										<td width="4%" align="center" valign="top" class="left_line"
 											style="border-left: 1px solid {{ $color }};">
 											<div class="margin_div text_titles_tc" style="color: {{ $color }}">by</div>
-											<div id="by_1" class="text_regular_c">{{ $data->by1 }}</div>
+											<div id="by_1" class="text_regular_c">&nbsp;</div>
 										</td>
 										<td width="6%" align="center" valign="top" class="left_line"
 											style="border-left: 1px solid {{ $color }};">
@@ -591,7 +589,7 @@
 										<td width="4%" align="center" valign="top" class="left_line"
 											style="border-left: 1px solid {{ $color }};">
 											<div class="margin_div text_titles_tc" style="color: {{ $color }}">by</div>
-											<div id="by_2" class="text_regular_c">{{ $data->by2 }}</div>
+											<div id="by_2" class="text_regular_c">&nbsp;</div>
 										</td>
 									</tr>
 								</table>
@@ -639,18 +637,22 @@
 											style="border-left: 1px solid {{ $color }};color: {{ $color }}">COLL</td>
 									</tr>
 									<tr>
-										<td width="8%" align="center" height="15px" class="text_regular_c">{{ $data->currency }}</td>
+										<td width="8%" align="center" height="15px" class="text_regular_c">USD</td>
 										<td width="5%" align="center" class="left_line" style="border-left: 1px solid {{ $color }};">
-											<div id="chgs_code" class="text_regular_c">{{ $data->chgs_code }}</div>
+											<div id="chgs_code" class="text_regular_c">{{ $chgs_code }}</div>
 										</td>
 										<td width="5%" align="center" class="left_line text_regular_c"
-											style="border-left: 1px solid {{ $color }};">{!! ($data->chgs_code == 'PP') ? 'X' : '' !!}</td>
+											style="border-left: 1px solid {{ $color }};">{!!
+											($chgs_code == 'PP') ? 'X' : '' !!}</td>
 										<td width="5%" align="center" class="left_line text_regular_c"
-											style="border-left: 1px solid {{ $color }};">{!! ($data->chgs_code == 'CLL') ? 'X' : '' !!}</td>
+											style="border-left: 1px solid {{ $color }};">{!!
+											($chgs_code == 'COD') ? 'X' : '' !!}</td>
 										<td width="5%" align="center" class="left_line text_regular_c"
-											style="border-left: 1px solid {{ $color }};">{!! ($data->chgs_code == 'PP') ? 'X' : '' !!}</td>
+											style="border-left: 1px solid {{ $color }};">{!!
+											($chgs_code == 'PP') ? 'X' : '' !!}</td>
 										<td width="5%" align="center" class="left_line text_regular_c"
-											style="border-left: 1px solid {{ $color }};">{!! ($data->chgs_code == 'CLL') ? 'X' : '' !!}</td>
+											style="border-left: 1px solid {{ $color }};">{!!
+											($chgs_code == 'COD') ? 'X' : '' !!}</td>
 									</tr>
 								</table>
 							</td>
@@ -696,7 +698,7 @@
 										</td>
 										<td width="12%" align="center" valign="middle" class="left_line"
 											style="border-left: 1px solid {{ $color }};">
-											<div id="flight_2" class="text_regular_c">{{ $data->fecha_vuelo2 }}</div>
+											<div id="flight_2" class="text_regular_c">{{ $data->fecha_vuelo1 }}</div>
 										</td>
 									</tr>
 								</table>
@@ -704,7 +706,7 @@
 							<td width="13%" class="left_line" style="border-left: 1px solid {{ $color }};" align="center"
 								valign="top">
 								<div class="text_titles_tc margin_div" style="color: {{ $color }}">Amount of Insurance</div>
-								<div id="amount_insurance" class="text_regular_c">{{ $data->amount_insurance }}</div>
+								<div id="amount_insurance" class="text_regular_c">&nbsp;</div>
 							</td>
 							<td width="38.5%" class="left_line text_titles_j"
 								style="border-left: 1px solid {{ $color }};color: {{ $color }}">
@@ -723,7 +725,7 @@
 							<td width="85%" valign="top" height="40px" rowspan="2">
 								<div class="text_titles_tl margin_div" style="color: {{ $color }}">Handling Information</div>
 								<div id="handling_information" class="text_regular_l">
-									<pre style="margin:0%;">{{ $data->handing_information }}</pre>
+									<pre>{{ $data->observaciones }}</pre>
 								</div>
 							</td>
 							<td class="text_titles_tl" style="color: {{ $color }}">&nbsp;</td>
@@ -736,10 +738,7 @@
 						</tr>
 					</table>
 
-
-					{{-- DETALLE[0] --}}
-
-					<table width="100%" height="220px" class="main_table_2"
+					<table width="100%" height="150px" class="main_table_2"
 						style="border-bottom: 1px solid {{ $color }};border-left: 1px solid {{ $color }};border-right: 1px solid {{ $color }};">
 						<tr>
 							<td width="7%" height="5" valign="middle" rowspan="2" class="text_titles_c bottom_line"
@@ -797,23 +796,15 @@
 									Item No.</div>
 							</td>
 						</tr>
-
-						{{-- // --}}
-						@php
-						$pieces = 0;
-						$weight = 0;
-						$totalValue = 0;
-						@endphp
-						@foreach ($detalle as $item)
 						<tr>
 							<td align="center" valign="top">
-								<div id="pieces" class="text_regular_c">{{ $item->piezas }}</div>
+								<div id="pieces" class="text_regular_c">{{ $data->piezas }}</div>
 							</td>
 							<td align="center" valign="top" class="left_line" style="border-left: 1px solid {{ $color }};">
 								<div id="kilos" class="margin_div text_regular_c">
-									{{ round($item->peso * 0.453592, 2) }}
+									{{ round($data->peso2 * 0.453592, 2) }}
 									<br>
-									{{ round($item->peso,2) }}
+									{{ round($data->peso2,2) }}
 									</br>
 								</div>
 							</td>
@@ -821,95 +812,77 @@
 								<div id="kilos_2" class="margin_div text_regular_c">Kl<br>Lb</div>
 							</td>
 							<td class="left_line bg_azul"
-								style="border-left: 1px solid {{ $color }};background-color:{{ $background }};">
-								&nbsp;</td>
+								style="border-left: 1px solid {{ $color }};background-color:{{ $background }};">&nbsp;</td>
 							<td align="center" valign="top" class="left_line" style="border-left: 1px solid {{ $color }};">
-								<div id="rate_code" class="text_regular_c">{{ $item->rate_class }}</div>
+								<div id="rate_code" class="text_regular_c">&nbsp;</div>
 							</td>
-							<td align="center" valign="top" rowspan="" class="left_line" style="border-left: 1px solid {{ $color }};">
+							<td align="center" valign="top" rowspan="2" class="left_line"
+								style="border-left: 1px solid {{ $color }};">
 								<div id="item_commodity" class="text_regular_c">1</div>
 							</td>
 							<td class="left_line bg_azul"
-								style="border-left: 1px solid {{ $color }};background-color:{{ $background }};">
-								&nbsp;</td>
-							<td align="center" valign="top" rowspan="" class="left_line" style="border-left: 1px solid {{ $color }};">
-								<div id="kilos_3" class="margin_div text_regular_c">{{ $item->peso_cobrado }}</div>
+								style="border-left: 1px solid {{ $color }};background-color:{{ $background }};">&nbsp;</td>
+							<td align="center" valign="top" rowspan="2" class="left_line"
+								style="border-left: 1px solid {{ $color }};">
+								<div id="kilos_3" class="margin_div text_regular_c">{{ $data->peso2 }}</div>
 							</td>
 							<td class="left_line bg_azul"
-								style="border-left: 1px solid {{ $color }};background-color:{{ $background }};">
-								&nbsp;</td>
-							<td align="center" valign="top" rowspan="" class="left_line" style="border-left: 1px solid {{ $color }};">
-								<div id="rate" class="margin_div text_total">{{ ($item->minima === 0) ? $item->tarifa : 'MIN' }}
+								style="border-left: 1px solid {{ $color }};background-color:{{ $background }};">&nbsp;</td>
+							<td align="center" valign="top" rowspan="2" class="left_line"
+								style="border-left: 1px solid {{ $color }};">
+								<div id="rate" class="margin_div text_total">{{ ($data->tarifa > 0) ? $data->tarifa : 'AS AGREED' }}
 								</div>
 							</td>
 							<td class="left_line bg_azul"
-								style="border-left: 1px solid {{ $color }};background-color:{{ $background }};">
-								&nbsp;</td>
+								style="border-left: 1px solid {{ $color }};background-color:{{ $background }};">&nbsp;</td>
 							<td align="center" valign="top" class="left_line" style="border-left: 1px solid {{ $color }};">
-								<div id="total" class="margin_div text_total">{{ '$ ' . number_format($item->total,2)}}</div>
+								<div id="total" class="margin_div text_total">
+									{{ ($data->tarifa > 0) ? '$ ' . number_format($data->tarifa * round($data->peso2 * 0.453592, 2),2) : 'AS AGREED' }}
+								</div>
 							</td>
 							<td class="left_line bg_azul"
-								style="border-left: 1px solid {{ $color }};background-color:{{ $background }};">
-								&nbsp;</td>
-							<td valign="top" rowspan="" class="left_line" style="border-left: 1px solid {{ $color }};width:200px;">
-								<div id="nature_goods" class="margin_div text_regular_l"
-									style="margin-bottom: 0px;border-bottom: black 1px dashed;">
-									<pre style="margin: 0;">{{ $item->descripcion }}</pre>
+								style="border-left: 1px solid {{ $color }};background-color:{{ $background }};">&nbsp;</td>
+							<td valign="top" rowspan="2" class="left_line" style="border-left: 1px solid {{ $color }};">
+								<div id="nature_goods" class="margin_div text_regular_l">
+									<pre>{{ $data->contenido2 }}</pre>
 								</div>
 							</td>
 						</tr>
-						@php
-						$pieces += $item->piezas;
-						$weight += round($item->peso * 0.453592, 2);
-						$totalValue += $item->total;
-						@endphp
-						@endforeach
-
-
-
-						{{-- // --}}
 						<tr>
-							<td height="20px" align="center" valign="middle" class="top_line"
+							<td height="30px" align="center" valign="middle" class="top_line"
 								style="border-top: 1px solid {{ $color }};">
-								<div id="pieces_2" class="text_regular_c">{{ $pieces }}</div>
+								<div id="pieces_2" class="text_regular_c">{{ $data->piezas }}</div>
 							</td>
 							<td align="center" valign="middle" class="left_line top_line"
 								style="border-left: 1px solid {{ $color }};border-top: 1px solid {{ $color }};">
-								<div id="total_kilos" class="text_regular_c">{{ round($weight, 2) }}</div>
+								<div id="total_kilos" class="text_regular_c">{{ round($data->peso2 * 0.453592, 2) }}</div>
 							</td>
 							<td align="center" valign="middle" class="left_line" style="border-left: 1px solid {{ $color }};">
 								<div id="kilos_4" class="margin_div text_regular_c">Kl</div>
 							</td>
 							<td class="left_line bg_azul"
-								style="border-left: 1px solid {{ $color }};background-color:{{ $background }};">
-								&nbsp;</td>
-							<td class="left_line" style="border-left: 1px solid {{ $color }};">&nbsp;</td>
+								style="border-left: 1px solid {{ $color }};background-color:{{ $background }};">&nbsp;</td>
 							<td class="left_line" style="border-left: 1px solid {{ $color }};">&nbsp;</td>
 							<td class="left_line bg_azul"
-								style="border-left: 1px solid {{ $color }};background-color:{{ $background }};">
-								&nbsp;
-							</td>
-							<td class="left_line" style="border-left: 1px solid {{ $color }};">&nbsp;</td>
+								style="border-left: 1px solid {{ $color }};background-color:{{ $background }};">&nbsp;</td>
 							<td class="left_line bg_azul"
-								style="border-left: 1px solid {{ $color }};background-color:{{ $background }};">
-								&nbsp;</td>
-							<td class="left_line" style="border-left: 1px solid {{ $color }};">&nbsp;</td>
+								style="border-left: 1px solid {{ $color }};background-color:{{ $background }};">&nbsp;</td>
 							<td class="left_line bg_azul"
-								style="border-left: 1px solid {{ $color }};background-color:{{ $background }};">
-								&nbsp;</td>
+								style="border-left: 1px solid {{ $color }};background-color:{{ $background }};">&nbsp;</td>
 							<td align="center" valign="middle" class="left_line top_line"
 								style="border-left: 1px solid {{ $color }};border-top: 1px solid {{ $color }};">
-								<div id="total_2" class="margin_div text_total">{{ '$ ' . number_format($totalValue,2) }}</div>
+								<div id="total_2" class="margin_div text_total">
+									{{ ($data->tarifa > 0) ? '$ ' . number_format($data->tarifa * round($data->peso2 * 0.453592, 2),2) : 'AS AGREED' }}
+								</div>
 							</td>
 							<td class="left_line bg_azul"
-								style="border-left: 1px solid {{ $color }};background-color:{{ $background }};">
-								&nbsp;</td>
-							<td class="left_line" style="border-left: 1px solid {{ $color }};">&nbsp;</td>
+								style="border-left: 1px solid {{ $color }};background-color:{{ $background }};">&nbsp;</td>
 						</tr>
 					</table>
+					{{-- master_detail --}}
 					<div
 						style="font-family:'Courier New', Courier, monospace;color: #dedede;position: absolute;margin-top: -80px;margin-left: 30em;width: 400px;">
-						{{ $data->master_detail }}</div>
+					</div>
 
 					<table width="100%" class="main_table_3" style="border-left: 1px solid {{ $color }};">
 						<tr>
@@ -955,13 +928,15 @@
 									<tr>
 										<td width="18%" height="12px" align="center" class="bottom_line"
 											style="border-bottom: 1px solid {{ $color }};">
-											<div id="pp_w_charge" class="text_total">{!! ($data->chgs_code == 'PP') ? '$
-												'.number_format($totalValue,2) : '' !!}</div>
+											<div id="pp_w_charge" class="text_total">{!! ($chgs_code == 'PP') ? (($data->tarifa > 0) ? '$
+												'.number_format($data->tarifa * round($data->peso2 * 0.453592, 2),2) : '') : '' !!}
+											</div>
 										</td>
 										<td width="18%" align="center" class="left_line bottom_line"
 											style="border-left: 1px solid {{ $color }};border-bottom: 1px solid {{ $color }};">
-											<div id="coll_w_charge" class="text_total">{!! ($data->chgs_code == 'CLL') ? '$
-												'.number_format($totalValue,2) : '' !!}</div>
+											<div id="coll_w_charge" class="text_total">{!! ($chgs_code == 'COD') ? (($data->tarifa > 0) ? '$
+												'.number_format($data->tarifa * round($data->peso2 * 0.453592, 2),2) : '') : '' !!}
+											</div>
 										</td>
 									</tr>
 									<tr>
@@ -1035,19 +1010,6 @@
 										<td>Amount</td>
 										<td>Entitlement</td>
 									</tr>
-									@foreach($other['data'] AS $ot)
-									<tr>
-										<td width="65%" valign="top">
-											<div class="text_regular_l">{{ $ot->oc_description }}</div>
-										</td>
-										<td width="25%" valign="top">
-											<div class="text_regular_l">$ {{ number_format($ot->oc_value, 2) }}</div>
-										</td>
-										<td width="10%" valign="top">
-											<div class="text_regular_l">{{ (($ot->oc_due == 1) ? 'C' : 'A') }}</div>
-										</td>
-									</tr>
-									@endforeach
 								</table>
 
 							</td>
@@ -1080,13 +1042,15 @@
 									</tr>
 									<tr>
 										<td width="18%" height="12" class="bottom_line" style="border-bottom: 1px solid {{ $color }};">
-											<div id="pp_due_agent" class="text_total">{!! ($data->chgs_code == 'PP') ? '$ '.
-												number_format($data->total_other_charge_due_agent,2) : '' !!}</div>
+											<div id="pp_due_agent" class="text_total">{!! ($chgs_code == 'PP') ? (($data->tarifa > 0) ? '$ '.
+												number_format(0,2) : '') : ''
+												!!}</div>
 										</td>
 										<td width="18%" class="left_line bottom_line"
 											style="border-left: 1px solid {{ $color }};border-bottom: 1px solid {{ $color }};">
-											<div id="coll_due_agent" class="text_total">{!! ($data->chgs_code == 'CLL') ? '$ '.
-												number_format($data->total_other_charge_due_agent,2) : '' !!}</div>
+											<div id="coll_due_agent" class="text_total">{!! ($chgs_code == 'COD') ? (($data->tarifa > 0) ? '$
+												'. number_format(0,2) : '') :
+												'' !!}</div>
 										</td>
 									</tr>
 									<tr>
@@ -1111,19 +1075,21 @@
 									</tr>
 									<tr>
 										<td height="12" class="bottom_line" style="border-bottom: 1px solid {{ $color }};">
-											<div id="pp_due_carrier" class="text_total">{!! ($data->chgs_code == 'PP') ? '$ '.
-												number_format($data->total_other_charge_due_carrier,2) : '' !!}</div>
+											<div id="pp_due_carrier" class="text_total">{!! ($chgs_code == 'PP') ? (($data->tarifa > 0) ? '$
+												'. number_format(0,2) : '') :
+												'' !!}</div>
 										</td>
 										<td width="18%" class="left_bottom_line"
 											style="border-left: 1px solid {{ $color }};border-bottom: 1px solid {{ $color }};">
-											<div id="coll_due_carrier" class="text_total">{!! ($data->chgs_code == 'CLL') ? '$ '.
-												number_format($data->total_other_charge_due_carrier,2) : '' !!}</div>
+											<div id="coll_due_carrier" class="text_total">{!! ($chgs_code == 'COD') ? (($data->tarifa > 0) ?
+												'$
+												'. number_format(0,2) : '')
+												: '' !!}</div>
 										</td>
 									</tr>
 									<tr>
 										<td width="36%" height="25px" colspan="2" class="bg_azul"
-											style="background-color:{{ $background }};">
-											&nbsp;</td>
+											style="background-color:{{ $background }};">&nbsp;</td>
 									</tr>
 								</table>
 
@@ -1185,15 +1151,14 @@
 									</tr>
 									<tr>
 										<td height="12" class="bottom_line" style="border-bottom: 1px solid {{ $color }};">
-											<div id="pp_total" class="text_total">{!! ($data->chgs_code == 'PP') ? '$
-												'.number_format(($data->total_other_charge_due_carrier + $data->total_other_charge_due_agent +
-												$totalValue),2) : '' !!}</div>
+											<div id="pp_total" class="text_total">{!! ($chgs_code == 'PP') ? (($data->tarifa > 0) ? '$
+												'.number_format(($data->tarifa
+												* round($data->peso2 * 0.453592, 2)),2) :'' ) : '' !!}</div>
 										</td>
 										<td width="18%" class="left_bottom_line"
 											style="border-left: 1px solid {{ $color }};border-bottom: 1px solid {{ $color }};">
-											<div id="coll_total" class="text_total">{!! ($data->chgs_code == 'CLL') ? '$ '.
-												number_format(($data->total_other_charge_due_carrier + $data->total_other_charge_due_agent +
-												$totalValue), 2) : '' !!}</div>
+											<div id="coll_total" class="text_total">{!! ($chgs_code == 'COD') ? (($data->tarifa > 0) ? '$ '.
+												number_format(($data->tarifa * round($data->peso2 * 0.453592, 2)), 2) : '') : '' !!}</div>
 										</td>
 									</tr>
 									<tr class="bg_azul" style="background-color:{{ $background }};">
@@ -1244,16 +1209,15 @@
 							<td height="35px" valign="bottom" colspan="3" class="left_line rigth_line"
 								style="border-left: 1px solid {{ $color }};border-right: 1px solid {{ $color }};">
 								{{-- <div id="sign_description" class="text_regular_l margin_div">DESCRIPCIÓN DE LA FIRMA</div> --}}
-								<div style="width:20%; float:left" class="text_regular_l">
-									{{ date('m-d-y', strtotime($data->fecha_vuelo1)) }}</div>
+								<div style="width:20%; float:left" class="text_regular_l">{{ date('m-d-y', time()) }}</div>
 								<div style="width:24%; float:left" class="text_regular_c">{{-- MIA --}}</div>
 								<div style="width:50%; float:right" class="text_regular_r">
 									<span>
-										{{ $data->nombre_carrier }}
+										DIAMOND LOGISTICS SERVICES , INC
 									</span>
 									<br>
 									<span>
-										{{ $data->telefono_carrier }} / {{ $data->direccion_carrier }}
+										Phone: 3056400464 / 4761 NW 72 Ave. MIAMI, FL USA 33166
 									</span>
 								</div>
 							</td>
@@ -1311,9 +1275,7 @@
 							</td>
 							<td rowspan="2" class=" left_line" style="border-left: 1px solid {{ $color }};">&nbsp;</td>
 							<td align="center" rowspan="2">
-								<div id="master_bottom" style="font-size:18px">
-									{{ ($data->master_id != '') ? 'HAWB' : '' }}{{ ($data->hija === 0) ? $data->codigo_aerolinea . ' '.substr($data->num_master,3) : 'HAWB' .'-'. substr($data->num_master,3) }}
-								</div>
+								<div id="master_bottom" style="font-size:18px">{{ 'HAWB' .'-'. substr($data->num_warehouse,2) }}</div>
 							</td>
 						</tr>
 						<tr>
@@ -1341,8 +1303,8 @@
 				</td>
 			</tr>
 		</table>
-		</div>
-		@endfor
+	</div>
+	@endforeach
 </body>
 <script type="text/javascript">
 	function printHTML() {

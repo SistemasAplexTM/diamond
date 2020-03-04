@@ -51,9 +51,9 @@
                 <th>
                   <center><i class="fal fa-calendar-day"></i> @lang('master.date')</center>
                 </th>
-                <th>
+                {{-- <th>
                   <center><i class="fal fa-dollar-sign"></i> @lang('master.rate')</center>
-                </th>
+                </th> --}}
                 <th>
                   <center><i class="fal fa-forklift"></i> @lang('master.weight') Lb</center>
                 </th>

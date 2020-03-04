@@ -77,10 +77,6 @@ span.error {
               >
                 <i class="fal fa-edit"></i>&nbsp;
               </button>
-              <!-- <div class="checkbox checkbox-primary checkbox-inline pull-right">
-                <input type="checkbox" id="crearS" value="true" v-model="shipper.disabled" />
-                <label for="crearS">Crear</label>
-              </div>-->
             </div>
             <div class="panel-body">
               <div class="row">
@@ -104,50 +100,6 @@ span.error {
                   </div>
                 </div>
               </div>
-              <!-- <div class="row">
-                <div class="col-lg-12">
-                  <div class="form-group">
-                    <label for="telefono">Teléfono</label>
-                    <div class="input-group">
-                      <span class="input-group-addon"><i class="fal fa-phone"></i></span>
-                      <input v-model="shipper.telefono" :disabled="!shipper.disabled" id="telefono" type="text" class="form-control" name="telefono" placeholder="">
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-lg-12">
-                  <div class="form-group">
-                    <label for="direccion">Dirección</label>
-                    <div class="input-group">
-                      <span class="input-group-addon"><i class="fal fa-map-marker"></i></span>
-                      <input v-model="shipper.direccion" :disabled="!shipper.disabled" id="direccion" type="text" class="form-control" name="direccion">
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-lg-12">
-                  <div class="form-group">
-                    <label for="ciudad">Ciudad, Estado, País -zip</label>
-                    <div class="input-group">
-                      <span class="input-group-addon"><i class="fal fa-location-arrow"></i></span>
-                      <input v-model="shipper.ciudad" :disabled="!shipper.disabled" id="ciudad" type="text" class="form-control" name="ciudad">
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-lg-12">
-                  <div class="form-group">
-                    <label for="contacto">Contacto</label>
-                    <div class="input-group">
-                      <span class="input-group-addon"><i class="fal fa-address-card"></i></span>
-                      <input v-model="shipper.contacto" :disabled="!shipper.disabled" id="contacto" type="text" class="form-control" name="contacto">
-                    </div>
-                  </div>
-                </div>
-              </div>-->
               <div class="row">
                 <div class="col-lg-12">
                   <div class="form-group">
@@ -207,50 +159,6 @@ span.error {
                   </div>
                 </div>
               </div>
-              <!-- <div class="row">
-                <div class="col-lg-12">
-                  <div class="form-group">
-                    <label for="telefono">Teléfono</label>
-                    <div class="input-group">
-                      <span class="input-group-addon"><i class="fal fa-phone"></i></span>
-                      <input v-model="consignee.telefono" :disabled="!consignee.disabled" id="telefono" type="text" class="form-control" name="telefono" placeholder="">
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-lg-12">
-                  <div class="form-group">
-                    <label for="direccion">Dirección</label>
-                    <div class="input-group">
-                      <span class="input-group-addon"><i class="fal fa-map-marker"></i></span>
-                      <input v-model="consignee.direccion" :disabled="!consignee.disabled" id="direccion" type="text" class="form-control" name="direccion">
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-lg-12">
-                  <div class="form-group">
-                    <label for="ciudad">Ciudad, Estado, País -zip</label>
-                    <div class="input-group">
-                      <span class="input-group-addon"><i class="fal fa-location-arrow"></i></span>
-                      <input v-model="consignee.ciudad" :disabled="!consignee.disabled" id="ciudad" type="text" class="form-control" name="ciudad">
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-lg-12">
-                  <div class="form-group">
-                    <label for="contacto">Contacto</label>
-                    <div class="input-group">
-                      <span class="input-group-addon"><i class="fal fa-address-card"></i></span>
-                      <input v-model="consignee.contacto" :disabled="!consignee.disabled" id="contacto" type="text" class="form-control" name="contacto">
-                    </div>
-                  </div>
-                </div>
-              </div>-->
               <div class="row">
                 <div class="col-lg-12">
                   <div class="form-group">
@@ -310,50 +218,6 @@ span.error {
                   </div>
                 </div>
               </div>
-              <!-- <div class="row">
-                <div class="col-lg-12">
-                  <div class="form-group">
-                    <label for="telefono">Teléfono</label>
-                    <div class="input-group">
-                      <span class="input-group-addon"><i class="fal fa-phone"></i></span>
-                      <input v-model="carrier.telefono" :disabled="!carrier.disabled" id="telefono" type="text" class="form-control" name="telefono" placeholder="">
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-lg-12">
-                  <div class="form-group">
-                    <label for="direccion">Dirección</label>
-                    <div class="input-group">
-                      <span class="input-group-addon"><i class="fal fa-map-marker"></i></span>
-                      <input v-model="carrier.direccion" :disabled="!carrier.disabled" id="direccion" type="text" class="form-control" name="direccion">
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-lg-12">
-                  <div class="form-group">
-                    <label for="ciudad">Ciudad, Estado, País -zip</label>
-                    <div class="input-group">
-                      <span class="input-group-addon"><i class="fal fa-location-arrow"></i></span>
-                      <input v-model="carrier.ciudad" :disabled="!carrier.disabled" id="ciudad" type="text" class="form-control" name="ciudad">
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-lg-12">
-                  <div class="form-group">
-                    <label for="contacto">Contacto</label>
-                    <div class="input-group">
-                      <span class="input-group-addon"><i class="fal fa-address-card"></i></span>
-                      <input v-model="carrier.contacto" :disabled="!carrier.disabled" id="contacto" type="text" class="form-control" name="contacto">
-                    </div>
-                  </div>
-                </div>
-              </div>-->
               <div class="row">
                 <div class="col-lg-12">
                   <div class="form-group">
@@ -734,66 +598,79 @@ span.error {
                   </div>
                 </div>
                 <div class="row">
-                  <div class="col-lg-12">
-                    <div class="table-responsive">
-                      <table class="table table-stripped">
-                        <thead>
-                          <tr>
-                            <th>N° of Pieces RCP</th>
-                            <th width="15%">Gross Weigth</th>
-                            <th width="9%">Rate Class</th>
-                            <th>Chargeable Weigth</th>
-                            <th>Rate Charge</th>
-                            <th>Total</th>
-                            <th width="40%">Nature and Quantity of Goods(Incl. Dimensions or Volume)</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr>
-                            <td>
-                              <div class="form-group" :class="{'has-error': errors.has('piezas') }">
+                  <el-button
+                    type="primary"
+                    size="mini"
+                    round
+                    style="float: right;"
+                    data-toggle="tooltip"
+                    title="Agregar nueva fila"
+                    @click="addRowDetail"
+                  >
+                    <i class="fal fa-plus"></i>
+                    Agregar fila
+                  </el-button>
+                </div>
+                <div class="row">
+                  <div class="table-responsive">
+                    <table class="table table-stripped">
+                      <thead>
+                        <tr>
+                          <th>N° of Pieces RCP</th>
+                          <th width="15%">Gross Weigth</th>
+                          <th width="9%">Rate Class</th>
+                          <th>Chargeable Weigth</th>
+                          <th>Rate Charge</th>
+                          <th>Total</th>
+                          <th width="40%">Nature and Quantity of Goods(Incl. Dimensions or Volume)</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr v-for="(detail, index) in detail_data" v-bind:key="detail.id">
+                          <td>
+                            <div class="form-group" :class="{'has-error': errors.has('piezas') }">
+                              <input
+                                v-validate="'required'"
+                                name="piezas"
+                                v-model="detail.piezas"
+                                type="number"
+                                class="form-control"
+                              />
+                            </div>
+                          </td>
+                          <td>
+                            <div class="form-group" :class="{'has-error': errors.has('peso') }">
+                              <div class="input-group">
                                 <input
                                   v-validate="'required'"
-                                  name="piezas"
-                                  v-model="piezas"
+                                  name="peso"
+                                  v-model="detail.peso_kl"
                                   type="number"
                                   class="form-control"
+                                  placeholder="Kl"
                                 />
+                                <span class="input-group-btn">
+                                  <select
+                                    class="btn"
+                                    name="unidad_medida"
+                                    v-model="detail.unidad_medida"
+                                  >
+                                    <option value="Kl">Kl</option>
+                                    <!-- <option value="Lb">Lb</option> -->
+                                  </select>
+                                </span>
                               </div>
-                            </td>
-                            <td>
-                              <div class="form-group" :class="{'has-error': errors.has('peso') }">
-                                <div class="input-group">
-                                  <input
-                                    v-validate="'required'"
-                                    name="peso"
-                                    v-model="peso"
-                                    type="number"
-                                    class="form-control"
-                                    placeholder="Kl"
-                                  />
-                                  <span class="input-group-btn">
-                                    <select
-                                      class="btn"
-                                      name="unidad_medida"
-                                      v-model="unidad_medida"
-                                    >
-                                      <option value="Kl">Kl</option>
-                                      <!-- <option value="Lb">Lb</option> -->
-                                    </select>
-                                  </span>
-                                </div>
-                              </div>
-                            </td>
-                            <td>
-                              <div class="form-group">
-                                <input
-                                  type="text"
-                                  class="form-control"
-                                  name="rate_class"
-                                  v-model="rate_class"
-                                />
-                                <!-- <select class="form-control" name="rate_class" v-model="rate_class">
+                            </div>
+                          </td>
+                          <td>
+                            <div class="form-group">
+                              <input
+                                type="text"
+                                class="form-control"
+                                name="rate_class"
+                                v-model="detail.rate_class"
+                              />
+                              <!-- <select class="form-control" name="rate_class" v-model="rate_class">
                                     <option value=""></option>
                                     <option value="M">M</option>
                                     <option value="N">N</option>
@@ -808,84 +685,95 @@ span.error {
                                     <option value="X">X</option>
                                     <option value="Y">Y</option>
                                     <option value="Z">Z</option>
-                                </select>-->
-                              </div>
-                            </td>
-                            <td>
-                              <div
-                                class="form-group"
-                                :class="{'has-error': errors.has('peso_cobrado') }"
-                              >
+                              </select>-->
+                            </div>
+                          </td>
+                          <td>
+                            <div
+                              class="form-group"
+                              :class="{'has-error': errors.has('peso_cobrado') }"
+                            >
+                              <input
+                                v-validate="'required'"
+                                name="peso_cobrado"
+                                v-model="detail.peso_cobrado"
+                                type="number"
+                                class="form-control"
+                                @keyup="calculateTotal(index)"
+                              />
+                            </div>
+                          </td>
+                          <td>
+                            <div class="form-group" :class="{'has-error': errors.has('tarifa') }">
+                              <div class="input-group">
                                 <input
-                                  v-validate="'required'"
-                                  name="peso_cobrado"
-                                  v-model="peso_cobrado"
+                                  v-validate="{ rules: { required: !this.min} }"
+                                  name="tarifa"
+                                  v-model="detail.tarifa"
                                   type="number"
                                   class="form-control"
+                                  @keyup="calculateTotal(index)"
                                 />
+                                <span
+                                  class="input-group-addon"
+                                  data-toggle="tooltip"
+                                  data-placement="top"
+                                  title="MIN"
+                                >
+                                  <i
+                                    class="fal fa-check"
+                                    @click.prevent="detail.minima = true;"
+                                    v-show="!detail.minima"
+                                  ></i>
+                                  <i
+                                    class="fal fa-times"
+                                    @click.prevent="detail.minima = false;"
+                                    v-show="detail.minima"
+                                  ></i>
+                                </span>
                               </div>
-                            </td>
-                            <td>
-                              <div class="form-group" :class="{'has-error': errors.has('tarifa') }">
-                                <div class="input-group">
-                                  <input
-                                    v-validate="{ rules: { required: !this.min} }"
-                                    name="tarifa"
-                                    v-model="tarifa"
-                                    type="number"
-                                    class="form-control"
-                                  />
-                                  <span
-                                    class="input-group-addon"
-                                    data-toggle="tooltip"
-                                    data-placement="top"
-                                    title="MIN"
-                                  >
-                                    <i
-                                      class="fal fa-check"
-                                      @click.prevent="min = true;"
-                                      v-show="!min"
-                                    ></i>
-                                    <i
-                                      class="fal fa-times"
-                                      @click.prevent="min = false;"
-                                      v-show="min"
-                                    ></i>
-                                  </span>
-                                </div>
-                              </div>
-                            </td>
-                            <td>
-                              <div class="form-group" :class="{'has-error': errors.has('total') }">
-                                <input
-                                  v-validate="'required'"
-                                  name="total"
-                                  v-model="total"
-                                  type="number"
-                                  class="form-control"
-                                  :readonly="!min"
-                                />
-                              </div>
-                            </td>
-                            <td>
-                              <div
-                                class="form-group"
-                                :class="{'has-error': errors.has('descripcion') }"
-                              >
-                                <textarea
-                                  v-validate="'required'"
-                                  name="descripcion"
-                                  v-model="descripcion"
-                                  class="form-control"
-                                  cols="30"
-                                  rows="5"
-                                ></textarea>
-                              </div>
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
+                            </div>
+                          </td>
+                          <td>
+                            <div class="form-group" :class="{'has-error': errors.has('total') }">
+                              <input
+                                v-validate="'required'"
+                                name="total"
+                                v-model="detail.total"
+                                type="number"
+                                class="form-control"
+                                :readonly="!detail.minima"
+                              />
+                            </div>
+                          </td>
+                          <td>
+                            <div
+                              class="form-group"
+                              :class="{'has-error': errors.has('descripcion') }"
+                            >
+                              <textarea
+                                v-validate="'required'"
+                                name="descripcion"
+                                v-model="detail.descripcion"
+                                class="form-control"
+                                cols="30"
+                                rows="5"
+                              ></textarea>
+                            </div>
+                            <label
+                              style="color:#ff380b;cursor:pointer;font-size: 12px;"
+                              class="pull-right"
+                              data-toggle="tooltip"
+                              title="Eliminar"
+                              @click="deleteRowDetail(index)"
+                            >
+                              Eliminar Fila
+                              <i class="fal fa-trash-alt"></i>
+                            </label>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
                   </div>
                 </div>
                 <div class="row">
@@ -914,82 +802,98 @@ span.error {
                   </div>
 
                   <div class="col-lg-9">
-                    <label>Other charges</label>
-                    <a class="pull-right" @click="addOtherChargue()">Add Row</a>
-                    <div class="table-responsive">
-                      <table class="table table-stripped table-hover table-bordered" width="100">
-                        <thead>
-                          <tr>
-                            <th rowspan="2" class="text-center" style="width: 60%;">Descripction</th>
-                            <th colspan="2" class="text-center">Due</th>
-                            <th rowspan="2" class="text-center">Amount</th>
-                            <th rowspan="2"></th>
-                          </tr>
-                          <tr>
-                            <th class="text-center">Agent</th>
-                            <th class="text-center">Carrier</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr v-for="(find, index) in other_c" :key="index">
-                            <td>
-                              <div class :class="{'has-error': errors.has('oc_description') }">
+                    <div class="row" style="margin-bottom: 5px;">
+                      <label>Other charges</label>
+                      <el-button
+                        class="pull-right"
+                        type="primary"
+                        size="mini"
+                        round
+                        data-toggle="tooltip"
+                        title="Agregar nueva fila"
+                        @click="addOtherChargue()"
+                      >
+                        <i class="fal fa-plus"></i>
+                        Agregar fila
+                      </el-button>
+                    </div>
+                    <!-- <a class="pull-right">Add Row</a> -->
+                    <div class="row">
+                      <div class="table-responsive">
+                        <table class="table table-stripped table-hover table-bordered" width="100">
+                          <thead>
+                            <tr>
+                              <th rowspan="2" class="text-center" style="width: 60%;">Descripction</th>
+                              <th colspan="2" class="text-center">Due</th>
+                              <th rowspan="2" class="text-center">Amount</th>
+                              <th rowspan="2"></th>
+                            </tr>
+                            <tr>
+                              <th class="text-center">Agent</th>
+                              <th class="text-center">Carrier</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr v-for="(find, index) in other_c" :key="index">
+                              <td>
+                                <div class :class="{'has-error': errors.has('oc_description') }">
+                                  <input
+                                    type="text"
+                                    class="form-control"
+                                    name="oc_description"
+                                    v-model="find.oc_description"
+                                    v-validate="'required'"
+                                  />
+                                </div>
+                              </td>
+                              <td class="text-center">
+                                <div class="radio radio-info">
+                                  <input
+                                    type="radio"
+                                    value="0"
+                                    :name="'agent'+index"
+                                    aria-label="Single radio Two"
+                                    v-model="find.oc_due"
+                                    v-on:change="setDueAgent()"
+                                  />
+                                  <label></label>
+                                </div>
+                              </td>
+                              <td class="text-center">
+                                <div class="radio radio-info">
+                                  <input
+                                    type="radio"
+                                    value="1"
+                                    :name="'carrier'+index"
+                                    aria-label="Single radio Two"
+                                    v-model="find.oc_due"
+                                    v-on:change="setDueAgent()"
+                                  />
+                                  <label></label>
+                                </div>
+                              </td>
+                              <td>
                                 <input
-                                  type="text"
+                                  type="number"
                                   class="form-control"
-                                  name="oc_description"
-                                  v-model="find.oc_description"
-                                  v-validate="'required'"
+                                  v-model="find.oc_value"
+                                  v-on:keyup="setDueAgent()"
                                 />
-                              </div>
-                            </td>
-                            <td class="text-center">
-                              <div class="radio radio-info">
-                                <input
-                                  type="radio"
-                                  value="0"
-                                  :name="'agent'+index"
-                                  aria-label="Single radio Two"
-                                  v-model="find.oc_due"
-                                  v-on:change="setDueAgent()"
-                                />
-                                <label></label>
-                              </div>
-                            </td>
-                            <td class="text-center">
-                              <div class="radio radio-info">
-                                <input
-                                  type="radio"
-                                  value="1"
-                                  :name="'carrier'+index"
-                                  aria-label="Single radio Two"
-                                  v-model="find.oc_due"
-                                  v-on:change="setDueAgent()"
-                                />
-                                <label></label>
-                              </div>
-                            </td>
-                            <td>
-                              <input
-                                type="number"
-                                class="form-control"
-                                v-model="find.oc_value"
-                                v-on:keyup="setDueAgent()"
-                              />
-                            </td>
-                            <td style="vertical-align: middle;">
-                              <a
-                                class="delete_btn"
-                                @click="deleteRow(index)"
-                                data-toggle="tooltip"
-                                title="Eliminar"
-                              >
-                                <i class="fal fa-trash-alt fa-lg"></i>
-                              </a>
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
+                              </td>
+                              <td style="vertical-align: middle;">
+                                <a
+                                  class="delete_btn"
+                                  @click="deleteRow(index)"
+                                  data-toggle="tooltip"
+                                  title="Eliminar"
+                                >
+                                  <i class="fal fa-trash-alt fa-lg"></i>
+                                </a>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -1068,6 +972,21 @@ export default {
       currency: "USD",
       chgs: "PP",
       tipo_transportador: "s",
+      detail_data: [
+        {
+          id: "",
+          piezas: "",
+          peso_kl: "",
+          unidad_medida: "",
+          rate_class: "",
+          peso_cobrado: "",
+          tarifa: "",
+          total: "",
+          descripcion: "",
+          commodity_item: "",
+          minima: false
+        }
+      ],
       shipper: {
         id: null,
         name: null,
@@ -1108,28 +1027,28 @@ export default {
   },
   props: ["master", "consol", "peso_consolidado", "piezas_consolidado"],
   watch: {
-    peso: function() {
-      // console.log('cobrado: ', this.peso_cobrado);
-      // if(this.peso_cobrado === '' || this.peso_cobrado === null || this.peso_cobrado == 0){
-      // this.peso_cobrado = this.peso;
-      // }
-    },
-    piezas: function() {
-      // this.peso_cobrado = this.peso;
-    },
-    peso_cobrado: function() {
-      if (this.tarifa !== "" && this.tarifa !== null && this.tarifa != 0) {
-        this.total = isInteger(this.peso_cobrado * this.tarifa);
-      }
-    },
-    tarifa: function() {
-      if (this.tarifa !== "" && this.tarifa !== null && this.tarifa != 0) {
-        this.total = isInteger(this.peso_cobrado * this.tarifa);
-      }
-      if (this.peso_consolidado != 0 && this.peso_consolidado != "") {
-        // this.peso = this.peso_consolidado;
-      }
-    },
+    // peso: function() {
+    //   // console.log('cobrado: ', this.peso_cobrado);
+    //   // if(this.peso_cobrado === '' || this.peso_cobrado === null || this.peso_cobrado == 0){
+    //   // this.peso_cobrado = this.peso;
+    //   // }
+    // },
+    // piezas: function() {
+    //   // this.peso_cobrado = this.peso;
+    // },
+    // peso_cobrado: function() {
+    //   if (this.tarifa !== "" && this.tarifa !== null && this.tarifa != 0) {
+    //     this.total = isInteger(this.peso_cobrado * this.tarifa);
+    //   }
+    // },
+    // tarifa: function() {
+    //   if (this.tarifa !== "" && this.tarifa !== null && this.tarifa != 0) {
+    //     this.total = isInteger(this.peso_cobrado * this.tarifa);
+    //   }
+    //   if (this.peso_consolidado != 0 && this.peso_consolidado != "") {
+    //     // this.peso = this.peso_consolidado;
+    //   }
+    // },
     write: function(value) {
       if (value) {
         this.icon_cost = "fal fa-hand-pointer";
@@ -1184,6 +1103,18 @@ export default {
     });
   },
   methods: {
+    calculateTotal(index) {
+      console.log(this.detail_data[index]);
+      if (
+        this.detail_data[index].tarifa !== "" &&
+        this.detail_data[index].tarifa !== null &&
+        this.detail_data[index].tarifa != 0
+      ) {
+        this.detail_data[index].total = isInteger(
+          this.detail_data[index].peso_cobrado * this.detail_data[index].tarifa
+        );
+      }
+    },
     open(type, edit) {
       // this.shipper.name = "";
       // this.shipper.id = "";
@@ -1208,6 +1139,24 @@ export default {
         type: type
       };
       bus.$emit("open", data);
+    },
+    addRowDetail: function() {
+      this.detail_data.push({
+        id: "",
+        piezas: "",
+        peso_kl: "",
+        unidad_medida: "",
+        rate_class: "",
+        peso_cobrado: "",
+        tarifa: "",
+        total: "",
+        descripcion: "",
+        commodity_item: "",
+        minima: false
+      });
+    },
+    deleteRowDetail(index) {
+      this.detail_data.splice(index, 1);
     },
     addOtherChargue: function() {
       this.other_c.push({
@@ -1411,16 +1360,18 @@ export default {
           chgs_code: this.chgs,
           fecha_vuelo1: this.fecha_vuelo,
           fecha_vuelo2: this.fecha_vuelo,
-          piezas: this.piezas,
-          peso: this.peso,
-          unidad_medida: this.unidad_medida,
-          rate_class: this.rate_class,
-          commodity_item: this.commodity_item,
-          peso_cobrado: this.peso_cobrado,
-          tarifa: this.tarifa ? this.tarifa : 0,
-          minima: this.min,
-          total: this.total,
-          descripcion: this.descripcion,
+          // DETALLE
+          detail: this.detail_data,
+          // piezas: this.piezas,
+          // peso: this.peso,
+          // unidad_medida: this.unidad_medida,
+          // rate_class: this.rate_class,
+          // commodity_item: this.commodity_item,
+          // peso_cobrado: this.peso_cobrado,
+          // tarifa: this.tarifa ? this.tarifa : 0,
+          // minima: this.min,
+          // total: this.total,
+          // descripcion: this.descripcion,
           handing_information: this.handing_information,
           master_detail: this.master_detail,
           consolidado_id:
@@ -1431,11 +1382,11 @@ export default {
         })
         .then(response => {
           toastr.success("Registro exitoso.");
-          window.open(
-            "../../imprimir/" + response.data.id_master + "/" + true,
-            "_blank"
-          );
-          location.href = "/master";
+          // window.open(
+          //   "../../imprimir/" + response.data.id_master + "/" + true,
+          //   "_blank"
+          // );
+          // location.href = "/master";
         });
     },
     update: function() {
@@ -1466,16 +1417,19 @@ export default {
           chgs_code: this.chgs,
           fecha_vuelo1: this.fecha_vuelo,
           fecha_vuelo2: this.fecha_vuelo,
-          piezas: this.piezas,
-          peso: this.peso,
-          unidad_medida: this.unidad_medida,
-          rate_class: this.rate_class,
-          commodity_item: this.commodity_item,
-          peso_cobrado: this.peso_cobrado,
-          tarifa: this.tarifa,
-          minima: this.min,
-          total: this.total,
-          descripcion: this.descripcion,
+          // DETALLE
+          detail: this.detail_data,
+          // piezas: this.piezas,
+          // peso: this.peso,
+          // unidad_medida: this.unidad_medida,
+          // rate_class: this.rate_class,
+          // commodity_item: this.commodity_item,
+          // peso_cobrado: this.peso_cobrado,
+          // tarifa: this.tarifa,
+          // minima: this.min,
+          // total: this.total,
+          // descripcion: this.descripcion,
+
           handing_information: this.handing_information,
           master_detail: this.master_detail,
           consolidado_id:
@@ -1495,109 +1449,112 @@ export default {
     },
     edit(id) {
       let me = this;
-      axios.get("../" + id).then(response => {
+      axios.get("../" + id).then(({ data }) => {
         // this.disableAerolinea = true;
         this.editing = true;
         this.shipper.disabled = false;
 
-        this.shipper.id = response.data.data.shipper_id;
-        this.shipper.name = response.data.data.nombre_shipper;
+        this.shipper.id = data.data.shipper_id;
+        this.shipper.name = data.data.nombre_shipper;
 
-        this.shipper.direccion = response.data.data.direccion_shipper;
-        this.shipper.telefono = response.data.data.telefono_shipper;
-        this.shipper.zip = response.data.data.zip_shipper;
-        this.shipper.ciudad = response.data.data.ciudad_shipper;
-        this.shipper.contacto = response.data.data.contacto_shipper;
-        this.shipper.estado = response.data.data.estado_shipper;
-        this.shipper.pais = response.data.data.pais_shipper;
+        this.shipper.direccion = data.data.direccion_shipper;
+        this.shipper.telefono = data.data.telefono_shipper;
+        this.shipper.zip = data.data.zip_shipper;
+        this.shipper.ciudad = data.data.ciudad_shipper;
+        this.shipper.contacto = data.data.contacto_shipper;
+        this.shipper.estado = data.data.estado_shipper;
+        this.shipper.pais = data.data.pais_shipper;
 
         this.consignee.disabled = false;
-        this.consignee.id = response.data.data.consignee_id;
-        this.consignee.name = response.data.data.nombre_consignee;
-        this.consignee.nombre = response.data.data.nombre_consignee;
-        this.consignee.direccion = response.data.data.direccion_consignee;
-        this.consignee.telefono = response.data.data.telefono_consignee;
-        this.consignee.zip = response.data.data.zip_consignee;
-        this.consignee.ciudad = response.data.data.ciudad_consignee;
-        this.consignee.contacto = response.data.data.contacto_consignee;
-        this.consignee.estado = response.data.data.estado_consignee;
-        this.consignee.pais = response.data.data.pais_consignee;
+        this.consignee.id = data.data.consignee_id;
+        this.consignee.name = data.data.nombre_consignee;
+        this.consignee.nombre = data.data.nombre_consignee;
+        this.consignee.direccion = data.data.direccion_consignee;
+        this.consignee.telefono = data.data.telefono_consignee;
+        this.consignee.zip = data.data.zip_consignee;
+        this.consignee.ciudad = data.data.ciudad_consignee;
+        this.consignee.contacto = data.data.contacto_consignee;
+        this.consignee.estado = data.data.estado_consignee;
+        this.consignee.pais = data.data.pais_consignee;
 
-        this.carrier.id = response.data.data.carrier_id;
-        this.carrier.name = response.data.data.nombre_carrier;
-        this.carrier.nombre = response.data.data.nombre_carrier;
-        this.carrier.direccion = response.data.data.direccion_carrier;
-        this.carrier.telefono = response.data.data.telefono_carrier;
-        this.carrier.zip = response.data.data.zip_carrier;
-        this.carrier.ciudad = response.data.data.ciudad_carrier;
-        this.carrier.contacto = response.data.data.contacto_carrier;
-        this.carrier.estado = response.data.data.estado_carrier;
-        this.carrier.pais = response.data.data.pais_carrier;
+        this.carrier.id = data.data.carrier_id;
+        this.carrier.name = data.data.nombre_carrier;
+        this.carrier.nombre = data.data.nombre_carrier;
+        this.carrier.direccion = data.data.direccion_carrier;
+        this.carrier.telefono = data.data.telefono_carrier;
+        this.carrier.zip = data.data.zip_carrier;
+        this.carrier.ciudad = data.data.ciudad_carrier;
+        this.carrier.contacto = data.data.contacto_carrier;
+        this.carrier.estado = data.data.estado_carrier;
+        this.carrier.pais = data.data.pais_carrier;
 
         setTimeout(function() {
-          me.datos_shipper = response.data.data.shipper;
-          me.datos_consignee = response.data.data.consignee;
-          me.datos_carrier = response.data.data.carrier;
+          me.datos_shipper = data.data.shipper;
+          me.datos_consignee = data.data.consignee;
+          me.datos_carrier = data.data.carrier;
           // aerolineas
           var aer = me.aerolineas.filter(
-            ({ id }) => id == response.data.data.aerolineas_id
+            ({ id }) => id == data.data.aerolineas_id
           );
           me.aerolinea = aer[0];
           me.aerolinea_inventario_id =
-            response.data.data.aerolinea_inventario !== null
-              ? response.data.data.codigo_aerolinea +
+            data.data.aerolinea_inventario !== null
+              ? data.data.codigo_aerolinea +
                 " " +
-                response.data.data.aerolinea_inventario
+                data.data.aerolinea_inventario
               : "";
 
           // aeropuertos
           var departure = me.aeropuertos.filter(
-            ({ id }) => id == response.data.data.aeropuertos_id
+            ({ id }) => id == data.data.aeropuertos_id
           );
           me.aeropuerto_salida = departure[0];
           var arrival = me.aeropuertos.filter(
-            ({ id }) => id == response.data.data.aeropuertos_id_destino
+            ({ id }) => id == data.data.aeropuertos_id_destino
           );
           me.aeropuerto_destino = arrival[0];
         }, 1500);
-        console.log(response.data.data.aerolinea_inventario);
-        if (response.data.data.aerolinea_inventario === null) {
+        // console.log(data.data.aerolinea_inventario);
+        if (data.data.aerolinea_inventario === null) {
           me.write = true;
         }
-        this.num_master = response.data.data.num_master;
-        this.consolidado_id = response.data.data.consolidado_id;
-        this.account_information = response.data.data.account_information;
-        this.handing_information = response.data.data.handing_information;
-        this.master_detail = response.data.data.master_detail;
-        this.agent_iata_data = response.data.data.agent_iata_data;
-        this.num_account = response.data.data.num_account;
-        this.reference_num = response.data.data.reference_num;
-        this.optional_shipping_info = response.data.data.optional_shipping_info;
-        this.amount_insurance = response.data.data.amount_insurance;
-        this.currency = response.data.data.currency;
-        this.chgs = response.data.data.chgs_code;
-        this.fecha_vuelo = response.data.data.fecha_vuelo1;
-        this.fecha_vuelo = response.data.data.fecha_vuelo2;
-        this.piezas = response.data.detalle.piezas;
-        this.peso = response.data.detalle.peso_kl;
-        this.unidad_medida = response.data.detalle.unidad_medida;
-        this.rate_class = response.data.detalle.rate_class;
-        this.commodity_item = response.data.detalle.commodity_item;
-        this.peso_cobrado = response.data.detalle.peso_cobrado;
-        this.tarifa = response.data.detalle.tarifa;
-        this.min = response.data.detalle.minima;
-        this.total = response.data.detalle.total;
-        this.descripcion = response.data.detalle.descripcion;
+        this.num_master = data.data.num_master;
+        this.consolidado_id = data.data.consolidado_id;
+        this.account_information = data.data.account_information;
+        this.handing_information = data.data.handing_information;
+        this.master_detail = data.data.master_detail;
+        this.agent_iata_data = data.data.agent_iata_data;
+        this.num_account = data.data.num_account;
+        this.reference_num = data.data.reference_num;
+        this.optional_shipping_info = data.data.optional_shipping_info;
+        this.amount_insurance = data.data.amount_insurance;
+        this.currency = data.data.currency;
+        this.chgs = data.data.chgs_code;
+        this.fecha_vuelo = data.data.fecha_vuelo1;
+        this.fecha_vuelo = data.data.fecha_vuelo2;
+        // DETALLE
+        this.detail_data = data.detalle;
+        // this.piezas = data.detalle.piezas;
+        // this.peso = data.detalle.peso_kl;
+        // this.unidad_medida = data.detalle.unidad_medida;
+        // this.rate_class = data.detalle.rate_class;
+        // this.commodity_item = data.detalle.commodity_item;
+        // this.peso_cobrado = data.detalle.peso_cobrado;
+        // this.tarifa = data.detalle.tarifa;
+        // this.min = data.detalle.minima;
+        // this.total = data.detalle.total;
+        // this.descripcion = data.detalle.descripcion;
+
         this.total_other_charge_due_agent =
-          response.data.data.total_other_charge_due_agent;
+          data.data.total_other_charge_due_agent;
         this.total_other_charge_due_carrier =
-          response.data.data.total_other_charge_due_carrier;
-        if (response.data.data.consolidado_id != null) {
+          data.data.total_other_charge_due_carrier;
+        if (data.data.consolidado_id != null) {
           this.consolidado_id = {
-            id: response.data.data.consolidado_id,
-            consolidado: response.data.data.consolidado,
-            fecha: response.data.data.fecha,
-            pais: response.data.data.pais
+            id: data.data.consolidado_id,
+            consolidado: data.data.consolidado,
+            fecha: data.data.fecha,
+            pais: data.data.pais
           };
         }
       });

@@ -105,7 +105,8 @@ trait DocumentTrait
               'e.descripcion',
               'b.carga_courier'
           )
-          ->orderBy('b.created_at', 'DESC');
+          ->orderBy('b.id', 'ASC')
+          ->orderBy('b.created_at', 'ASC');
           
         return $sql;
     }
@@ -158,8 +159,8 @@ trait DocumentTrait
           ->leftJoin('shipper AS d', 'b.shipper_id', 'd.id')
           ->leftJoin('agencia AS e', 'b.agencia_id', 'e.id')
           ->select(
-            	'a.id AS detalle_id',
               'b.id',
+            	'a.id AS detalle_id',
             	'b.valor_libra',
             	'b.valor',
             	'b.liquidado',

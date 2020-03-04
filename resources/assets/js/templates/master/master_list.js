@@ -26,10 +26,10 @@ $(document).ready(function () {
       data: 'created_at',
       name: 'created_at'
     },
-    {
-      data: 'tarifa',
-      name: 'tarifa'
-    },
+    // {
+    //   data: 'tarifa',
+    //   name: 'tarifa'
+    // },
     {
       data: 'peso',
       name: 'peso',

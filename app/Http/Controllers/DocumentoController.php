@@ -357,6 +357,9 @@ class DocumentoController extends Controller
         $grupos = MaestraMultiple::select('id', 'nombre')
             ->where([['modulo', 'Grupos'], ['deleted_at', null]])
             ->get();
+        $tipo_consol = MaestraMultiple::select('id', 'nombre')
+            ->where([['modulo', 'Tipo_Consolidado'], ['deleted_at', null]])
+            ->get();
 
         $documento = Documento::leftJoin('shipper', 'documento.shipper_id', '=', 'shipper.id')
             ->leftJoin('consignee', 'documento.consignee_id', '=', 'consignee.id')
@@ -454,26 +457,7 @@ class DocumentoController extends Controller
             ])
             ->first();
 
-        // DB::connection()->enableQueryLog();
-        // $insert =  DB::table('consolidado_detalle AS a')
-        // ->join('documento_detalle AS b', 'a.documento_detalle_id', 'b.id')
-        // ->join('shipper AS c', 'b.shipper_id', 'c.id')
-        // ->leftJoin('shipper AS c2', 'a.shipper', 'c2.id')
-        // ->join('consignee AS d', 'b.consignee_id', 'd.id')
-        // ->leftJoin('consignee AS d2', 'a.consignee', 'd2.id')
-        // ->select(
-        //     'a.id',
-        //     DB::raw('(IF(a.shipper IS NULL,CONCAT_WS("\n", c.nombre_full, c.direccion, c.telefono),CONCAT_WS("\n", c2.nombre_full, c2.direccion, c2.telefono))) AS shipper_d'),
-        //     DB::raw('(IF(a.consignee IS NULL,CONCAT_WS("\n", d.nombre_full, d.direccion, d.telefono),CONCAT_WS("\n", d2.nombre_full, d2.direccion, d2.telefono))) AS consignee_d')
-        // )
-        // ->where([
-        //     ['a.consolidado_id', 155]
-        // ])
-        // ->get();
-        //     return DB::getQueryLog();
-        // foreach ($insert as $key => $value) {
-        //     DB::table('consolidado_detalle')->where([['id', $value->id]])->update(['shipper_data' => $value->shipper_d, 'consignee_data' => $value->consignee_d]);
-        // }
+        
 
         // $funcionalidades_doc = MaestraMultiple::select('id', 'nombre')
         //     ->where([['modulo', 7], ['deleted_at', null]])
@@ -515,6 +499,7 @@ class DocumentoController extends Controller
             'tipoPagos',
             'formaPagos',
             'grupos',
+            'tipo_consol',
             'func'
         ));
     }
@@ -541,7 +526,7 @@ class DocumentoController extends Controller
                 $data->transporte_id      = $request->transporte_id;
                 $data->observaciones      = $request->observacion;
                 $data->updated_at         = $request->date;
-                $data->tipo_consolidado   = $request->tipo_consolidado;
+                $data->tipo_consolidado_id  = $request->tipo_consolidado_id;
                 $data->date_doc   = $request->date_doc;
                 if ($data->save()) {
                     $this->AddToLog('Documento Consolidado actualizado (' . $id . ')');
@@ -582,37 +567,37 @@ class DocumentoController extends Controller
                 $data->agencia_id = $request->agencia_id;
                 $shipper_old = $data->shipper_id;
                 $consignee_old = $data->consignee_id;
-                if ($request->opEditarShip) {
-                    //CREACION O ACTUALIZACION DEL SHIPPER O CONSIGNEE
-                    // $idsShipCons      = $this->createOrUpdateShipperConsignee($request->all());
-                    $data->shipper_id = $idsShipCons['shipper_id'];
-                } else {
-                    if ($request->shipper_id == '') {
-                        // $idsShipCons        = $this->createOrUpdateShipperConsignee($request->all());
-                        $data->shipper_id   = $idsShipCons['shipper_id'];
-                        $data->consignee_id = $idsShipCons['consig_id'];
-                    } else {
-                        $data->shipper_id = $request->shipper_id;
-                    }
-                }
-                if ($request->opEditarCons) {
-                    //CREACION O ACTUALIZACION DEL SHIPPER O CONSIGNEE
-                    // $idsShipCons        = $this->createOrUpdateShipperConsignee($request->all());
-                    $data->consignee_id = $idsShipCons['consig_id'];
-                } else {
-                    if ($request->consignee_id == '' and  $data->consignee_id == '' and $data->shipper_id != '') {
-                        // $idsShipCons        = $this->createOrUpdateShipperConsignee($request->all());
-                        $data->consignee_id = $idsShipCons['consig_id'];
-                    } else {
-                        if ($request->consignee_id != '') {
-                            $data->consignee_id = $request->consignee_id;
-                        } else {
-                            // if ($data->consignee_id != '') {
-                            $data->consignee_id = $data->consignee_id;
-                            // }
-                        }
-                    }
-                }
+                // if ($request->opEditarShip) {
+                //     //CREACION O ACTUALIZACION DEL SHIPPER O CONSIGNEE
+                //     // $idsShipCons      = $this->createOrUpdateShipperConsignee($request->all());
+                //     $data->shipper_id = $idsShipCons['shipper_id'];
+                // } else {
+                //     if ($request->shipper_id == '') {
+                //         // $idsShipCons        = $this->createOrUpdateShipperConsignee($request->all());
+                //         $data->shipper_id   = $idsShipCons['shipper_id'];
+                //         $data->consignee_id = $idsShipCons['consig_id'];
+                //     } else {
+                //         $data->shipper_id = $request->shipper_id;
+                //     }
+                // }
+                // if ($request->opEditarCons) {
+                //     //CREACION O ACTUALIZACION DEL SHIPPER O CONSIGNEE
+                //     // $idsShipCons        = $this->createOrUpdateShipperConsignee($request->all());
+                //     $data->consignee_id = $idsShipCons['consig_id'];
+                // } else {
+                //     if ($request->consignee_id == '' and  $data->consignee_id == '' and $data->shipper_id != '') {
+                //         // $idsShipCons        = $this->createOrUpdateShipperConsignee($request->all());
+                //         $data->consignee_id = $idsShipCons['consig_id'];
+                //     } else {
+                //         if ($request->consignee_id != '') {
+                //             $data->consignee_id = $request->consignee_id;
+                //         } else {
+                //             // if ($data->consignee_id != '') {
+                //             $data->consignee_id = $data->consignee_id;
+                //             // }
+                //         }
+                //     }
+                // }
                 /* OBTENER EL PREFIJO DE LA CIUDAD DEL CONSIGNEE PARA HACER EL NUMERO DE GUIA */
                 $prefijoGuia = DB::table('consignee as a')
                     ->join('localizacion as b', 'a.localizacion_id', 'b.id')
@@ -1678,7 +1663,14 @@ class DocumentoController extends Controller
                     } else {
                         if ($document === 'consolidado_guias') {
                             $detalleConsolidado = DB::table('consolidado_detalle as a')
+                                ->leftJoin('documento as consol', 'a.consolidado_id', '=', 'consol.id')
+                                ->leftJoin('master as mm', 'consol.master_id', '=', 'mm.id')
+                                ->leftJoin('aerolineas_aeropuertos as aepd', 'mm.aeropuertos_id_destino', '=', 'aepd.id')
+                                ->leftJoin('aerolineas_aeropuertos as aep', 'mm.aeropuertos_id', '=', 'aep.id')
                                 ->leftJoin('documento_detalle as b', 'a.documento_detalle_id', '=', 'b.id')
+                                ->leftJoin('documento as doc', 'b.documento_id', '=', 'doc.id')
+                                ->leftJoin('guia_wrh_pivot', 'guia_wrh_pivot.documento_id', '=', 'doc.id')
+                                ->leftJoin('maestra_multiple as tipo_pago', 'guia_wrh_pivot.tipo_pago_id', '=', 'tipo_pago.id')
                                 ->leftJoin('posicion_arancelaria as pa', 'b.arancel_id2', 'pa.id')
                                 ->leftJoin('shipper as c', 'b.shipper_id', '=', 'c.id')
                                 ->leftJoin('consignee as d', 'b.consignee_id', '=', 'd.id')
@@ -1813,7 +1805,16 @@ class DocumentoController extends Controller
                                     'cc.depto as cons_depto2',
                                     'cc.direccion as cons_dir2',
                                     'cc.telefono as cons_tel2',
-                                    'cc.pais as cons_pais2'
+                                    'cc.pais as cons_pais2',
+                                    'doc.valor_libra AS tarifa',
+                                    'doc.observaciones',
+                                    'tipo_pago.descripcion AS tipo_pago',
+                                    'mm.num_master',
+                                    'mm.to1',
+                                    'mm.by_first_carrier',
+                                    'mm.fecha_vuelo1',
+                                    'aepd.nombre AS aeropuerto_destino',
+                                    'aep.nombre AS aeropuerto'
                                 )
                                 ->where([['a.deleted_at', null], ['a.consolidado_id', $id], ['a.flag', 0]])
                                 ->orderBy('b.num_warehouse', 'ASC')
@@ -1826,8 +1827,13 @@ class DocumentoController extends Controller
                                 if ($documento->transporte_id == 1) {
                                     if (env('APP_TYPE') === 'courier') {
                                         if (env('APP_CLIENT') === 'colombiana' || env('APP_CLIENT') === 'diamond') {
-                                            return view('pdf/consolidadoGuiasPdf2', compact('documento', 'detalle', 'detalleConsolidado'));
-                                            // $pdf = PDF::loadView('pdf.consolidadoGuiasPdf2', compact('documento', 'detalle', 'detalleConsolidado'));
+                                            if ($documento->tipo_consolidado_id !== null and $documento->tipo_consolidado_id == 23) {
+                                                
+                                                return view('pdf/manifiesto/consolidadoGuiasCarga', compact('documento', 'detalle', 'detalleConsolidado'));
+                                            } else {
+                                                return view('pdf/consolidadoGuiasPdf2', compact('documento', 'detalle', 'detalleConsolidado'));
+                                                // $pdf = PDF::loadView('pdf.consolidadoGuiasPdf2', compact('documento', 'detalle', 'detalleConsolidado'));
+                                            }
                                         } else {
                                             $pdf = PDF::loadView('pdf.consolidadoGuiasPdf', compact('documento', 'detalle', 'detalleConsolidado'));
                                         }
@@ -1992,7 +1998,7 @@ class DocumentoController extends Controller
                                     $this->AddToLog('Impresion Consolidado (' . $id . ')');
                                     if (env('APP_TYPE') === 'courier') {
                                         if (env('APP_CLIENT') === 'colombiana' || env('APP_CLIENT') === 'diamond') {
-                                            $pdf          = PDF::loadView('pdf.consolidadoPdfColombiana', compact('documento', 'detalle', 'detalleConsolidado'))->setPaper('a4', 'portrait');
+                                            $pdf          = PDF::loadView('pdf.consolidadoPdfColombiana', compact('documento', 'detalle', 'detalleConsolidado'))->setPaper('a4', 'landscape');
                                         } else {
                                             if ($documento->pais_id_document === $pais_id_puntos) {
                                                 //FORMATO PARA CUBA

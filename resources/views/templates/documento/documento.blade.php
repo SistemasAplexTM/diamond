@@ -262,7 +262,7 @@
       :pais_id_config="pais_id_config" :app_type="'{{ env('APP_TYPE') }}'" :app_client="'{{ env('APP_CLIENT') }}'"
       :documento="{{ json_encode($documento) }}" :contactos="contactos" :restore="restoreShipperConsignee"
       :agrupar="datosAgrupar" :removeragrupado="removerAgrupado" :permission='permissions' :close_document="close"
-      v-if="mostrar.includes(24)"></formconsolidado-component>
+      :type_consol="{{ $tipo_consol }}" v-if="mostrar.includes(24)"></formconsolidado-component>
     @else
     <consol_bodega-component :app_type="'{{ env('APP_TYPE') }}'" :documento="{{ json_encode($documento) }}"
       :contactos="contactos" :restore="restoreShipperConsignee" :agrupar="datosAgrupar"

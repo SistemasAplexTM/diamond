@@ -217,12 +217,28 @@ a.badge:hover {
                     <div class="col-sm-12">
                       <div class="form-group">
                         <label for="observacion">Tipo consolidado</label>
-                        <input
+                        <!-- <input
                           type="text"
                           v-model="tipo_consolidado"
                           name="tipo_consolidado"
                           class="form-control"
-                        />
+                        />-->
+                        <el-select
+                          autocomplete="off"
+                          name="tipo_consolidado"
+                          v-model="tipo_consolidado"
+                          filterable
+                          placeholder="Tipo Consolidado"
+                          v-validate.disable="'required'"
+                          size="medium"
+                        >
+                          <el-option
+                            v-for="item in type_consol"
+                            :key="item.id"
+                            :label="item.nombre"
+                            :value="item.id"
+                          ></el-option>
+                        </el-select>
                       </div>
                     </div>
                   </div>
@@ -378,40 +394,6 @@ a.badge:hover {
                 <div class="row">
                   <div class="col-sm-12">
                     <detail :update_detail="update_detail_consolidated"></detail>
-                    <!-- <table
-                      id="tbl-consolidado"
-                      class="table table-striped table-hover table-bordered dataTable"
-                      style="width: 100%;margin-top: 30px;"
-                    >
-                      <thead>
-                        <tr>
-                          <th style="width: 20px;">
-                            <i class="fal fa-cubes"></i>
-                          </th>
-                          <th>#Guia/WRH</th>
-                          <th>Remitente</th>
-                          <th>Destinatario</th>
-                          <th>P.A</th>
-                          <th>Descripción</th>
-                          <th style="width: 40px;">Dec.</th>
-                          <th style="width: 40px;">Lb</th>
-                          <th style="width: 40px;">Lb R</th>
-                          <th style="width: 20px;"></th>
-                        </tr>
-                      </thead>
-                      <tbody></tbody>
-                      <tfoot>
-                        <tr>
-                          <th
-                            style="text-align:right;font-size: 25px;"
-                            colspan="6"
-                          >Totales de esta página:</th>
-                          <th id="Tdeclarado"></th>
-                          <th id="Tpeso"></th>
-                          <th id="TpesoR" colspan="2"></th>
-                        </tr>
-                      </tfoot>
-                    </table>-->
                   </div>
                 </div>
                 <div class="row">
@@ -578,7 +560,11 @@ a.badge:hover {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr v-if="contactos_fields != null" v-for="contacto in contactos_fields">
+                  <tr
+                    v-if="contactos_fields != null"
+                    v-for="contacto in contactos_fields"
+                    v-bind:key="contacto.id"
+                  >
                     <td v-if="contacto.nombre != null" style="width: 150px;">
                       <button
                         @click="selectedShipperConsignee(contacto)"
@@ -754,6 +740,10 @@ export default {
     date_doc: {
       type: String,
       required: false
+    },
+    type_consol: {
+      type: Array,
+      required: true
     },
     documento: {
       type: Object,
@@ -944,6 +934,7 @@ export default {
     }, 100);
   },
   created() {
+    this.tipo_consolidado = this.documento.tipo_consolidado_id;
     /* CUSTOM MESSAGES VE-VALIDATOR*/
     const dict = {
       custom: {
@@ -988,7 +979,7 @@ export default {
       localizacion_id: null,
       city_selected_s: null,
       ciudades: [],
-      tipo_consolidado: "COURIER",
+      tipo_consolidado: 22,
       num_bolsa_selected: 0,
       bags: [],
       cant_bags: 0,
@@ -1198,7 +1189,7 @@ export default {
           central_destino_id: me.central_destino_id,
           transporte_id: me.transporte_id,
           observacion: me.observacion,
-          tipo_consolidado: me.tipo_consolidado,
+          tipo_consolidado_id: me.tipo_consolidado,
           date_doc: me.date_doc
         };
         axios

@@ -42,11 +42,30 @@ class MasterController extends Controller
                 }
             }
             AerolineaInventario::where('id', $request->aerolinea_inventario_id)->update(['usado' => 1]);
-            $detalle            = (new MasterDetalle)->fill($request->all());
-            $detalle->peso_kl = $detalle->peso;
-            $detalle->peso = $detalle->peso * 2.20462;
-            $detalle->master_id = $master->id;
-            $detalle->save();
+
+            foreach ($request->detail as $key => $value) {
+                DB::table('master_detalle')->insert(
+                    [
+                      'master_id'      => $master->id,
+                      'piezas'         => $value['piezas'],
+                      'peso'           => $value['peso_kl'] * 2.20462,
+                      'peso_kl'        => $value['peso_kl'],
+                      'unidad_medida'  => $value['unidad_medida'],
+                      'rate_class'     => $value['rate_class'],
+                      'commodity_item' => $value['commodity_item'],
+                      'peso_cobrado'   => $value['peso_cobrado'],
+                      'tarifa'         => $value['tarifa'],
+                      'total'          => $value['total'],
+                      'minima'         => $value['minima'],
+                      'descripcion'    => $value['descripcion']
+                    ]
+                );
+            }
+            // $detalle            = (new MasterDetalle)->fill($request->all());
+            // $detalle->peso_kl = $detalle->peso;
+            // $detalle->peso = $detalle->peso * 2.20462;
+            // $detalle->master_id = $master->id;
+            // $detalle->save();
 
             DB::table('master_cargos_adicionales')->where('master_id', $master->id)->delete();
             if ($request->other_c[0]['oc_value'] != '') {
@@ -126,20 +145,25 @@ class MasterController extends Controller
             $masterObj = Master::findOrFail($master);
             $masterObj->updated_at = $request->updated_at;
             $masterObj->update($request->all());
-            $detalle = MasterDetalle::where('master_id', $master);
-            $detalle->update([
-                'piezas'         => $request->piezas,
-                'peso'           => $request->peso * 2.20462,
-                'peso_kl'        => $request->peso,
-                'unidad_medida'  => $request->unidad_medida,
-                'rate_class'     => $request->rate_class,
-                'commodity_item' => $request->commodity_item,
-                'peso_cobrado'   => $request->peso_cobrado,
-                'tarifa'         => $request->tarifa,
-                'total'          => $request->total,
-                'minima'         => $request->minima,
-                'descripcion'    => $request->descripcion,
-            ]);
+            DB::table('master_detalle')->where('master_id', $master)->delete();
+            foreach ($request->detail as $key => $value) {
+                DB::table('master_detalle')->insert(
+                    [
+                      'master_id'      => $master,
+                      'piezas'         => $value['piezas'],
+                      'peso'           => $value['peso_kl'] * 2.20462,
+                      'peso_kl'        => $value['peso_kl'],
+                      'unidad_medida'  => $value['unidad_medida'],
+                      'rate_class'     => $value['rate_class'],
+                      'commodity_item' => $value['commodity_item'],
+                      'peso_cobrado'   => $value['peso_cobrado'],
+                      'tarifa'         => $value['tarifa'],
+                      'total'          => $value['total'],
+                      'minima'         => $value['minima'],
+                      'descripcion'    => $value['descripcion']
+                    ]
+                );
+            }
             DB::table('master_cargos_adicionales')->where('master_id', $master)->delete();
             if ($request->other_c[0]['oc_value'] != '') {
                 foreach ($request->other_c as $value) {
@@ -344,7 +368,8 @@ class MasterController extends Controller
                 'a.unidad_medida'
             )
             ->where('a.master_id', $id_master)
-            ->first();
+            ->where('a.deleted_at', null)
+            ->get();
         return $data;
     }
 
@@ -366,9 +391,9 @@ class MasterController extends Controller
                 'a.num_master',
                 'f.consecutivo',
                 'f.id AS consolidado_id',
-                'b.peso',
-                'b.peso_kl',
-                'b.tarifa',
+                DB::raw("ROUND(SUM(b.peso),2) AS peso"),
+                DB::raw("SUM(b.peso_kl) AS peso_kl"),
+                // 'b.tarifa',
                 'g.nombre AS consignee',
                 'g.contacto AS contacto',
                 'a.created_at',
@@ -386,6 +411,19 @@ class MasterController extends Controller
                 WHERE
                 z.master_id = a.id AND
                 z.deleted_at IS NULL) AS fecha_liquidacion")
+            )
+            ->groupBy(
+                'a.id',
+                'a.master_id',
+                'a.carrier_id',
+                'c.nombre',
+                'e.nombre',
+                'a.num_master',
+                'f.consecutivo',
+                'f.id',
+                'g.nombre',
+                'g.contacto',
+                'a.created_at'
             )
             ->where([
                 ['a.deleted_at', null],
