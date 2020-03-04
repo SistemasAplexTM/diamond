@@ -255,6 +255,7 @@ span.error {
                       <el-select
                         v-model="aerolinea"
                         clearable
+                        filterable
                         placeholder="Seleccione"
                         :disabled="disableAerolinea"
                         @change="getAerolineasInventario"
@@ -304,6 +305,7 @@ span.error {
                         v-validate="'required'"
                         v-model="aerolinea_inventario_id"
                         clearable
+                        filterable
                         placeholder="Seleccione"
                         :disabled="disableAerolinea"
                         @change="setNumMaster"
@@ -371,6 +373,7 @@ span.error {
                         v-validate="'required'"
                         v-model="aeropuerto_salida"
                         clearable
+                        filterable
                         placeholder="Seleccione"
                         :class="{'has-error': errors.has('aeropuerto_salida') }"
                         value-key="id"
@@ -413,6 +416,7 @@ span.error {
                         v-validate="'required'"
                         v-model="aeropuerto_destino"
                         clearable
+                        filterable
                         placeholder="Seleccione"
                         :class="{'has-error': errors.has('aeropuerto_destino') }"
                         value-key="id"
@@ -1382,11 +1386,11 @@ export default {
         })
         .then(response => {
           toastr.success("Registro exitoso.");
-          // window.open(
-          //   "../../imprimir/" + response.data.id_master + "/" + true,
-          //   "_blank"
-          // );
-          // location.href = "/master";
+          window.open(
+            "../../imprimir/" + response.data.id_master + "/" + true,
+            "_blank"
+          );
+          location.href = "/master";
         });
     },
     update: function() {

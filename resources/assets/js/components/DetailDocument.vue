@@ -107,7 +107,7 @@ export default {
         //   "Valor US$",
         //   "Acción"
         // ],
-        rowHeaders: true,
+        // rowHeaders: true,
         stretchH: "all",
         className: "htMiddle htCenter",
         columns: [

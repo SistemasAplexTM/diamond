@@ -99,16 +99,6 @@
                                     <th>@lang('general.actions')</th>
                                 </tr>
                             </thead>
-                            <tbody>
-
-                            </tbody>
-                            <tfoot>
-                                <tr>
-                                    <th>@lang('general.description')</th>
-                                    <th>@lang('general.prefix')</th>
-                                    <th>@lang('general.actions')</th>
-                                </tr>
-                            </tfoot>
                         </table>
                     </div>
                 </div>

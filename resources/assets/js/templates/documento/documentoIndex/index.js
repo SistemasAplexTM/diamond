@@ -145,7 +145,11 @@ function datatableDocument(t, tipo_doc_id, filtro) {
       data: 'peso',
       name: 'b.peso',
       "render": function (data, type, full, meta) {
-        return '<div style="float: left;">' + ((full.peso != null) ? full.peso : 0) + ' lb </div> <div style="float: right;">' + ((full.piezas != null) ? full.piezas : 0) + '</div>';
+        let Piz = '';
+        if (tipo_doc_id != 3 && t != '_agencia') {
+          Piz = '<div style="float: right;">' + ((full.piezas != null) ? full.piezas : 0) + '</div>';
+        }
+        return '<div style="float: left;">' + ((full.peso != null) ? full.peso : 0) + ' lb </div> ' + Piz;
       },
       searchable: false,
       sortable: false,

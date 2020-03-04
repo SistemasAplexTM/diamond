@@ -334,17 +334,19 @@ class ConsigneeController extends Controller
         ->first();
       $pref = '';
       $prefijo_pobox = Agencia::select('prefijo_pobox')->where('id', Auth::user()->agencia_id)->first();
+      $caracter = '';
       if ($prefijo_pobox->prefijo_pobox == null) {
         $pref = $data->agencia_id;
+        $caracteres      = strlen($pref);
+        $sumarCaracteres = $caracteres - $caracteres;
+        $caracter        = '';
+        for ($i = 0; $i <= $sumarCaracteres; $i++) {
+          $caracter = $caracter . '0';
+        }
       } else {
         $pref = $prefijo_pobox->prefijo_pobox;
       }
-      $caracteres      = strlen($pref);
-      $sumarCaracteres = $caracteres - $caracteres;
-      $caracter        = '';
-      for ($i = 0; $i <= $sumarCaracteres; $i++) {
-        $caracter = $caracter . '0';
-      }
+      
       $po_box = $caracter . $pref . '-' . $id;
       // $answer = Consignee::where('id', $id)->update(['po_box' => $prefijo->iso2 . '' . $po_box]);
       $answer = Consignee::where('id', $id)->update(['po_box' => $po_box]);

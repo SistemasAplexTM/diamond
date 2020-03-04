@@ -199,6 +199,7 @@ class Controller extends BaseController
 
     public function replacements($id, $objAgencia, $objWarehouse = null, $objShipper = null, $objConsignee = null, $datosEnvio = null, $tracking = null)
     {
+        $arr = explode("//", url('/'));
         $replacements = array(
             //URL del sistema
             '({url_principal})'   => url('/'),
@@ -217,7 +218,7 @@ class Controller extends BaseController
             '({depto_consignee})' => ($objConsignee) ? $objConsignee->depto : '',
             '({zip_consignee})'   => ($objConsignee) ? $objConsignee->zip : '',
             '({pais_consignee})'  => ($objConsignee) ? $objConsignee->pais : '',
-            '({pass_consignee})'  => ($objConsignee) ? $objConsignee->celular : '',
+            '({pass_consignee})'  => ($objConsignee) ? $objConsignee->telefono : '',
             '({email_consignee})' => ($objConsignee) ? $objConsignee->correo : '',
             '({tel_consignee})'   => ($objConsignee) ? $objConsignee->telefono : '----------',
             '({cel_consignee})'   => ($objConsignee) ? $objConsignee->celular : '',
@@ -243,10 +244,11 @@ class Controller extends BaseController
             '({ciudad_agencia})'  => ($objAgencia) ? $objAgencia->ciudad : '',
             '({estado_agencia})'  => ($objAgencia) ? $objAgencia->depto : '',
             '({pais_agencia})'    => ($objAgencia) ? $objAgencia->pais : '',
-            '({url_casillero})'   => ($objAgencia) ? $objAgencia->url_casillero : '',
+            '({url_casillero})'   => $arr[0] . '//casillero' . $arr[1].'/login/'.base64_encode($objAgencia->id),
+            // '({url_casillero})'   => ($objAgencia) ? $objAgencia->url_casillero : '',
             '({url_terms})'       => ($objAgencia) ? $objAgencia->url_terms : '',
-            // '({url_registro})'    => ($objAgencia) ? $objAgencia->url_registro : '',
-            // '({url_rastreo})'     => ($objAgencia) ? $objAgencia->url_rastreo : '',
+            '({url_registro})'    => url('/').'/registro/'.base64_encode($objAgencia->id),
+            '({url_rastreo})'     => url('/').'/rastreo/',
             '({url_prealerta})'   => ($objAgencia) ? $objAgencia->url_prealerta : '',
             '({url_registro_casillero})'     => ($objAgencia) ? $objAgencia->url_registro_casillero : '',
             '({url})'             => ($objAgencia) ? $objAgencia->url : '',

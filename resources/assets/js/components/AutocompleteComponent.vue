@@ -18,8 +18,8 @@
   </v-select>-->
   <div class>
     <el-autocomplete
-      v-model="datos.name"
       class="inline-input"
+      v-model="datos.name"
       clearable
       placeholder="Seleccione"
       :fetch-suggestions="querySearch"

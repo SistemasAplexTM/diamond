@@ -189,7 +189,7 @@ class PaisController extends Controller
      */
     public function getAll()
     {
-        // return \DataTables::of(Pais::query()->where('deleted_at', '=', NULL))->make(true);
-        return Pais::all();
+        return \DataTables::of(Pais::query()->where('deleted_at', '=', NULL))->make(true);
+        // return Pais::all();
     }
 }
