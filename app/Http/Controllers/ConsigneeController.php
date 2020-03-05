@@ -113,34 +113,52 @@ class ConsigneeController extends Controller
 
   public function destroy($id)
   {
-    $data = Consignee::findOrFail($id);
-    $data->delete();
-    $this->AddToLog('Consignee Eliminado de base de datos id (' . $id . ')');
+    $exist = $this->searchDocumentsConsignee($id);
+    if ($exist['exist']) {
+      $answer = array(
+        "error" => 'Error al intentar Eliminar el registro.',
+        "exist" => $exist,
+        "code"  => 600,
+      );
+      return $answer;
+    }else{
+      $data = Consignee::findOrFail($id);
+      $data->delete();
+      $this->AddToLog('Consignee Eliminado de base de datos id (' . $id . ')');
+    }
   }
 
   public function delete($id, $logical)
   {
-
-    if (isset($logical) and $logical == 'true') {
-      $data             = Consignee::findOrFail($id);
-      $now              = new \DateTime();
-      $data->deleted_at = $now->format('Y-m-d H:i:s');
-      if ($data->save()) {
-        $this->AddToLog('Consignee Eliminado id (' . $id . ')');
-        $answer = array(
-          "datos" => 'Eliminación exitosa.',
-          "code"  => 200,
-        );
-      } else {
-        $answer = array(
-          "error" => 'Error al intentar Eliminar el registro.',
-          "code"  => 600,
-        );
-      }
-
+    $exist = $this->searchDocumentsConsignee($id);
+    if ($exist['exist']) {
+      $answer = array(
+        "error" => 'Error al intentar Eliminar el registro.',
+        "exist" => $exist,
+        "code"  => 600,
+      );
       return $answer;
-    } else {
-      $this->destroy($id);
+    }else{
+      if (isset($logical) and $logical == 'true') {
+        $data             = Consignee::findOrFail($id);
+        $now              = new \DateTime();
+        $data->deleted_at = $now->format('Y-m-d H:i:s');
+        if ($data->save()) {
+          $this->AddToLog('Consignee Eliminado id (' . $id . ')');
+          $answer = array(
+            "datos" => 'Eliminación exitosa.',
+            "code"  => 200,
+          );
+        } else {
+          $answer = array(
+            "error" => 'Error al intentar Eliminar el registro.',
+            "code"  => 600,
+          );
+        }
+        return $answer;
+      } else {
+        $this->destroy($id);
+      }
     }
   }
 
@@ -535,12 +553,40 @@ class ConsigneeController extends Controller
   }
 
   public function removeContact($id)
-    {
-        $data             = Consignee::findOrFail($id);
-        $data->parent_id = null;
-        $data->save();
-        return $answer = array(
-            'code'  => 200
-        );
+  {
+      $data             = Consignee::findOrFail($id);
+      $data->parent_id = null;
+      $data->save();
+      return $answer = array(
+          'code'  => 200
+      );
+  }
+
+  // VALIDA QUE UN CONSIGNEE EXISTA EN ALGUN DOCUMENTO
+  public function searchDocumentsConsignee($id_consignee)
+  {
+    $exist = false;
+    // VALIDAR CON DOCUMENTO
+    $sql = DB::table('documento')
+      ->join('agencia', 'documento.agencia_id', 'agencia.id')
+      ->select('documento.id', 'documento.consecutivo', 'agencia.descripcion AS agencia')
+      ->where([['documento.consignee_id', $id_consignee]])->get();
+    foreach ($sql as $key => $value) {
+      $exist = true;
     }
+    // VALIDAR CON DETALLE DOCUMENTO
+    $sql2 = DB::table('documento_detalle')
+      ->join('documento', 'documento_detalle.documento_id', 'documento.id')
+      ->join('agencia', 'documento.agencia_id', 'agencia.id')
+      ->select('documento_detalle.id', 'documento.consecutivo', 'agencia.descripcion AS agencia')
+      ->where([['documento_detalle.consignee_id', $id_consignee]])->get();
+    foreach ($sql2 as $key => $value) {
+      $exist = true;
+    }
+    return array(
+      'documento' => $sql,
+      'detalle' => $sql2,
+      'exist' => $exist
+    );
+  }
 }

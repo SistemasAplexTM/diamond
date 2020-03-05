@@ -138,7 +138,8 @@
         <label for="correo" class="control-label gcore-label-top">Email:</label>
       </el-col>
       <el-col :span="16">
-        <el-input type="email"  placeholder="Email" v-model="form.correo" size="medium" clearable autocomplete="new-email"></el-input>
+        <el-input type="email"  placeholder="Email" v-model="form.correo" size="medium" clearable autocomplete="new-email" :class="{ 'error_field': errors_data.correo }"></el-input>
+        <small class="help-block" v-show="errors_data.correo">Campo obligatorio</small>
       </el-col>
     </el-row>
     <el-row :gutter="24" v-if="hidde && showItem">
@@ -240,7 +241,7 @@
         <label for="emailsend" class="control-label gcore-label-top">&nbsp;</label>
       </el-col>
       <el-col :span="16">
-        <el-checkbox v-model="form.emailsend"><i class="fal fa-envelope"></i> Enviar email con datos de su casillero.</el-checkbox>
+        <el-checkbox v-model="form.emailsend" @change="checkEmailData"><i class="fal fa-envelope"></i> Enviar email con datos de su casillero.</el-checkbox>
       </el-col>
     </el-row>
     <el-row :gutter="24" v-if="payload.table !== 'clientes' && edit === false && showItem">
@@ -280,7 +281,8 @@ export default {
         primer_nombre: false,
         primer_apellido: false,
         direccion: false,
-        localizacion_id: false
+        localizacion_id: false,
+        correo: false
       },
       form: {
         corporativo: false,
@@ -366,9 +368,25 @@ export default {
     this.table = this.payload.table;
   },
   methods: {
+    checkEmailData(data) {
+      if (data) {
+        if (this.form.correo == null || this.form.correo == "") {
+          this.errors_data.correo = true;
+          return false;
+        } else {
+          this.errors_data.correo = false;
+        }
+      } else {
+        this.errors_data.correo = false;
+      }
+      return true;
+    },
     beforeSend(edit) {
       this.loading = true;
-      if (this.validateFields(false)) {
+      if (
+        this.validateFields(false) &&
+        this.checkEmailData(this.form.emailsend)
+      ) {
         // VALIDA SI ES EL FORMULARIO PARA CLIENTE Y ASIGNA LAS VARIABLES
         // CORRESPONDIENTES
         this.setFormToClient();
@@ -443,6 +461,7 @@ export default {
     },
     validateFields(field) {
       let save = true;
+
       if (this.form.primer_nombre === null || this.form.primer_nombre === "") {
         if (!field || field === "primer_nombre") {
           this.errors_data.primer_nombre = true;

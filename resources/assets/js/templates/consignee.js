@@ -28,7 +28,7 @@ $(document).ready(function () {
           var btn_edit = "<a onclick=\"edit(" + full.id + ")\" class='edit_btn' data-toggle='tooltip' data-placement='top' title='Editar'><i class='fal fa-pencil fa-lg'></i></a> ";
         }
         if (permission_delete) {
-          var btn_delete = "<li><a onclick=\"eliminar(" + full.id + "," + true + ")\" style='color:red'><i class='fal fa-trash-alt'></i> Eliminar</a></li>";
+          var btn_delete = "<li><a onclick=\"eliminar(" + full.id + "," + false + ")\" style='color:red'><i class='fal fa-trash-alt'></i> Eliminar</a></li>";
         }
         var btn = '<div class="btn-group">' +
           '<button type="button" class="btn btn-success dropdown-toggle btn-xs btn-circle-sm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' +
@@ -122,7 +122,7 @@ function formatRepoSelection(repo) {
 /* objeto VUE */
 var objVue = new Vue({
   el: '#consignee',
-  mounted: function () {},
+  mounted: function () { },
   data: {
     agency_data: data_agencia,
     parametro: null,
@@ -255,17 +255,40 @@ var objVue = new Vue({
       this.listErrors = {};
       if (data.logical === true) {
         axios.get('consignee/delete/' + data.id + '/' + data.logical).then(response => {
-          this.updateTable();
-          toastr.success("<div><p>Registro eliminado exitosamente.</p><button type='button' onclick='deshacerEliminar(" + data.id + ")' id='okBtn' class='btn btn-xs btn-danger pull-right'><i class='fal fa-reply'></i> Restaurar</button></div>");
-          toastr.options.closeButton = true;
+          if (this.verifyDelete(response.data)) {
+            this.updateTable();
+            toastr.success("<div><p>Registro eliminado exitosamente.</p><button type='button' onclick='deshacerEliminar(" + data.id + ")' id='okBtn' class='btn btn-xs btn-danger pull-right'><i class='fal fa-reply'></i> Restaurar</button></div>");
+            toastr.options.closeButton = true;
+          } else {
+            let resp = response.data;
+            // console.log('documento: ', resp.exist.documento.length);
+            // console.log('detalle: ', resp.exist.detalle.length);
+            toastr.warning('No es posibleble eliminar, el registro esta en uno o varios documentos.');
+            toastr.options.closeButton = true;
+          }
         });
       } else {
         axios.delete('consignee/' + data.id).then(response => {
-          this.updateTable();
-          toastr.success('Registro eliminado correctamente.');
-          toastr.options.closeButton = true;
+          if (this.verifyDelete(response.data)) {
+            this.updateTable();
+            toastr.success('Registro eliminado correctamente.');
+            toastr.options.closeButton = true;
+          } else {
+            let resp = response.data;
+            // console.log('documento: ', resp.exist.documento.length);
+            // console.log('detalle: ', resp.exist.detalle.length);
+            toastr.warning('No es posibleble eliminar, el registro esta en uno o varios documentos.');
+            toastr.options.closeButton = true;
+          }
         });
       }
+    },
+    verifyDelete(resp) {
+      let delete_ = true;
+      if (resp.exist.exist) {
+        delete_ = false;
+      }
+      return delete_;
     },
     update: function () {
       var me = this;
