@@ -223,7 +223,6 @@ export default {
         width: "100%",
         fixedColumnsLeft: 2,
         height: function() {
-          // numero_filas * 40 + 40;
           let hei = 5050;
           if ($(".ht_master .wtHider").height() <= 5050) {
             hei = parseInt($(".ht_master .wtHider").height()) + 20;
@@ -232,16 +231,17 @@ export default {
         },
         afterChange: changes => {
           if (changes) {
-            // console.log(changes);
-            var row = this.data[changes[0][0]];
-            // console.log(this.data[changes[0][0]]);
-            var data = {
-              id: row["id"],
-              option: changes[0][1],
-              id_detail: row["documento_detalle_id"],
-              data: changes[0][3]
-            };
-            this.updateDataDetailNew(data);
+            for (let i = 0; i < changes.length; i++) {
+              var row = this.data[changes[i][0]];
+              var data = {
+                id: row["id"],
+                option: changes[i][1],
+                id_detail: row["documento_detalle_id"],
+                data: changes[i][3]
+              };
+              this.updateDataDetailNew(data);
+            }
+            toastr.success("Actualizado con éxito");
           }
         }
       }
@@ -288,9 +288,7 @@ export default {
         .post("updateDetailConsolidado", data)
         .then(response => {
           if (response.data.code == 200) {
-            toastr.success("Actualizado con éxito");
             this.getData();
-            // console.log("success!", data);
           } else {
             console.log("error");
           }

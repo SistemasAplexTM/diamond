@@ -207,13 +207,16 @@ export default {
         },
         afterChange: changes => {
           if (changes) {
-            var row = this.data[changes[0][0]];
-            var data = {
-              id: row["id"],
-              option: changes[0][1],
-              data: changes[0][3]
-            };
-            this.updateDataDetailNew(data);
+            for (let i = 0; i < changes.length; i++) {
+              var row = this.data[changes[i][0]];
+              var data = {
+                id: row["id"],
+                option: changes[i][1],
+                data: changes[i][3]
+              };
+              this.updateDataDetailNew(data);
+            }
+            toastr.success("Actualizado con éxito");
           }
         }
       }
@@ -276,9 +279,7 @@ export default {
         .post("updateDetailDocument", data)
         .then(response => {
           if (response.data.code == 200) {
-            toastr.success("Actualizado con éxito");
             this.getData();
-            // console.log("success!", data);
           } else {
             console.log("error");
           }
