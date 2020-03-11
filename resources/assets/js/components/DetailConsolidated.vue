@@ -23,7 +23,8 @@ export default {
   props: {
     update_detail: {
       type: Boolean
-    }
+    },
+    type_consol: [String, Number]
   },
   watch: {
     update_detail: function(val) {
@@ -36,16 +37,16 @@ export default {
       let dataRow = instance.getDataAtRow(row);
       let btn_delete =
         '<button onclick="eliminarConsolidado(' +
-        dataRow[9] +
+        dataRow[10] +
         ', false)" class="btn btn-danger btn-circle" type="button" data-toggle="tooltip" data-original-title="Eliminar"><i class="fal fa-trash-alt"></i></button>';
       // BTN LABEL - PRINTS
       let url_print_label =
         "../../impresion-documento-label/" +
-        dataRow[11] +
+        dataRow[12] +
         "/guia/" +
-        dataRow[10] +
+        dataRow[11] +
         "/consolidado/" +
-        dataRow[9];
+        dataRow[10];
       let btn_print_label =
         "<a onclick=\"printDocuments('" +
         url_print_label +
@@ -53,7 +54,7 @@ export default {
         ' class="btn btn-circle btn-default btn-outline" type="button" data-toggle="tooltip" data-original-title="Label" target="blank_"><i class="fal fa-barcode"></i></a>';
       // BTN DOCUMENT - PRINTS
       let url_print_invoice =
-        "../../impresion-documento/" + dataRow[11] + "/invoice/" + dataRow[10];
+        "../../impresion-documento/" + dataRow[12] + "/invoice/" + dataRow[11];
       let btn_print_invoice =
         "<a onclick=\"printDocuments('" +
         url_print_invoice +
@@ -68,7 +69,7 @@ export default {
       td.innerHTML =
         value +
         ' <a data-toggle="tooltip" title="" class="edit" style="float: right; color: rgb(255, 193, 7); " onclick="showModalArancel(' +
-        dataRow[10] +
+        dataRow[11] +
         ', \'tbl-consolidado\')" data-original-title="Cambiar"><i class="fal fa-pencil"></i></a>';
       // if (cellProperties.row == 0) {
       //   cellProperties.instance.setDataAtCell(0, 4, "nuevo valor");
@@ -88,11 +89,11 @@ export default {
       td.innerHTML =
         value +
         '<div style="width:20%;"><a  data-toggle="tooltip" title="Cambiar" class="edit" style="color:#FFC107;" onclick="showModalShipperConsigneeConsolidado(' +
-        dataRow[9] +
+        dataRow[10] +
         ", '" +
-        dataRow[12] +
+        dataRow[13] +
         '\', \'shipper\')"><i class="fal fa-pencil"></i></a> <a onclick="restoreShipperConsignee(' +
-        dataRow[9] +
+        dataRow[10] +
         ', \'shipper\')" class="delete" title="Restaurar original" data-toggle="tooltip" style="float:right;color:#2196F3;margin-right: 5px;">' +
         '<i class="fal fa-sync-alt"></i></a></div>';
     }
@@ -109,11 +110,11 @@ export default {
       td.innerHTML =
         value +
         '<div style="width:20%;"><a  data-toggle="tooltip" title="Cambiar" class="edit" style="color:#FFC107;" onclick="showModalShipperConsigneeConsolidado(' +
-        dataRow[9] +
+        dataRow[10] +
         ", '" +
-        dataRow[13] +
+        dataRow[14] +
         '\', \'consignee\')"><i class="fal fa-pencil"></i></a> <a onclick="restoreShipperConsignee(' +
-        dataRow[9] +
+        dataRow[10] +
         ', \'consignee\')" class="delete" title="Restaurar original" data-toggle="tooltip" style="float:right;color:#2196F3;margin-right: 5px;">' +
         '<i class="fal fa-sync-alt"></i></a></div>';
     }
@@ -132,6 +133,7 @@ export default {
           "Destinatario",
           "P.A",
           "Descripción",
+          "Piezas",
           "Dec.",
           "Lb",
           "Lb R",
@@ -168,6 +170,14 @@ export default {
             readOnly: true
           },
           { data: "contenido2", width: "400", className: "htLeft" },
+          {
+            data: "piezas",
+            type: "numeric",
+            numericFormat: {
+              pattern: "0",
+              culture: "en-US" // this is the default culture, set up for USD
+            }
+          },
           {
             data: "declarado2",
             type: "numeric",
@@ -217,7 +227,7 @@ export default {
           }
         ],
         hiddenColumns: {
-          columns: [10, 11, 12, 13]
+          columns: [11, 12, 13, 14]
         },
         rowHeights: 100,
         width: "100%",

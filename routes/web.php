@@ -353,6 +353,7 @@ Route::group(['middleware' => 'auth'], function () {
   Route::get('documento/getDataShipperConsignee/{table}/{data}', 'DocumentoController@getDataShipperConsignee');
   Route::get('documento/getDataShipperConsigneeById/{table}/{id}', 'DocumentoController@getDataShipperConsigneeById');
   Route::get('documento/{id}/addShipperConsigneeToDocument/{table}/{id_data}', 'DocumentoController@addShipperConsigneeToDocument');
+  Route::get('documento/{id}/consolidateGuidesCharge/{id_detail}', 'DocumentoController@consolidateGuidesCharge');
 
   /*  REPORTES - IMPRESIONES EN PDF */
   Route::get('impresion-documento/{id}/{document}/{id_detalle?}', 'DocumentoController@pdf')->name('documento.pdf');

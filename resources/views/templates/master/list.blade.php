@@ -80,6 +80,50 @@
     </div>
   </div>
 
+  <!-- MODAL IMPRIMIR GUIAS CONSOLIDADO CARGA -->
+  <div class="modal fade bs-example" id="modalPrintGuides" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" style="width:600px;">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+              class="sr-only">Close</span></button>
+          <h4 class="modal-title" id="myModalLabel">
+            <i class="fal fa-print" style="font-size: 20px;"></i> Imprimir Guias de Consolidado
+            @{{ consolidado_consecutivo }}
+          </h4>
+        </div>
+        <div class="modal-body">
+          <form id="printGuides">
+            <div class="row">
+              <div class="col-sm-12">
+                <el-table :data="gidesConsolidate" height="250" style="width: 100%">
+                  <el-table-column prop="num_warehouse" label="Warehouse">
+                  </el-table-column>
+                  <el-table-column prop="piezas" label="Piezas" width="90">
+                  </el-table-column>
+                  <el-table-column prop="peso2" label="Peso" width="90">
+                  </el-table-column>
+                  <el-table-column label="" width="120">
+                    <template slot-scope="scope">
+                      <el-button size="mini" @click="printGuidesConsolidate(scope.$index, scope.row)"><i
+                          class="fal fa-print"></i> Imprimir
+                      </el-button>
+                    </template>
+                  </el-table-column>
+                </el-table>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fal fa-times"></i>
+            Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- MODAL ASOCIAR CONSOLIDADO -->
   <div class="modal fade bs-example" id="modalCreateMaster" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
     aria-hidden="true">

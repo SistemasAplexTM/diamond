@@ -391,6 +391,7 @@ class MasterController extends Controller
                 'a.num_master',
                 'f.consecutivo',
                 'f.id AS consolidado_id',
+                'f.tipo_consolidado_id',
                 DB::raw("ROUND(SUM(b.peso),2) AS peso"),
                 DB::raw("SUM(b.peso_kl) AS peso_kl"),
                 // 'b.tarifa',
@@ -423,7 +424,8 @@ class MasterController extends Controller
                 'f.id',
                 'g.nombre',
                 'g.contacto',
-                'a.created_at'
+                'a.created_at',
+                'tipo_consolidado_id'
             )
             ->where([
                 ['a.deleted_at', null],

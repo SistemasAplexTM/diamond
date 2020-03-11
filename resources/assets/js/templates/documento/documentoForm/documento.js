@@ -608,5 +608,18 @@ function changueShipperConsignee(id, shipper_id, consignee_id) {
 }
 
 function printDocuments(url, document) {
-    objVue.printDocument(url, document);
+    swal({
+        title: 'Imprimir ' + (document == 'label' ? document : 'Factura'),
+        text: "",
+        type: 'info',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Si',
+        cancelButtonText: 'No, cancelar!'
+    }).then((result) => {
+        if (result.value) {
+            objVue.printDocument(url, document);
+        }
+    });
 }

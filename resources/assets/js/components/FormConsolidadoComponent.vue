@@ -393,7 +393,10 @@ a.badge:hover {
                 </div>
                 <div class="row">
                   <div class="col-sm-12">
-                    <detail :update_detail="update_detail_consolidated"></detail>
+                    <detail
+                      :update_detail="update_detail_consolidated"
+                      :type_consol="tipo_consolidado"
+                    ></detail>
                   </div>
                 </div>
                 <div class="row">

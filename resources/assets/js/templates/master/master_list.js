@@ -78,9 +78,13 @@ $(document).ready(function () {
         var btn_cost = '<li><a onclick="createCost(' + full.id + ', \'' + full.num_master + '\', \'' + full.peso + '\', \'' + full.peso_kl + '\', \'' + full.tarifa + '\')"><i class="fal fa-file-invoice-dollar fa-lg"></i> Crear Costos</a></li>';
         var btn_xml = '<li><a href="master/generateXml/' + full.id + '" target="_blank"><i class="fal fa-file-export fa-lg"></i> Generar XML</a></li>';
         if (full.consolidado_id != null) {
+          let link = "<li><a href='impresion-documento/" + full.consolidado_id + "/consolidado_guias' target='_blank'> <spam class='fal fa-print'></spam> Guias hijas</a></li>";
+          if (full.tipo_consolidado_id == 23) {
+            link = "<li><a onclick='openModalGuides(" + full.consolidado_id + ", " + full.consecutivo + ")'> <spam class='fal fa-print'></spam> Guias hijas</a></li>";
+          }
           btn_consolidado = "<li class='divider'></li>" +
             "<li><a href='impresion-documento/" + full.consolidado_id + "/consolidado' target='_blank'> <spam class='fal fa-print'></spam> Consolidado</a></li> " +
-            "<li><a href='impresion-documento/" + full.consolidado_id + "/consolidado_guias' target='_blank'> <spam class='fal fa-print'></spam> Guias hijas</a></li>" +
+            link +
             "<li><a href='master/imprimirGuias/" + full.consolidado_id + "/labels' target='_blank'> <spam class='fal fa-print'></spam> Labels guias hijas</a></li> " +
             "<li><a href='exportInternalManifest/" + full.consolidado_id + "' target='_blank'> <spam class='fal fa-print'></spam> Manifiesto Interno</a></li>";
         }
@@ -120,6 +124,10 @@ $(document).ready(function () {
     ]
   });
 });
+
+function openModalGuides(consolidado_id, consecutivo) {
+  objVue.openModalGuides(consolidado_id, consecutivo);
+}
 
 function deleteDocument(id) {
   objVue.deleteDocument(id);
@@ -185,6 +193,7 @@ var objVue = new Vue({
     master_asociar: null,
     options: [],
     consolidado_id: null,
+    consolidado_consecutivo: null,
     list: [],
     id_master: null,
     master: null,
@@ -214,8 +223,22 @@ var objVue = new Vue({
     icon_cost: 'fal fa-user-edit',
     icon_title: 'Escribir',
     text_cost: 'Seleccionar Costo o Gasto',
+    gidesConsolidate: [],
   },
   methods: {
+    printGuidesConsolidate(index, row) {
+      window.open("documento/" + row.consolidado_id + "/consolidateGuidesCharge/" + row.id);
+    },
+    openModalGuides(consol_id, consecutivo) {
+      this.consolidado_consecutivo = consecutivo;
+      axios.get('documento/' + consol_id + '/getAllConsolidadoDetalle').then(response => {
+        this.gidesConsolidate = response.data.data;
+        $('#modalPrintGuides').modal('show');
+      }).catch(error => {
+        console.log(error);
+      });
+
+    },
     associateConsolidado() {
       let data = {
         consolidado_id: this.consolidado_id,
