@@ -343,7 +343,8 @@
 	$color = '#000';
 	$background = '#eaeaea';
 	$destino = 'ORIGINAL COPY 1';
-	$cantidad = 8
+	$cantidad = 8;
+	$peso_cobrado = 0;
 	@endphp
 	@foreach ($detalleConsolidado as $data)
 	@for($i = 1; $i <= $cantidad; $i++) @if($cantidad==1) <?php $i=8; ?> @endif <?php  $colorLetras = '';  ?> @if($i==1)
@@ -811,13 +812,14 @@
 							</tr>
 							<tr>
 								<td align="center" valign="top">
-									<div id="pieces" class="text_regular_c">{{ $data->piezas }}</div>
+									<div id="pieces" class="text_regular_c">
+										{{ ($documento->tipo_consolidado_id != 23) ? $data->piezas : $data->total_piezas }}</div>
 								</td>
 								<td align="center" valign="top" class="left_line" style="border-left: 1px solid {{ $color }};">
 									<div id="kilos" class="margin_div text_regular_c">
-										{{ round($data->peso2 * 0.453592, 2) }}
+										{{ ($documento->tipo_consolidado_id != 23) ? $peso_cobrado : round($data->total_peso * 0.453592, 2) }}
 										<br>
-										{{ round($data->peso2,2) }}
+										{{ ($documento->tipo_consolidado_id != 23) ? round($data->peso2,2) : round($data->total_peso,2) }}
 										</br>
 									</div>
 								</td>
@@ -837,7 +839,13 @@
 									style="border-left: 1px solid {{ $color }};background-color:{{ $background }};">&nbsp;</td>
 								<td align="center" valign="top" rowspan="2" class="left_line"
 									style="border-left: 1px solid {{ $color }};">
-									<div id="kilos_3" class="margin_div text_regular_c">{{ $data->peso2 }}</div>
+									<div id="kilos_3" class="margin_div text_regular_c">
+										@php
+										$t_peso = $data->total_peso; ///2,2046
+										$t_volumen = $data->total_volumen;
+										@endphp
+										{{ $peso_cobrado = (($documento->tipo_consolidado_id != 23) ? $data->peso2 : ($t_peso > $t_volumen) ? $t_peso : round($t_volumen / 2.2046, 0)) }}
+									</div>
 								</td>
 								<td class="left_line bg_azul"
 									style="border-left: 1px solid {{ $color }};background-color:{{ $background }};">&nbsp;</td>
@@ -850,7 +858,7 @@
 									style="border-left: 1px solid {{ $color }};background-color:{{ $background }};">&nbsp;</td>
 								<td align="center" valign="top" class="left_line" style="border-left: 1px solid {{ $color }};">
 									<div id="total" class="margin_div text_total">
-										{{ ($data->tarifa > 0) ? '$ ' . number_format($data->tarifa * round($data->peso2 * 0.453592, 2),2) : 'AS AGREED' }}
+										{{ (($data->tarifa > 0) ? '$ ' . number_format($data->tarifa * $peso_cobrado,2) : 'AS AGREED') }}
 									</div>
 								</td>
 								<td class="left_line bg_azul"
@@ -864,11 +872,14 @@
 							<tr>
 								<td height="30px" align="center" valign="middle" class="top_line"
 									style="border-top: 1px solid {{ $color }};">
-									<div id="pieces_2" class="text_regular_c">{{ $data->piezas }}</div>
+									<div id="pieces_2" class="text_regular_c">
+										{{ ($documento->tipo_consolidado_id != 23) ? $data->piezas : $data->total_piezas }}</div>
 								</td>
 								<td align="center" valign="middle" class="left_line top_line"
 									style="border-left: 1px solid {{ $color }};border-top: 1px solid {{ $color }};">
-									<div id="total_kilos" class="text_regular_c">{{ round($data->peso2 * 0.453592, 2) }}</div>
+									<div id="total_kilos" class="text_regular_c">
+										{{ ($documento->tipo_consolidado_id != 23) ? $peso_cobrado : round($data->total_peso * 0.453592, 2) }}
+									</div>
 								</td>
 								<td align="center" valign="middle" class="left_line" style="border-left: 1px solid {{ $color }};">
 									<div id="kilos_4" class="margin_div text_regular_c">Kl</div>
@@ -885,7 +896,7 @@
 								<td align="center" valign="middle" class="left_line top_line"
 									style="border-left: 1px solid {{ $color }};border-top: 1px solid {{ $color }};">
 									<div id="total_2" class="margin_div text_total">
-										{{ ($data->tarifa > 0) ? '$ ' . number_format($data->tarifa * round($data->peso2 * 0.453592, 2),2) : 'AS AGREED' }}
+										{{ ($data->tarifa > 0) ? '$ ' . number_format($data->tarifa * $peso_cobrado,2) : 'AS AGREED' }}
 									</div>
 								</td>
 								<td class="left_line bg_azul"
@@ -942,13 +953,13 @@
 											<td width="18%" height="12px" align="center" class="bottom_line"
 												style="border-bottom: 1px solid {{ $color }};">
 												<div id="pp_w_charge" class="text_total">{!! ($chgs_code == 'PP') ? (($data->tarifa > 0) ? '$
-													'.number_format($data->tarifa * round($data->peso2 * 0.453592, 2),2) : '') : '' !!}
+													'.number_format($data->tarifa * $peso_cobrado,2) : '') : '' !!}
 												</div>
 											</td>
 											<td width="18%" align="center" class="left_line bottom_line"
 												style="border-left: 1px solid {{ $color }};border-bottom: 1px solid {{ $color }};">
 												<div id="coll_w_charge" class="text_total">{!! ($chgs_code == 'COD') ? (($data->tarifa > 0) ? '$
-													'.number_format($data->tarifa * round($data->peso2 * 0.453592, 2),2) : '') : '' !!}
+													'.number_format($data->tarifa * $peso_cobrado,2) : '') : '' !!}
 												</div>
 											</td>
 										</tr>
@@ -1170,12 +1181,12 @@
 											<td height="12" class="bottom_line" style="border-bottom: 1px solid {{ $color }};">
 												<div id="pp_total" class="text_total">{!! ($chgs_code == 'PP') ? (($data->tarifa > 0) ? '$
 													'.number_format(($data->tarifa
-													* round($data->peso2 * 0.453592, 2)),2) :'' ) : '' !!}</div>
+													* $peso_cobrado),2) :'' ) : '' !!}</div>
 											</td>
 											<td width="18%" class="left_bottom_line"
 												style="border-left: 1px solid {{ $color }};border-bottom: 1px solid {{ $color }};">
 												<div id="coll_total" class="text_total">{!! ($chgs_code == 'COD') ? (($data->tarifa > 0) ? '$ '.
-													number_format(($data->tarifa * round($data->peso2 * 0.453592, 2)), 2) : '') : '' !!}</div>
+													number_format(($data->tarifa * $peso_cobrado), 2) : '') : '' !!}</div>
 											</td>
 										</tr>
 										<tr class="bg_azul" style="background-color:{{ $background }};">

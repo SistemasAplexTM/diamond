@@ -86,28 +86,15 @@ export default {
             "Código",
             "Pieza(s)",
             "Peso(Lb)",
-            "Alto",
             "Largo",
             "Ancho",
+            "Alto",
             "Contenido",
             "Cód. Aduana",
             "Valor US$",
             "Acción"
           ]
         ],
-        // colHeaders: [
-        //   "Código",
-        //   "Pieza(s)",
-        //   "Peso(Lb)",
-        //   "Alto",
-        //   "Largo",
-        //   "Ancho",
-        //   "Contenido",
-        //   "Cód. Aduana",
-        //   "Valor US$",
-        //   "Acción"
-        // ],
-        // rowHeaders: true,
         stretchH: "all",
         className: "htMiddle htCenter",
         columns: [
@@ -134,14 +121,6 @@ export default {
             }
           },
           {
-            data: "alto",
-            type: "numeric",
-            numericFormat: {
-              pattern: "0,0",
-              culture: "en-US" // this is the default culture, set up for USD
-            }
-          },
-          {
             data: "largo",
             type: "numeric",
             numericFormat: {
@@ -151,6 +130,14 @@ export default {
           },
           {
             data: "ancho",
+            type: "numeric",
+            numericFormat: {
+              pattern: "0,0",
+              culture: "en-US" // this is the default culture, set up for USD
+            }
+          },
+          {
+            data: "alto",
             type: "numeric",
             numericFormat: {
               pattern: "0,0",

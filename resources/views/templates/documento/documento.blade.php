@@ -922,153 +922,85 @@
                               </td>
                             </tr>
                           </table>
-                          {{-- <table class="table table-striped  table-hover" id="whgTable" style="width: 100%;">
-                            <thead>
-                              <tr>
-                                <th>Item</th>
-                                <th style="width: 10%;">@lang('documents.code')</th>
-                                <th style="width: 7%;">@lang('documents.pieces')</th>
-                                <th style="width: 17%;">@lang('documents.weight')(Lb)</th>
-                                <th style="">@lang('documents.contains')</th>
-                                <th style="width: 15%;">@lang('documents.hs')</th> --}}
-                          {{-- Por qué HS? porque así se conoce internacionalmente la posición arancelaria como Sistema Armonizado de Aduanas --}}
-                          {{-- <th style="width: 10%;">@lang('documents.value') US$</th>
-                                <th style="width: 10%;">@lang('documents.points')</th>
-                                <th style="width: 13%;">@lang('documents.action')</th>
-                              </tr>
-                            </thead>
-                            <tfoot style="background-color: paleturquoise;">
-                              <tr>
-                                <td colspan="10">
-                                  <table style="width: 100%;">
-                                    <tr>
-                                      <td>
-                                        <div class="col-lg-12">
-                                          <div style="text-align:center;font-weight:300;"><i
-                                              class="fal fa-box-check"></i> : <label id="piezas">0.00</label>
-                                            @lang('documents.pieces')</div>
-                                          <input type="hidden" id="piezas1" name="piezas"
-                                            value="{{ isset($documento->piezas) ? $documento->piezas : 0 }}">
-                        </div>
-                        </td>
-                        <td>
-                          <div class="col-sm-12">
-                            <div style="text-align:center;font-weight:300;"><i class="fal fa-weight-hanging"></i> :
-                              <label id="pesoDim">0.00</label> Lbs
-                            </div>
-                            <input type="hidden" id="pesoDim1" name="pesoDim"
-                              value="{{ isset($documento->peso) ? $documento->peso : 0 }}">
-                          </div>
-                        </td>
-                        <td>
-                          <div class="col-sm-12">
-                            <div style="text-align:center;font-weight:300;"><i class="fal fa-ruler-combined"></i> :
-                              <label id="volumen">0.00</label>
-                              @lang('documents.volume')</div>
-                            <input type="hidden" id="volumen1" name="volumen"
-                              value="{{ isset($documento->volumen) ? $documento->volumen : 0 }}">
-                          </div>
-                        </td>
-                        <td>
-                          <div class="col-sm-12">
-                            <div style="text-align:center;font-weight:300;"><i class="fal fa-container-storage"></i> :
-                              <label id="pie_ft">0.00</label>
-                              @lang('documents.cubic_foot')</div>
-                            <input type="hidden" id="pie_ft1" name="pie_ft"
-                              value="{{ (isset($documento->volumen)) ? number_format(($documento->volumen * 166 / 1728), 2) : 0 }}">
-                          </div>
-                        </td>
-                        <td>
-                          <div class="col-lg-12">
-                            <div style="text-align:center;font-weight:300;"><i class="fal fa-dollar-sign"></i> : <label
-                                id="valor_declarado_tbl">0.00</label></div>
-                            <input type="hidden" id="valor_declarado_tbl1" value="0">
-                          </div>
-                        </td>
-                        </tr>
-                        </table>
-                        </td>
-                        </tr>
-                        </tfoot>
-                        </table> --}}
-                        <div id="noEnviar" class="col-lg-12" style="text-align: center; color: red; display: none;">
-                          @lang('documents.message_register')</div>
+                          <div id="noEnviar" class="col-lg-12" style="text-align: center; color: red; display: none;">
+                            @lang('documents.message_register')</div>
 
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-                <div class="row pasos_guia" id="generales_guia">
-                  <div class="col-lg-4" v-if="mostrar.includes(17)">
-                    <input type="hidden" id="tipo_pago_id" name="tipo_pago_id" value="{{ $documento->tipo_pago_id }}">
+                  <div class="row pasos_guia" id="generales_guia">
+                    <div class="col-lg-4" v-if="mostrar.includes(17)">
+                      <input type="hidden" id="tipo_pago_id" name="tipo_pago_id" value="{{ $documento->tipo_pago_id }}">
+                    </div>
+                    <div class="col-lg-4" v-if="mostrar.includes(12)">
+                      <input type="hidden" id="forma_pago_id" name="forma_pago_id"
+                        value="{{ $documento->forma_pago_id }}">
+                    </div>
+                    <div class="col-lg-4" v-if="mostrar.includes(18)">
+                      <input type="hidden" id="grupo_id" name="grupo_id" value="{{ $documento->grupo_id }}">
+                    </div>
+                    <div class="col-lg-12">
+                      <div class="form-group">
+                        <label>@lang('documents.comments'): </label>
+                        <textarea class="form-control text-write" rows="5" style="height: 80px;" id="observaciones"
+                          name="observaciones">{{ isset($documento->observaciones) ? $documento->observaciones : '' }}</textarea>
+                      </div>
+                    </div>
+                    <div class="col-sm-12">
+                      <div class="checkbox checkbox-success checkbox-inline">
+                        <input type="checkbox" id="inlineCheckbox1" name="factura" value="1"
+                          {{ (isset($documento->factura) and $documento->factura != 0) ? 'checked' : '' }}>
+                        <label for="inlineCheckbox1"> @lang('documents.bill') </label>
+                      </div>
+                      <div class="checkbox checkbox-success checkbox-inline">
+                        <input type="checkbox" id="inlineCheckbox2" name="carga_peligrosa" value="1"
+                          {{ (isset($documento->carga_peligrosa) and $documento->carga_peligrosa != 0) ? 'checked' : '' }}>
+                        <label for="inlineCheckbox2">@lang('documents.dangerous_load')</label>
+                      </div>
+                      <div class="checkbox checkbox-success checkbox-inline">
+                        <input type="checkbox" id="inlineCheckbox3" name="re_empacado" value="1"
+                          {{ (isset($documento->re_empacado) and $documento->re_empacado != 0) ? 'checked' : '' }}>
+                        <label for="inlineCheckbox3">@lang('documents.packed') </label>
+                      </div>
+                      <div class="checkbox checkbox-success checkbox-inline">
+                        <input type="checkbox" id="inlineCheckbox4" name="mal_empacado" value="1"
+                          {{ (isset($documento->mal_empacado) and $documento->mal_empacado != 0) ? 'checked' : '' }}>
+                        <label for="inlineCheckbox4"> @lang('documents.badly_packed')</label>
+                      </div>
+                      <div class="checkbox checkbox-success checkbox-inline">
+                        <input type="checkbox" id="inlineCheckbox5" name="rota" value="1"
+                          {{ (isset($documento->rota) and $documento->rota != 0) ? 'checked' : '' }}>
+                        <label for="inlineCheckbox5"> @lang('documents.broken')</label>
+                      </div>
+                    </div>
                   </div>
-                  <div class="col-lg-4" v-if="mostrar.includes(12)">
-                    <input type="hidden" id="forma_pago_id" name="forma_pago_id"
-                      value="{{ $documento->forma_pago_id }}">
-                  </div>
-                  <div class="col-lg-4" v-if="mostrar.includes(18)">
-                    <input type="hidden" id="grupo_id" name="grupo_id" value="{{ $documento->grupo_id }}">
-                  </div>
-                  <div class="col-lg-12">
+                  <input type="hidden" id="id" name="id" value="">
+                  <hr />
+                  <div class="row">
                     <div class="form-group">
-                      <label>@lang('documents.comments'): </label>
-                      <textarea class="form-control text-write" rows="3" style="height: 65px;" id="observaciones"
-                        name="observaciones">{{ isset($documento->observaciones) ? $documento->observaciones : '' }}</textarea>
-                    </div>
-                  </div>
-                  <div class="col-sm-12">
-                    <div class="checkbox checkbox-success checkbox-inline">
-                      <input type="checkbox" id="inlineCheckbox1" name="factura" value="1"
-                        {{ (isset($documento->factura) and $documento->factura != 0) ? 'checked' : '' }}>
-                      <label for="inlineCheckbox1"> @lang('documents.bill') </label>
-                    </div>
-                    <div class="checkbox checkbox-success checkbox-inline">
-                      <input type="checkbox" id="inlineCheckbox2" name="carga_peligrosa" value="1"
-                        {{ (isset($documento->carga_peligrosa) and $documento->carga_peligrosa != 0) ? 'checked' : '' }}>
-                      <label for="inlineCheckbox2">@lang('documents.dangerous_load')</label>
-                    </div>
-                    <div class="checkbox checkbox-success checkbox-inline">
-                      <input type="checkbox" id="inlineCheckbox3" name="re_empacado" value="1"
-                        {{ (isset($documento->re_empacado) and $documento->re_empacado != 0) ? 'checked' : '' }}>
-                      <label for="inlineCheckbox3">@lang('documents.packed') </label>
-                    </div>
-                    <div class="checkbox checkbox-success checkbox-inline">
-                      <input type="checkbox" id="inlineCheckbox4" name="mal_empacado" value="1"
-                        {{ (isset($documento->mal_empacado) and $documento->mal_empacado != 0) ? 'checked' : '' }}>
-                      <label for="inlineCheckbox4"> @lang('documents.badly_packed')</label>
-                    </div>
-                    <div class="checkbox checkbox-success checkbox-inline">
-                      <input type="checkbox" id="inlineCheckbox5" name="rota" value="1"
-                        {{ (isset($documento->rota) and $documento->rota != 0) ? 'checked' : '' }}>
-                      <label for="inlineCheckbox5"> @lang('documents.broken')</label>
-                    </div>
-                  </div>
-                </div>
-                <input type="hidden" id="id" name="id" value="">
-                <hr />
-                <div class="row">
-                  <div class="form-group">
-                    <div class="col-sm-12 col-sm-offset-0 guardar">
-                      <div class="btn-group dropup">
-                        <button type="button" class="btn btn-success ladda-button" id="saveForm"
-                          data-style="expand-right" @click="beforeSaveDocument('print')"><i class="fal fa-print"></i>
-                          @lang('documents.save_changes_print')</button>
-                        <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown"
-                          aria-haspopup="true" aria-expanded="false" style="height: 35px;">
-                          <span class="caret"></span>
-                          <span class="sr-only">Toggle Dropdown</span>
-                        </button>
-                        <ul class="dropdown-menu">
-                          <li><a @click="beforeSaveDocument()"><i class="fal fa-save fa-fw"></i>
-                              @lang('documents.save_changes')</a></li>
-                          <li><a @click="beforeSaveDocument('email')"><i class="fal fa-envelope"></i>
-                              @lang('documents.save_changes_email')</a></li>
-                          <li><a @click="beforeSaveDocument('all')"><i class="fal fa-mail-bulk"></i>
-                              @lang('documents.save_changes_email_print')</a></li>
-                        </ul>
+                      <div class="col-sm-12 col-sm-offset-0 guardar">
+                        <div class="btn-group dropup">
+                          <button type="button" class="btn btn-success ladda-button" id="saveForm"
+                            data-style="expand-right" @click="beforeSaveDocument('print')"><i class="fal fa-print"></i>
+                            @lang('documents.save_changes_print')</button>
+                          <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false" style="height: 35px;">
+                            <span class="caret"></span>
+                            <span class="sr-only">Toggle Dropdown</span>
+                          </button>
+                          <ul class="dropdown-menu">
+                            <li><a @click="beforeSaveDocument()"><i class="fal fa-save fa-fw"></i>
+                                @lang('documents.save_changes')</a></li>
+                            <li><a @click="beforeSaveDocument('email')"><i class="fal fa-envelope"></i>
+                                @lang('documents.save_changes_email')</a></li>
+                            <li><a @click="beforeSaveDocument('all')"><i class="fal fa-mail-bulk"></i>
+                                @lang('documents.save_changes_email_print')</a></li>
+                          </ul>
+                        </div>
+                        <a href="{{ route('documento.index') }}" type="button" class="btn btn-white"><i
+                            class="fal fa-times fa-fw"></i> @lang('documents.cancel') </a>
                       </div>
-                      <a href="{{ route('documento.index') }}" type="button" class="btn btn-white"><i
-                          class="fal fa-times fa-fw"></i> @lang('documents.cancel') </a>
                     </div>
                   </div>
                 </div>
@@ -1078,75 +1010,74 @@
         </div>
       </div>
     </div>
-</div>
-{{-- MODAL FORMA DE PAGO --}}
-<div class="modal fade bs-example" id="modalPaymentMethod" tabindex="" role="dialog" aria-labelledby="myModalLabel"
-  aria-hidden="true">
-  <div class="modal-dialog" id="paiment">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
-            class="sr-only">@lang('documents.close')</span></button>
-        <h2 class="modal-title" id="myModalLabel"><i class="fal fa-money-check-alt"></i>
-          @lang('documents.payment_type')</h2>
-      </div>
-      <div class="modal-body">
-        <form id="formSearchTracking" name="formSearchTracking" method="POST" action="">
-          <div class="row" id="window-load">
-            <div id="loading">
-              <Spinner name="circle" color="#66bf33" />
-            </div>
+    {{-- MODAL FORMA DE PAGO --}}
+    <div class="modal fade bs-example" id="modalPaymentMethod" tabindex="" role="dialog" aria-labelledby="myModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog" id="paiment">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                class="sr-only">@lang('documents.close')</span></button>
+            <h2 class="modal-title" id="myModalLabel"><i class="fal fa-money-check-alt"></i>
+              @lang('documents.payment_type')</h2>
           </div>
-          <div class="row">
-            <div class="col-lg-12">
-              <h3>Seleccione el tipo de pago para este recibo.</h3>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-lg-12">
-              <div class="form-group">
-                {{-- <label for="" class="">@lang('documents.payment_type')</label> --}}
-                <el-radio v-model="tipo_pago_id" label="4" border @change="validatePayment">Collect</el-radio>
-                <el-radio v-model="tipo_pago_id" label="5" border @change="validatePayment">Prepaid</el-radio>
-                {{-- <el-select v-model="tipo_pago_id" placeholder="Tipo de Pago" @change="validatePayment">
+          <div class="modal-body">
+            <form id="formSearchTracking" name="formSearchTracking" method="POST" action="">
+              <div class="row" id="window-load">
+                <div id="loading">
+                  <Spinner name="circle" color="#66bf33" />
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-12">
+                  <h3>Seleccione el tipo de pago para este recibo.</h3>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-12">
+                  <div class="form-group">
+                    {{-- <label for="" class="">@lang('documents.payment_type')</label> --}}
+                    <el-radio v-model="tipo_pago_id" label="4" border @change="validatePayment">Collect</el-radio>
+                    <el-radio v-model="tipo_pago_id" label="5" border @change="validatePayment">Prepaid</el-radio>
+                    {{-- <el-select v-model="tipo_pago_id" placeholder="Tipo de Pago" @change="validatePayment">
                                     <el-option
                                       v-for="item in paymentMethod"
                                       :key="item.id"
                                       :label="item.descripcion"
                                       :value="item.id">
                                       <span style="float: left">@{{ item.nombre }}</span>
-                <span style="float: right; color: #8492a6; font-size: 13px">@{{ item.descripcion }}</span>
-                </el-option>
-                </el-select> --}}
-              </div>
-              <div class="form-group" v-show="showPay">
-                <label for="" class="">@lang('documents.way_to_pay')</label>
-                <el-select v-model="forma_pago_id" placeholder="Forma de Pago" @change="setPayment">
-                  <el-option v-for="item in payments" :key="item.id" :label="item.nombre" :value="item.id">
-                    <span style="float: left">@{{ item.nombre }}</span>
                     <span style="float: right; color: #8492a6; font-size: 13px">@{{ item.descripcion }}</span>
-                  </el-option>
-                </el-select>
+                    </el-option>
+                    </el-select> --}}
+                  </div>
+                  <div class="form-group" v-show="showPay">
+                    <label for="" class="">@lang('documents.way_to_pay')</label>
+                    <el-select v-model="forma_pago_id" placeholder="Forma de Pago" @change="setPayment">
+                      <el-option v-for="item in payments" :key="item.id" :label="item.nombre" :value="item.id">
+                        <span style="float: left">@{{ item.nombre }}</span>
+                        <span style="float: right; color: #8492a6; font-size: 13px">@{{ item.descripcion }}</span>
+                      </el-option>
+                    </el-select>
+                  </div>
+                </div>
               </div>
-            </div>
+            </form>
           </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary" data-dismiss="modal" @click="saveDocument()"><i
-            class="fal fa-chevron-double-right"></i> @lang('documents.continue')</button>
-        <button type="button" class="btn btn-default" data-dismiss="modal">@lang('documents.close')</button>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal" @click="saveDocument()"><i
+                class="fal fa-chevron-double-right"></i> @lang('documents.continue')</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal">@lang('documents.close')</button>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</div>
-</form>
-{{-- MODAL AGREGAR TRACKINGS --}}
-@include('templates/documento/modals/modalTracking')
-{{-- MODAL AGREGAR TRACKINGS --}}
-@include('templates/documento/modals/modalChangeShipperConsignee')
-{{-- MODAL AGREGAR PUNTOS --}}
-{{-- <points-component v-if="mostrar.includes(66)" :id_detail="points_id_detail"></points-component> --}}
+  </form>
+  {{-- MODAL AGREGAR TRACKINGS --}}
+  @include('templates/documento/modals/modalTracking')
+  {{-- MODAL AGREGAR TRACKINGS --}}
+  @include('templates/documento/modals/modalChangeShipperConsignee')
+  {{-- MODAL AGREGAR PUNTOS --}}
+  {{-- <points-component v-if="mostrar.includes(66)" :id_detail="points_id_detail"></points-component> --}}
 </div>
 @endsection
 @section('scripts')

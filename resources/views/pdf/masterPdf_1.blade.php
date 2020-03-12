@@ -503,7 +503,11 @@
 							<td width="51.5%" height="70px" valign="top" colspan="2" rowspan="2" class="left_line"
 								style="border-left: 1px solid {{ $color }};">
 								<div class="text_titles_tl margin_div" style="color: {{ $color }}">Accounting Information</div>
-								<div id="accounting_information" class="text_regular_l">{{ $data->account_information }}</div>
+								<div id="accounting_information" class="text_regular_l">
+									<pre
+										style="margin: 0;font-family: 'Courier New', Courier, monospace">{{ $data->account_information }}</pre>
+									</pre>
+								</div>
 							</td>
 						</tr>
 						<tr class="bottom_line" style="border-bottom: 1px solid {{ $color }};">

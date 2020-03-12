@@ -517,7 +517,7 @@ class DocumentoController extends Controller
 
     public function update(Request $request, $id)
     {
-
+        
         if ($request->document_type === 'consolidado') {
             try {
                 $data                     = Documento::findOrFail($id);
@@ -618,8 +618,10 @@ class DocumentoController extends Controller
                     $data->peso         = $request->pesoDim;
                     $data->peso_cobrado = $request->pesoDim;
                 } else {
+                   
                     if ($request->document_type === 'guia') {
                         if (!$request->liquidar) {
+                             
                             $data->liquidado       = 0;
                             $data->peso            = 0;
                             $data->peso_cobrado    = 0;
@@ -657,6 +659,9 @@ class DocumentoController extends Controller
                             ]);
                             $request->session()->flash('print_document', array('id' => $id, 'document' => ($request->option == 'print' || $request->option == 'all') ? 'guia' : ''));
                         }
+                        
+                        $data->peso            = $request->pesoDim;
+                        $data->peso_cobrado    = $request->pesoDim;
                         $data->piezas            = $request->piezas;
                         $data->volumen           = $request->volumen;
                         $data->observaciones     = $request->observaciones;
@@ -798,7 +803,10 @@ class DocumentoController extends Controller
     public function destroy($id, $table = null)
     {
         if ($table) {
+            
             $data = DocumentoDetalle::findOrFail($id);
+            //RESTAR PIEZAS - PESO - VOLUMEN
+            $this->updateDatasDocument($data->documento_id, $data, true);
             $data->delete();
             $piv = DB::table('status_detalle')->where([['documento_detalle_id', $id]])->delete();
             $this->AddToLog('Documento detalle eliminado (' . $id . ') WRH (' . $data->num_warehouse . ')');
@@ -1100,8 +1108,8 @@ class DocumentoController extends Controller
                     $prefijoGuia->prefijo = $config_pefix->value;
                 }
 
+                $this->updateDatasDocument($data->documento_id, $data);
                 $documento = Documento::findOrFail($data->documento_id);
-
                 $documentoD = DocumentoDetalle::select('documento_detalle.id', 'documento_detalle.paquete')
                     ->where([
                         ['documento_detalle.documento_id', $data->documento_id],
@@ -1814,7 +1822,10 @@ class DocumentoController extends Controller
                                     'mm.by_first_carrier',
                                     'mm.fecha_vuelo1',
                                     'aepd.nombre AS aeropuerto_destino',
-                                    'aep.nombre AS aeropuerto'
+                                    'aep.nombre AS aeropuerto',
+                                    'doc.piezas AS total_piezas',
+                                    'doc.peso AS total_peso',
+                                    'doc.volumen AS total_volumen'
                                 )
                                 ->where([['a.deleted_at', null], ['a.consolidado_id', $id], ['a.flag', 0]])
                                 ->orderBy('b.num_warehouse', 'ASC')
@@ -1851,6 +1862,7 @@ class DocumentoController extends Controller
                             if ($document === 'consolidado') {
                                 $detalleConsolidado = DB::table('consolidado_detalle as a')
                                     ->leftJoin('documento_detalle as b', 'a.documento_detalle_id', '=', 'b.id')
+                                    ->join('documento AS doc', 'b.documento_id', 'doc.id')
                                     ->leftJoin('shipper as c', 'b.shipper_id', '=', 'c.id')
                                     ->leftJoin('consignee as d', 'b.consignee_id', '=', 'd.id')
                                     ->leftJoin('localizacion as e', 'c.localizacion_id', '=', 'e.id')
@@ -1984,7 +1996,10 @@ class DocumentoController extends Controller
                                         'cc.depto as cons_depto2',
                                         'cc.direccion as cons_dir2',
                                         'cc.telefono as cons_tel2',
-                                        'cc.pais as cons_pais2'
+                                        'cc.pais as cons_pais2',
+                                        'doc.piezas AS total_piezas',
+                                        'doc.peso AS total_peso',
+                                        'doc.volumen AS total_volumen'
                                     )
                                     ->where([['a.deleted_at', null], ['a.consolidado_id', $id], ['a.flag', 0]])
                                     ->orderBy('b.num_warehouse', 'ASC')
@@ -2414,6 +2429,7 @@ class DocumentoController extends Controller
         $detalle = DB::table('consolidado_detalle AS a')
             ->join('documento AS b', 'a.consolidado_id', 'b.id')
             ->join('documento_detalle AS c', 'a.documento_detalle_id', 'c.id')
+            ->join('documento AS doc', 'c.documento_id', 'doc.id')
             ->leftJoin('shipper as d', 'c.shipper_id', 'd.id')
             ->leftJoin('consignee as e', 'c.consignee_id', 'e.id')
             ->leftJoin('posicion_arancelaria as f', 'c.arancel_id2', 'f.id')
@@ -2547,7 +2563,10 @@ class DocumentoController extends Controller
               		FROM
               			shipper as ss
               		WHERE ss.id = a.shipper
-              	) AS shipper_json')
+                  ) AS shipper_json'),
+                'doc.piezas AS total_piezas',
+                'doc.peso AS total_peso',
+                'doc.volumen AS total_volumen'
             )
             ->where($where)
             ->orderBy('c.num_warehouse', 'ASC')
@@ -3421,7 +3440,9 @@ class DocumentoController extends Controller
     {
         try {
             $data = DocumentoDetalle::findOrFail($request->id);
-
+            //RESTAR PIEZAS - PESO - VOLUMEN
+            $this->updateDatasDocument($data->documento_id, $data, true);
+            
             if (isset($request->data) and $request->option === 'peso') {
                 $data->peso = $request->data;
                 $data->peso2 = $request->data;
@@ -3458,6 +3479,9 @@ class DocumentoController extends Controller
             //     $data->volumen = ($request->data['largo'] * $request->data['ancho'] * $request->data['alto'] / 166);
             // }
 
+            //SUMAR PIEZAS - PESO - VOLUMEN
+            $this->updateDatasDocument($data->documento_id, $data);
+            
             if ($data->save()) {
                 $this->AddToLog('Documento detalle editado (' . $data->id . ')');
                 $answer = array(
@@ -4386,7 +4410,10 @@ class DocumentoController extends Controller
                         'mm.by_first_carrier',
                         'mm.fecha_vuelo1',
                         'aepd.nombre AS aeropuerto_destino',
-                        'aep.nombre AS aeropuerto'
+                        'aep.nombre AS aeropuerto',
+                        'doc.piezas AS total_piezas',
+                        'doc.peso AS total_peso',
+                        'doc.volumen AS total_volumen'
                     )
                     ->where([['a.deleted_at', null], ['a.id', $id_detail]])
                     ->get();
@@ -4394,5 +4421,24 @@ class DocumentoController extends Controller
         } catch (Exception $e) {
             return array('error' => $e, 'code' => 500);
         }
+    }
+
+    public function updateDatasDocument($id_document, $data, $rest = false)
+    {
+        $documento = Documento::findOrFail($id_document);
+        if ($rest) {
+            //RESTAR PIEZAS - PESO - VOLUMEN
+            $documento->piezas      = $documento->piezas - $data->piezas;
+            $documento->peso        = $documento->peso - $data->peso;
+            $documento->peso_cobrado= $documento->peso_cobrado - $data->peso;
+            $documento->volumen     = $documento->volumen - $data->volumen;
+        }else{
+            //SUMAR PIEZAS - PESO - VOLUMEN
+            $documento->piezas      = $documento->piezas + $data->piezas;
+            $documento->peso        = $documento->peso + $data->peso;
+            $documento->peso_cobrado= $documento->peso_cobrado + $data->peso;
+            $documento->volumen     = $documento->volumen + $data->volumen;
+        }
+        $documento->save();
     }
 }

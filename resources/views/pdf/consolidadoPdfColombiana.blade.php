@@ -203,12 +203,18 @@
                     <div id="detalle">{{ preg_replace('/<br[^>]*?>/si', "\n",nl2br($val->contenido2)) }}</div>
                 </td>
                 <td id="detalle" style="text-align: center;"></td>
-                <td id="detalle" style="text-align: center;">{{ $piezas = number_format($val->piezas) }}</td>
+                <td id="detalle" style="text-align: center;">
+                    {{ $piezas = ($documento->tipo_consolidado_id != 23) ? number_format($val->piezas) : number_format($val->total_piezas) }}
+                </td>
                 <td id="detalle" style="text-align: center;">
                     @if($val->peso2 == 0)
-                    <div style="background-color:black;color:white;">{{ ceil($val->peso2) }} Lb<div>
+                    <div style="background-color:black;color:white;">
+                        {{ ($documento->tipo_consolidado_id != 23) ? number_format(ceil($val->peso2)) : number_format(ceil($val->total_peso)) }}
+                        Lb
+                        <div>
                             @else
-                            {{ ceil($val->peso2) }} Lb
+                            {{ ($documento->tipo_consolidado_id != 23) ? number_format(ceil($val->peso2)) : number_format(ceil($val->total_peso)) }}
+                            Lb
                             @endif
                 </td>
                 {{-- <td id="detalle" style="text-align: center;width: 10%">{{ ceil($val->volumen) }} Lb</td> --}}
@@ -230,7 +236,7 @@
             <?php
                 $totDocs += 1;
                 $totPiezas += $piezas;
-                $peso += ceil($val->peso2);
+                $peso += ($documento->tipo_consolidado_id != 23) ? (ceil($val->peso2)) : (ceil($val->total_peso));
                 $vol += ceil($val->volumen);
                 $declarado += $val->declarado2;
                 $cont++;

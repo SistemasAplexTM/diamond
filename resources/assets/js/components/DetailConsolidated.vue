@@ -171,7 +171,7 @@ export default {
           },
           { data: "contenido2", width: "400", className: "htLeft" },
           {
-            data: "piezas",
+            data: this.type_consol != 23 ? "piezas" : "total_piezas",
             type: "numeric",
             numericFormat: {
               pattern: "0",
@@ -187,7 +187,7 @@ export default {
             }
           },
           {
-            data: "peso2_sum",
+            data: this.type_consol != 23 ? "peso2_sum" : "total_peso",
             type: "numeric",
             numericFormat: {
               pattern: "0,0",
