@@ -58,6 +58,15 @@
     margin-top: 0px;
     margin-bottom: 0px;
   }
+  .pb-10{
+    padding-bottom: 10px; 
+  }
+  .fade-enter-active, .fade-leave-active {
+    transition: opacity .5s;
+  }
+  .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+    opacity: 0;
+  }
 </style>
 <div class="row" id="tracking">
   <form id="formtracking" enctype="multipart/form-data" class="form-horizontal" role="form" action="" method="post">
@@ -144,6 +153,48 @@
                     @{{ errors.first('consignee_id') }}
                   </small>
                 </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="form-group">
+                <div class="col-sm-12 pb-10">
+                  <el-checkbox v-model="create_receitp">Crear Recibo</el-checkbox>
+                </div>
+                <template name="fade">
+                  <div class="col-sm-12" v-if="create_receitp">
+                    <div class="form-group">
+                      <el-select ref="shipper_id2" v-model="shipper_id2" clearable filterable  placeholder="Seleccione Shipper">
+                        <el-option
+                          v-for="item in shippers"
+                          :key="item.id"
+                          :label="item.name"
+                          :value="item.id">
+                        </el-option>
+                      </el-select>
+                    </div>
+                  </div>
+                  <div class="form-group" v-if="create_receitp">
+                    <div class="col-sm-4">
+                      <input class="form-control" id="peso2" placeholder="Peso" type="number" min="0" v-model="peso2">
+                    </div>
+                    <div class="col-sm-8">
+                      <div class="input-group">
+                        <input type="text" class="form-control" placeholder="L" maxlength="4" id="largo2"
+                          v-model="largo2">
+                        <span class="input-group-addon">x</span>
+                        <input type="text" class="form-control" placeholder="W" maxlength="4" id="ancho2"
+                          v-model="ancho2">
+                        <span class="input-group-addon">x</span>
+                        <input type="text" class="form-control" placeholder="H" maxlength="4" id="alto2"
+                          v-model="alto2">
+                      </div>
+                    </div>
+                  </div>
+                  
+                </template>
               </div>
             </div>
           </div>
@@ -302,9 +353,18 @@
                     <div class="form-group">
                       <label for="shipper_id"
                         class="control-label gcore-label-top">@lang('documents.sender_shipper'):</label>
-                      <v-select name="shipper_id" :options="shippers" placeholder="@lang('documents.sender_shipper')"
+                        <el-select name="shipper_id" v-model="shipper_id" clearable filterable placeholder="Seleccione Shipper">
+                          <el-option
+                            v-for="item in shippers"
+                            :key="item.id"
+                            :label="item.name"
+                            :value="item">
+                          </el-option>
+                        </el-select>
+
+                      {{-- <v-select name="shipper_id" :options="shippers" placeholder="@lang('documents.sender_shipper')"
                         label="name" v-model="shipper_id">
-                      </v-select>
+                      </v-select> --}}
                     </div>
                   </div>
                   <div class="col-sm-6">

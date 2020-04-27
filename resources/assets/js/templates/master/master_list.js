@@ -2,6 +2,7 @@ $(document).ready(function () {
   $('#modalMasterCost').on('show.bs.modal', function () {
     objVue.getDataSelectCost();
   });
+
   $('#tbl-master').DataTable({
     ajax: 'master/all/reg',
     "order": [
@@ -86,7 +87,7 @@ $(document).ready(function () {
             "<li><a href='impresion-documento/" + full.consolidado_id + "/consolidado' target='_blank'> <spam class='fal fa-print'></spam> Consolidado</a></li> " +
             link +
             "<li><a href='master/imprimirGuias/" + full.consolidado_id + "/labels' target='_blank'> <spam class='fal fa-print'></spam> Labels guias hijas</a></li> " +
-            "<li><a href='exportInternalManifest/" + full.consolidado_id + "' target='_blank'> <spam class='fal fa-print'></spam> Manifiesto Interno</a></li>";
+            "<li><a href='exportCellar/" + full.consolidado_id + "' target='_blank'> <spam class='fal fa-print'></spam> Manifiesto Interno</a></li>";
         }
         var btns = "<div class='btn-group'>" +
           "<button type='button' class='btn btn-success dropdown-toggle btn-xs btn-circle-sm' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>" +

@@ -71,29 +71,31 @@ export default {
       this.typeSearch = item;
     },
     querySearch(queryString, cb) {
-      var me = this;
-      axios
-        .get(
-          "/documento/getDataSearchDocument/" +
-            queryString +
-            "/" +
-            this.typeSearch
-        )
-        .then(function(response) {
-          me.options = response.data.data;
-          let data2 = response.data.data2;
-          if (data2.length > 0) {
-            for (var i = 0; i < data2.length; i++) {
-              me.options.push(data2[i]);
+      if (queryString.length > 3) {
+        var me = this;
+        axios
+          .get(
+            "/documento/getDataSearchDocument/" +
+              queryString +
+              "/" +
+              this.typeSearch
+          )
+          .then(function(response) {
+            me.options = response.data.data;
+            let data2 = response.data.data2;
+            if (data2.length > 0) {
+              for (var i = 0; i < data2.length; i++) {
+                me.options.push(data2[i]);
+              }
             }
-          }
-          // me.options.push(response.data.data2);
-          cb(me.options);
-        })
-        .catch(function(error) {
-          console.log(error);
-          toastr.warning("Error: -" + error);
-        });
+            // me.options.push(response.data.data2);
+            cb(me.options);
+          })
+          .catch(function(error) {
+            console.log(error);
+            toastr.warning("Error: -" + error);
+          });
+      }
     },
     handleSelect(item) {
       var data = {

@@ -6,6 +6,10 @@ body {
   font-family: "Roboto Condensed";
 }
 
+.fixed-nav .slimScrollDiv #side-menu{
+  padding-bottom: 10px !important;
+}
+
 .is-readOnly {
   background-color: #f7f7f7 !important;
 

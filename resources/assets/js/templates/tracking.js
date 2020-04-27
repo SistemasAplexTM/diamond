@@ -368,11 +368,19 @@ var objVue = new Vue({
     tracking_id: null,
     print_direct: (print_labels != '' && print_documents != '') ? true : false,
     print_warehouse: null,
-    print_id_document: null
+    print_id_document: null,
+    //crear recibo
+    create_receitp: false,
+    peso2: null,
+    largo2: 0,
+    ancho2: 0,
+    alto2: 0,
+    shipper_id2: null,
   },
   methods: {
     focusContent(el) {
       $('#' + el).focus();
+      this.searchTracking();
     },
     printDocument: function (direct) {
       let me = this;
@@ -485,11 +493,17 @@ var objVue = new Vue({
       this.instruccion = false;
       this.confirmedSend = false;
       this.editar = 0;
+      this.create_receitp = false;
+      this.peso2 = null,
+      this.largo2 = 0,
+      this.ancho2 = 0,
+      this.alto2 = 0,
+      this.shipper_id2 = null
     },
     validation: function (data) {
       if (data.contenido != "") {
         if (data.peso != "" && parseFloat(data.peso) > 0) {
-          if (data.shipper != null) {
+          if (data.shipper_id != null) {
             return true;
           } else {
             toastr.options = {
@@ -515,42 +529,58 @@ var objVue = new Vue({
         return false;
       }
     },
-    createDocument: function () {
+    createDocument: function (op, dat) {
       var l = $("#saveDoc").ladda();
       l.ladda("start");
       let me = this;
-      var datos = $("#formTrackingClient").serializeArray();
-      me.ids_tracking = [];
-      me.contenido_tracking = [];
-      $.each(datos, function (i, field) {
-        if (field.name === "chk[]") {
-          if ($("#chk" + field.value).val() != "") {
-            me.ids_tracking.push($("#chk" + field.value).val());
-            me.contenido_tracking.push(
-              $("#chk" + field.value).data("contenido")
-            );
+      var datosForm = '';
+      if(typeof op != 'undefined'){
+        datosForm = {
+          contenido: dat.contenido,
+          peso: dat.peso,
+          largo: dat.largo,
+          ancho: dat.ancho,
+          alto: dat.alto,
+          shipper_id: dat.shipper_id,
+          tipo_documento_id: 1,
+          type_id: 1, //COURIER
+          created_at: this.getTime(),
+          consignee_id: dat.consignee_id,
+          agencia_id: dat.agencia_id
+        };
+      }else{
+        var datos = $("#formTrackingClient").serializeArray();
+        me.ids_tracking = [];
+        me.contenido_tracking = [];
+        $.each(datos, function (i, field) {
+          if (field.name === "chk[]") {
+            if ($("#chk" + field.value).val() != "") {
+              me.ids_tracking.push($("#chk" + field.value).val());
+              me.contenido_tracking.push($("#chk" + field.value).data("contenido"));
+            }
           }
+        });
+        if (me.contenido_tracking.length > 0) {
+          var myStr = me.contenido_tracking.toString();
+          me.contenido_detail = myStr.replace(/,/g, ", ");
         }
-      });
-      if (me.contenido_tracking.length > 0) {
-        var myStr = me.contenido_tracking.toString();
-        me.contenido_detail = myStr.replace(/,/g, ", ");
+        datosForm = {
+          contenido: me.contenido_detail,
+          peso: me.peso,
+          largo: me.largo,
+          ancho: me.ancho,
+          alto: me.alto,
+          shipper_id: me.shipper_id != null ? me.shipper_id.id : null,
+          tipo_documento_id: 1,
+          type_id: 1, //COURIER
+          created_at: this.getTime(),
+          consignee_id: me.consignee_id_doc,
+          agencia_id: $('#agencia_id_receipt').val()
+        };
       }
-      var datosForm = {
-        contenido: me.contenido_detail,
-        peso: me.peso,
-        shipper: me.shipper_id
-      };
       if (me.validation(datosForm)) {
         axios
-          .post("documento/ajaxCreate/" + 1, {
-            tipo_documento_id: 1,
-            type_id: 1, //COURIER
-            created_at: this.getTime(),
-            shipper_id: me.shipper_id.id ? me.shipper_id.id : false,
-            consignee_id: me.consignee_id_doc,
-            agencia_id: $('#agencia_id_receipt').val()
-          })
+          .post("documento/ajaxCreate/" + 1, datosForm)
           .then(function (response) {
             var res = response.data;
             if (response.data["code"] == 200) {
@@ -563,7 +593,7 @@ var objVue = new Vue({
               setTimeout(() => {
                 $('#modalPrint').modal('show');
               }, 1500);
-              me.createDocumentDetail(res.datos["id"]);
+              me.createDocumentDetail(res.datos["id"], datosForm);
             } else {
               toastr.warning(response.data["error"]);
             }
@@ -586,28 +616,28 @@ var objVue = new Vue({
       }
       l.ladda("stop");
     },
-    createDocumentDetail: function (id_document) {
+    createDocumentDetail: function (id_document, dat) {
       let me = this;
       axios
         .post("documento/insertDetail", {
           documento_id: id_document,
           contador: 1,
-          dimensiones: me.peso + " Vol=" + me.largo + "x" + me.ancho + "x" + me.alto,
-          peso: me.peso,
-          peso2: me.peso,
-          contenido: me.contenido_detail,
-          contenido2: me.contenido_detail,
-          largo: me.largo,
-          ancho: me.ancho,
-          alto: me.alto,
-          volumen: ((me.largo * me.ancho * me.alto) / 166).toFixed(2),
+          dimensiones: dat.peso + " Vol=" + dat.largo + "x" + dat.ancho + "x" + dat.alto,
+          peso: dat.peso,
+          peso2: dat.peso,
+          contenido: dat.contenido,
+          contenido2: dat.contenido,
+          largo: dat.largo,
+          ancho: dat.ancho,
+          alto: dat.alto,
+          volumen: ((dat.largo * dat.ancho * dat.alto) / 166).toFixed(2),
           tipo_empaque_id: 3,
           posicion_arancelaria_id: 234,
           arancel_id2: 234,
           created_at: this.getTime(),
           ids_tracking: this.ids_tracking,
-          shipper_id: me.shipper_id.id ? me.shipper_id.id : null,
-          consignee_id: me.consignee_id_doc
+          shipper_id: dat.shipper_id,
+          consignee_id: dat.consignee_id
         })
         .then(function (response) {
           var res = response.data;
@@ -660,7 +690,7 @@ var objVue = new Vue({
               .addClass("alert-info");
           }
         } else {
-          me.create();
+          // me.create();
         }
       });
     },
@@ -724,20 +754,29 @@ var objVue = new Vue({
         }
       });
       let me = this;
+      var op = me.create_receitp;
       this.$validator
         .validateAll()
         .then(result => {
-          if (result) {
+          var dat = {
+            consignee_id: this.consignee_id != null ? this.consignee_id.id : null,
+            codigo: this.tracking,
+            contenido: this.contenido,
+            confirmed_send: this.confirmedSend,
+            agencia_id: $("#agencia_id").val(),
+            // datos adicionales
+            peso: me.peso2,
+            largo: me.largo2,
+            ancho: me.ancho2,
+            alto: me.alto2,
+            shipper_id: me.shipper_id2,
+          }
+          if (result && this.validate2(op, dat)) {
             axios
-              .post("tracking", {
-                consignee_id: this.consignee_id != null ? this.consignee_id.id : null,
-                codigo: this.tracking,
-                contenido: this.contenido,
-                confirmed_send: this.confirmedSend,
-                agencia_id: $("#agencia_id").val()
-              })
+              .post("tracking", dat)
               .then(function (response) {
                 if (response.data["code"] == 200) {
+                  me.ids_tracking.push(response.data.datos.id);
                   toastr.success("Registro creado correctamente.");
                   toastr.options.closeButton = true;
                 } else {
@@ -746,6 +785,11 @@ var objVue = new Vue({
                 }
                 me.resetForm();
                 me.updateTable();
+                if (op) {
+                  setTimeout(() => {
+                    me.createDocument(op, dat);
+                  }, 1000);
+                }
               })
               .catch(function (error) {
                 console.log(error);
@@ -760,6 +804,30 @@ var objVue = new Vue({
         .catch(function (error) {
           toastr.warning("Error: " + error);
         });
+    },
+    validate2(op, data){
+      if (op) {
+        if (data.peso != "" && parseFloat(data.peso) > 0) {
+          if (data.shipper_id != null) {
+            return true;
+          } else {
+            toastr.options = {
+              positionClass: "toast-top-center"
+            };
+            toastr.error("Selecciona un shippper para continuar");
+            return false;
+          }
+        } else {
+          $('#peso2').focus();
+          toastr.options = {
+            positionClass: "toast-top-center"
+          };
+          toastr.error("Ingresa el peso del paquete.");
+          return false;
+        }
+      }else{
+        return true
+      }
     },
     cancel: function () {
       var me = this;

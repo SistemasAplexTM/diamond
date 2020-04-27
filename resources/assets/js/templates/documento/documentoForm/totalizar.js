@@ -13,7 +13,7 @@ $(window).load(function () {
         totalizeDocument();
     }, 1000);
 });
-$(document).ready(function () {});
+$(document).ready(function () { });
 
 function totalizeDocument(elemento) {
     // setTimeout(function(){
@@ -120,6 +120,8 @@ function calculateFlete(flete) {
         if ($('#servicios_id option:selected').data('cobvol') == 0 && app_client != 'worldcargo') {
             if ((parseFloat(peso) * parseFloat(tarifa)) >= 0 && ((parseFloat(peso) * parseFloat(tarifa)) <= $('#servicios_id option:selected').data('tarifamin'))) {
                 $('#cobrarPor').text('Pes');
+                console.log('entro');
+
                 return flete;
             }
             if ((parseFloat(peso) * parseFloat(tarifa)) > $('#servicios_id option:selected').data('tarifamin')) {

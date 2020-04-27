@@ -4402,7 +4402,7 @@ class DocumentoController extends Controller
                         'cc.direccion as cons_dir2',
                         'cc.telefono as cons_tel2',
                         'cc.pais as cons_pais2',
-                        'doc.valor_libra AS tarifa',
+                        'doc.valor AS tarifa',
                         'doc.observaciones',
                         'tipo_pago.descripcion AS tipo_pago',
                         'mm.num_master',

@@ -85,7 +85,7 @@ class TrackingController extends Controller
                 $tr->save();
               }
               $answer = array(
-                  "datos"  => $request->all(),
+                  "datos"  => $data,
                   "code"   => 200,
                   "status" => 200,
               );

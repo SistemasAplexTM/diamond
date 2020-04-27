@@ -11,9 +11,6 @@
             <div class="navbar-header" style="width: 60%;">
                 <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fal fa-bars"></i>
                 </a>
-                {{-- <a class="minimalize-styl-2" href="{{ route('home') }}" style="font-size: 30px;margin-top:
-                5px;margin-bottom: 0px;" data-toggle="tooltip" title="Inicio" data-placement="right"><i
-                    class="fal fa-home"></i> </a> --}}
                 <ul class="nav metismenu" id="homeIndex">
                     <li class="dropdown navbar minimalize-styl-2" style="margin-top: 0px;margin-left: 0px;">
                         <a aria-expanded="false" role="button" href="#" class="dropdown-toggle" data-toggle="dropdown"
@@ -95,12 +92,6 @@
 
             <ul class="nav navbar-top-links navbar-right">
                 <li><span id="liveclock" style=""></span></li>
-                {{-- <li>
-                <a href="{{ route('change_lang', ['lang' => 'es']) }}">ES</a>
-                </li>
-                <li>
-                    <a href="{{ route('change_lang', ['lang' => 'en']) }}">EN</a>
-                </li> --}}
                 <!--NOTIFICACIONES-->
                 <li class="dropdown">
                     <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
@@ -111,7 +102,7 @@
                         <li>
                             <a href="#">
                                 <div>
-                                    <i class="fal fa-user-circle fa-fw"></i>JHONNYS
+                                    <i class="fal fa-user-circle fa-fw"></i>Admin
                                     <span class="pull-right text-muted small">@lang('layouts.message')</span>
                                 </div>
                             </a>
@@ -139,11 +130,6 @@
                         onclick="event.preventDefault();document.getElementById('logout-form').submit();">
                         <i class="fal fa-sign-out-alt"></i> @lang('layouts.log_out')
                     </a>
-                    {{-- <li>
-                    <a class="right-sidebar-toggle" id="sidebar-rigth">
-                        <i class="fal fa-tasks"></i>
-                    </a>
-                </li> --}}
                     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                         {{ csrf_field() }}
                     </form>
@@ -155,5 +141,4 @@
 
         </nav>
     </div>
-    {{-- <rigthsidebar-component :object="datos"></rigthsidebar-component> --}}
 </div>

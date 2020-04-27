@@ -1,11 +1,11 @@
 <nav id="sidebar" class="navbar-default navbar-static-side" role="navigation">
   <div class="sidebar-collapse">
-    <li class="nav-header" slot="header">
+  <ul class="nav metismenu" id="side-menu">
+    <li class="nav-header" slot="header" style="padding: 10px 25px!impoirtant;">
       <div class="dropdown profile-element">
         <span>
           <img alt="image" class="" id="imgProfile" src="{{ asset('storage/') }}/{{ Session::get('logo') }}"
-            style="width: 170px;" />
-          {{-- <img alt="image" class="" id="imgProfile" src="" style="width: 170px;height: 60px;background-color: #fff"/> --}}
+            style="width: 170px;">
         </span>
         <a class="dropdown-toggle" data-toggle="dropdown" href="#">
           <span class="clear">
@@ -41,11 +41,10 @@
           </li>
         </ul>
       </div>
-      <div class="logo-element">
-        4plbox
-      </div>
+      <div class="logo-element">4plbox</div>
     </li>
+  </ul>
+
     <sidebar-component>
-      {{-- </sidebar-component> --}}
   </div>
 </nav>
