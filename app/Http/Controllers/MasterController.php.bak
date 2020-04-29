@@ -376,7 +376,7 @@ class MasterController extends Controller
     public function getAll()
     {
         $data = DB::table('master AS a')
-            ->leftJoin('master_detalle AS b', 'b.master_id', 'a.id')
+            ->join('master_detalle AS b', 'b.master_id', 'a.id')
             ->join('aerolineas_aeropuertos AS c', 'a.aerolineas_id', 'c.id')
             ->join('aerolineas_aeropuertos AS d', 'd.id', 'a.aeropuertos_id_destino')
             ->join('localizacion AS e', 'd.localizacion_id', 'e.id')

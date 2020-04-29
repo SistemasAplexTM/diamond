@@ -103,7 +103,7 @@
             <tr>
                 <td class="border_bottom" colspan="4">
                     <div class="titulos">
-                        Descripción - Contenido
+                        Descripci贸n - Contenido
                     </div>
                     <div class="description">
                         {{ $value->contenido2 }}
@@ -122,7 +122,7 @@
                 <td class="border_bottom" colspan="4">
                     <div style="text-align:center">
                         <strong>{{ ((isset($documento->agencia) and $documento->agencia != '') ? trim($documento->agencia) : '') }}
-                            Su mejor opción</strong>
+                            Su mejor opci贸n</strong>
                     </div>
                     {{-- <div style="text-align:center">
                            <strong> </strong>
