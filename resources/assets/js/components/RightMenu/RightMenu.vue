@@ -2,7 +2,7 @@
   <el-drawer
     :visible.sync="drawer"
     direction="rtl"
-    size="25%"
+    size="28%"
     :destroy-on-close="true"
     :append-to-body="true"
     :wrapperClosable="false"
@@ -63,7 +63,7 @@ export default {
   color: white;
   position: fixed;
   top: 0;
-  width: 24%;
+  width: 28%;
   margin-right: 0px;
   margin-left: 0px;
   z-index: 999;

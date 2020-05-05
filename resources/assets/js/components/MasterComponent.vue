@@ -717,6 +717,7 @@ span.error {
                                   type="number"
                                   class="form-control"
                                   @keyup="calculateTotal(index)"
+                                  :readonly="detail.minima"
                                 />
                                 <span
                                   class="input-group-addon"
@@ -726,7 +727,7 @@ span.error {
                                 >
                                   <i
                                     class="fal fa-check"
-                                    @click.prevent="detail.minima = true;"
+                                    @click.prevent="detail.minima = true; detail.tarifa = 0;"
                                     v-show="!detail.minima"
                                   ></i>
                                   <i

@@ -474,7 +474,7 @@ class ConsigneeController extends Controller
   public function vueSelect($data)
   {
     $term = $data;
-    $tags = Consignee::select(['id', 'nombre_full as name'])
+    $tags = Consignee::select(['id', 'nombre_full as name', 'po_box'])
       ->whereRaw("TRIM(REPLACE(nombre_full,'  ',' ')) like '%$term%'")
       ->where([
         ['agencia_id', Auth::user()->agencia_id],

@@ -3,77 +3,124 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use JavaScript;
+use App\Moneda;
 use App\Invoice;
 use App\InvoiceDetail;
 
 class InvoiceController extends Controller
 {
-    public function index()
-    {
-      return view('templates.invoice.index');
+  public function index()
+  {
+    JavaScript::put([
+      'data_agencia' => $this->getNameAgencia(),
+    ]);
+    return view('templates.invoice.index');
+  }
+
+  public function store(Request $request)
+  {
+    try {
+      $data = (new Invoice)->fill($request->all());
+      if ($data->save()) {
+        $answer = array(
+          "datos"  => $request->all(),
+          "code"   => 200,
+          "status" => 200,
+        );
+      } else {
+        $answer = array(
+          "error"  => 'Error al intentar Crear el registro.',
+          "code"   => 600,
+        );
+      }
+      return $answer;
+    } catch (\Exception $e) {
+      $answer = array(
+        "error"  => $e,
+        "code"   => 600,
+      );
+      return $answer;
     }
+  }
 
-    public function getAll()
-    {
-        $sql = Invoice::join('shipper AS b', 'b.id', 'invoice.shipper_id')
-        ->join('consignee AS c', 'c.id', 'invoice.consignee_id')
-        ->select(
-        	'invoice.id',
-          'invoice.consecutive',
-          'invoice.date_document',
-          'b.nombre_full AS shipper',
-          'c.nombre_full AS consignee',
-          'invoice.observation'
-          )->where('invoice.deleted_at', NULL)->get();
-
-        return \DataTables::of($sql)->make(true);
+  public function update(Request $request, $id)
+  {
+    try {
+      $data = Invoice::findOrFail($id);
+      $data->update($request->all());
+      $answer = array(
+        "datos"  => $request->all(),
+        "code"   => 200,
+        "status" => 500,
+      );
+      return $answer;
+    } catch (\Exception $e) {
+      $answer = array(
+        "error"  => $e,
+        "code"   => 600,
+        "status" => 500,
+      );
+      return $answer;
     }
+  }
 
-    public function pdfLabels($invoice_id)
-    {
-      $invoice = Invoice::join('shipper AS b', 'b.id', 'invoice.shipper_id')
-        ->join('consignee AS c', 'c.id', 'invoice.consignee_id')
-        ->join('agencia AS d', 'd.id', 'invoice.agency_id')
-        ->select(
-          'invoice.id',
-          'invoice.consecutive',
-          'invoice.date_document',
-          'b.nombre_full AS shipper',
-          'c.nombre_full AS consignee',
-          'invoice.observation',
-          'd.descripcion as agencia',
-          'd.telefono as agencia_tel',
-          'd.direccion as agencia_dir',
-          'd.zip as agencia_zip',
-          'd.email as agencia_email',
-          'd.logo as agencia_logo'
-          )->where([
-              ['invoice.id', $invoice_id],
-              ['invoice.deleted_at', NULL]
-          ])->first();
+  public function destroy($id)
+  {
+    $data = invoice::findOrFail($id);
+    $data->delete();
+  }
 
-      $detalle = InvoiceDetail::join('documento AS b', 'b.id', 'invoice_detail.document_id')
-        ->join('documento_detalle AS c', 'c.documento_id', 'b.id')
-        ->select(
-          'b.piezas',
-          'invoice_detail.id',
-          'c.dimensiones',
-          'c.largo',
-          'c.ancho',
-          'c.alto',
-          'c.contenido',
-          'c.volumen',
-          'c.valor',
-          'c.peso',
-          'c.num_warehouse',
-          'c.num_guia',
-          'c.liquidado',
-          'c.consolidado'
-          )->where([
-              ['invoice_detail.deleted_at', NULL],
-              ['invoice_detail.invoice_id', $invoice_id]
-          ])->get();
-      return view('pdf/invoice/labels', compact('invoice', 'detalle'));
+  public function getAll()
+  {
+      $sql = Invoice::with('detail')->orderBy('created_at', 'DESC')->get();
+      return \DataTables::of($sql)->make(true);
+  }
+
+  public function getSelectClient($filter)
+  {
+    $shipper = DB::table('shipper AS a')
+      ->select(['a.id','a.nombre_full as name',DB::raw("'shipper' as table_name")])
+      ->where([
+        ['a.nombre_full', 'LIKE', '%' . $filter . '%'],
+        ['a.deleted_at', null],
+      ]);
+    $consignee = DB::table('consignee AS a')
+      ->select(['a.id','a.nombre_full as name',DB::raw("'consignee' as table_name")])
+      ->where([
+        ['a.nombre_full', 'LIKE', '%' . $filter . '%'],
+        ['a.deleted_at', null],
+      ]);
+    $data = DB::table('transportador AS a')
+      ->select(['a.id','a.nombre as name',DB::raw("'master' as table_name")])
+      ->union($shipper)
+      ->union($consignee)
+      ->where([
+        ['a.nombre', 'LIKE', '%' . $filter . '%'],
+        ['a.deleted_at', null],
+      ])->get();
+    $answer = array(
+      'data' => $data
+    );
+    return \Response::json($answer);
+  }
+
+  public function getCurrency(){
+    try {
+      $data = Moneda::whereNull('deleted_at')->get();
+      $answer = array(
+        "data"  => $data,
+        "code"   => 200,
+      );
+      return $answer;
+    } catch (\Exception $e) {
+      $answer = array(
+        "error"  => $error,
+        "code"   => 600,
+      );
+      return $answer;
     }
+  }
 
 }

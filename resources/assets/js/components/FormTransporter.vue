@@ -49,12 +49,12 @@ export default {
   data() {
     return {
       form: {
-        name: "prueba",
-        email: "prueba@prueba.com",
+        name: "",
+        email: "",
         info: null,
-        shipper: true,
-        consignee: true,
-        carrier: true
+        shipper: false,
+        consignee: false,
+        carrier: false
       }
     };
   },

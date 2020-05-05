@@ -458,6 +458,12 @@ Route::group(['middleware' => 'auth'], function () {
   Route::get('radicado/getClientes', 'RadicadoController@getClientes');
   Route::get('radicado/getEmpleados', 'RadicadoController@getEmpleados');
   Route::get('radicado/imprimir/{id}', 'RadicadoController@imprimir');
+
+  /* INVOICE */
+  Route::resource('invoice', 'InvoiceController', ['except' => ['show', 'create', 'edit']]);
+  Route::get('invoice/getSelectClient/{filter}', 'InvoiceController@getSelectClient');
+  Route::get('invoice/getCurrency', 'InvoiceController@getCurrency');
+
 });
 Route::get('DocumentoController', 'DocumentoController@printFile');
 Route::any('WebClientPrintController', 'WebClientPrintController@processRequest');

@@ -142,7 +142,8 @@
                     @select="handleSelect">
                     <template slot-scope="{ item }">
                       <div class="content-select">
-                        <i class="fal fa-user icon"></i> @{{ item.name }}
+                        <i class="fal fa-user icon"></i> @{{ item.name }} 
+                        <span style="float: right;"><i class="fa fa-address-book icon"></i> @{{ item.po_box }}</span>
                       </div>
                     </template>
                     <template slot="append">

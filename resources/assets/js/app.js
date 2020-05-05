@@ -83,3 +83,6 @@ Vue.component('casillero', require('./components/Casillero.vue'));
 
 Vue.component('form-transporter', require('./components/FormTransporter.vue'));
 Vue.component('detail-document', require('./components/DetailDocument.vue')); 
+
+//invoice
+Vue.component('invoice', require('./components/invoice/Invoice.vue')); 
