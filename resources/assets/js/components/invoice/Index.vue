@@ -5,7 +5,7 @@
         <div class="ibox-title">
             <h5>Facturas</h5>
             <div class="ibox-tools">
-                <a class="btn btn-primary" data-toggle="tooltip" title="Crear Factura" @click="openRigthBar"><span>Nueva <i class="fal fa-plus" style="font-size: small;"></i></span></a>
+                <a class="btn btn-primary" data-toggle="tooltip" title="Crear Factura" @click="openRigthBar(false)"><span>Nueva <i class="fal fa-plus" style="font-size: small;"></i></span></a>
             </div>
         </div>
         <div class="ibox-content">
@@ -31,29 +31,68 @@
 
 <script>
 export default {
-  props: ['agency_data'],
+  props: ['agency_data', 'id_edit'],
+  watch: {
+    id_edit:function(value){
+      if (value != null) {
+        this.id = value
+        this.edit();
+      }
+    }
+  },
   data(){
     return {
-      id: 0
+      id: null,
+      data_edit: null,
+      client : null
     }
+  },
+  created() {
+    let me = this;
+    bus.$on("refresh", function(payload) {
+      me.getAll();
+    });
+    
   },
   mounted(){
     this.getAll();
   },
   methods:{
-    openRigthBar() {
+    edit(){
+      let me = this;
+      axios.get("invoice/getInvoiceById/" + me.id)
+        .then(function(response) {
+          me.data_edit = response.data.invoice;
+          me.client = response.data.client;
+          me.openRigthBar(true);
+        })
+        .catch(function(error) {
+          console.log(error);
+          toastr.warning("Error.");
+          toastr.options.closeButton = true;
+        });
+    },
+    openRigthBar(edit) {
       var data = {
         component: 'invoice',
-        title: 'Nueva Factura',
+        title: (edit) ? 'Factura #' + this.id : 'Nueva Factura',
         icon: 'fal fa-file-invoice-dollar',
         table: 'invoice',
         hidden_btn: true,
-        edit: false,
-        agency: this.agency_data
+        edit: edit,
+        agency: this.agency_data,
+        invoice: this.data_edit,
+        client: this.client
       }
       bus.$emit('open', data)
     },
     getAll(){
+      if ($.fn.DataTable.isDataTable('#tbl-invoice')) {
+        var table = $('#tbl-invoice').DataTable();
+        table.clear();
+        $('#tbl-invoice tbody').empty();
+        $('#tbl-invoice').dataTable().fnDestroy();
+      }
       $('#tbl-invoice').DataTable({
           processing: true,
           serverSide: true,
@@ -62,7 +101,7 @@ export default {
           ajax: '/invoice/getAll',
           "order": [[ 0, "desc" ]],
           columns: [
-              {data: 'consecutive', name: 'consecutive'},
+              {data: 'id', name: 'id'},
               {data: 'date_document', name: 'date_document'},
               {data: 'client_id', name: 'client_id'},
               {data: 'currency', name: 'currency'},
@@ -81,7 +120,7 @@ export default {
                   "render": function (data, type, full, meta) {
                       var btn_edit = '';
                       var btn_delete = '';
-                      var btn_edit = '<a href="#" class="edit" title="Editar" data-toggle="tooltip" style="color:#FFC107;"><i class="fal fa-pencil fa-lg"></i></a> ';
+                      var btn_edit = '<a onclick="edit('+full.id+')" class="edit" title="Editar" data-toggle="tooltip" style="color:#FFC107;"><i class="fal fa-pencil fa-lg"></i></a> ';
                       var btn_pdf = '<a href="#" class="edit" title="Ver PDF" data-toggle="tooltip" style="color:#ff0740;"><i class="fal fa-file-pdf fa-lg"></i></a> ';
                       var btn_email = '<a href="#" class="edit" title="Enviar Email" data-toggle="tooltip" style="color:#075fff;"><i class="fal fa-envelope-open-text fa-lg"></i></a> ';
                       var btn_delete = ' <a class="delete" title="Eliminar" data-toggle="tooltip" style="color:#E34724;"><i class="fal fa-trash-alt fa-lg"></i></a>';

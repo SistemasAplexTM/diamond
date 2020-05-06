@@ -24,7 +24,7 @@
     }
   </style>
   <div class="row" id="invoice">
-    <invoice-component :agency_data="agency_data"></invoice-component>
+    <invoice-component :agency_data="agency_data" :id_edit="id_edit"></invoice-component>
   </div>
 @endsection
 

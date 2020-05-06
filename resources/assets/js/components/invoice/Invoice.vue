@@ -18,7 +18,7 @@
             v-for="item in currencies"
             :key="item.id"
             :label="item.moneda"
-            :value="item">
+            :value="item.id">
             <span style="float: left">{{ item.moneda }}</span>
             <span style="float: right; color: #8492a6; font-size: 13px">{{ item.simbolo }}</span>
           </el-option>
@@ -80,7 +80,8 @@
       <el-col>
         <el-table
           :data="tableData"
-          style="width: 100%">
+          style="width: 100%"
+          height="300">
           <el-table-column
             label="Descripción"
             width="200"
@@ -111,22 +112,22 @@
 export default {
   name: 'invoice',
   props: ['payload'],
+  watch: {
+    payload: {
+      handler(nv, ov) {
+        this.asignedData();
+      },
+      deep: true
+    },
+  },
   data(){
     return{
       id: '',
       agency_id: this.payload.agency.id,
       consecutive:'',
       date_document:'',
-      client_table:'',
-      client_id_table:'',
       client_id:{},
-      currency:{
-        codigo: "170",
-        descripcion: "Colombian Peso",
-        id: 1,
-        moneda: "COP",
-        simbolo: "$"
-      },
+      currency:1,
       observation:'',
       currencies:[],
       //detail
@@ -134,12 +135,19 @@ export default {
       quantity: 1,
       amount: '',
       tableData: [],
-      loading: false
+      loading: false,
+      error: false
     }
   },
+  mounted() {
+    
+  },
   created() {
-    this.getCurrency();
     let me = this;
+    this.getCurrency();
+    if (this.id == '') {
+      this.asignedData();
+    }
     bus.$on("save", function(payload) {
       me.beforeSend();
     });
@@ -151,10 +159,27 @@ export default {
     });
   },
   methods:{
+    asignedData(){
+      let me = this;
+      setTimeout(() => {
+        if (me.payload.edit) {
+          me.id = me.payload.invoice.id;
+          me.consecutive = me.payload.invoice.consecutive;
+          me.date_document = me.payload.invoice.date_document;
+          me.client_id = {
+            id: me.payload.client.id,
+            name: me.payload.client.name,
+            table_name: me.payload.invoice.client_table,
+          },
+          me.currency = parseInt(me.payload.invoice.currency);
+          me.observation = me.payload.invoice.observation;
+          me.getDetail();
+        }
+      }, 300);
+    },
     beforeSend(edit){
       this.loading = true;
       if (this.validateFields()) {
-        // this.setFormToClient();
         if (edit) {
           this.update();
         } else {
@@ -166,15 +191,15 @@ export default {
     validateFields(){
       var op = true;
       if (this.date_document == '') {
-        op = false;
+        op = false; this.error = true;
         toastr.warning("Atención! Ingresa la fecha.");
       }else{
         if (this.currency == '') {
-          op = false;
+          op = false; this.error = true;
           toastr.warning("Atención! Ingresa la moneda.");
         }else{
           if (this.isEmpty(this.client_id)) {
-            op = false;
+            op = false; this.error = true;
             toastr.warning("Atención! Ingresa el cliente.");
           }
         }
@@ -182,27 +207,82 @@ export default {
       return op;      
     },
     store(){
+      var me = this;
       var data = {
         agency_id: this.agency_id,
-        consecutive: this.consecutive,
+        // consecutive: this.consecutive,
         date_document: this.date_document,
-        client_table: this.client_table,
-        client_id: this.client_id,
+        client_table: this.client_id.table_name,
+        client_id: this.client_id.id,
         currency: this.currency,
         observation: this.observation,
       }
-      console.log('guardar');
+      axios
+        .post("invoice", {data})
+        .then(function(response) {
+          if (response.data["code"] == 200) {
+            me.id = response.data.datos.id;
+            bus.$emit('refresh'); // Refrescar tabla de facturas
+            toastr.success("Registro creado correctamente.");
+            toastr.options.closeButton = true;
+          } else {
+            toastr.warning("Error");
+            toastr.options.closeButton = true;
+          }
+        })
+        .catch(function(error) {
+          alert("Ocurrió un error al intentar registrar");
+        });
     },
     update(){
       console.log('actualizar');
     },
     addDetail(){
-      this.tableData.push({
+      let me = this;
+      var data = {
+        invoice_id: this.id,
         description: this.description,
         quantity: this.quantity,
         amount: this.amount,
-      });
-      this.resetDetail();
+      };
+      if (this.id != '') {
+        axios
+        .post("invoice/createDetail", {data})
+        .then(function(response) {
+          if (response.data["code"] == 200) {
+            me.resetDetail();
+            me.getDetail();
+            bus.$emit('refresh'); // Refrescar tabla de facturas
+            toastr.success("Detalle agregado.");
+            toastr.options.closeButton = true;
+          } else {
+            toastr.warning("Error");
+            toastr.options.closeButton = true;
+          }
+        })
+        .catch(function(error) {
+          alert("Ocurrió un error al intentar registrar");
+        });
+      }else{
+        me.beforeSend();
+        if (!me.error) {
+          setTimeout(() => {
+            me.addDetail()
+          }, 1000);
+        } 
+      }
+    },
+    getDetail(){
+      let me = this;
+      axios.get("invoice/getDetail/" + me.id)
+        .then(function(response) {
+          me.tableData = response.data
+        })
+        .catch(function(error) {
+          console.log(error);
+          toastr.warning("Error.");
+          toastr.options.closeButton = true;
+        });
     },
     querySearch(queryString, cb) {
       if (queryString.length > 3) {
@@ -246,7 +326,29 @@ export default {
       return true;
     },
     handleDelete(index, row) {
-      console.log(index, row);
+      let me = this
+      swal({
+        title: 'Atención!',
+        text: "Desea eliminar este registro?",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Si',
+        cancelButtonText: 'No',
+      }).then((result) => {
+        if (result.value) {
+          axios.get('invoice/destroyDetail/'+row.id).then(function(response) {
+            me.getDetail()
+            bus.$emit('refresh'); // Refrescar tabla de facturas
+            toastr.success("Registro eliminado correctamente.");
+            toastr.options.closeButton = true;
+          }).catch(function(error) {
+            alert("Ocurrió un error al intentar eliminar");
+          });
+        }
+      });
+      
     },
     resetDetail(){
       this.description = '';
@@ -255,6 +357,12 @@ export default {
     },
     resetForm(){
       this.resetDetail();
+      this.id = '';
+      this.consecutive='',
+      this.date_document='',
+      this.client_id={},
+      this.currency=1,
+      this.tableData = [];
     }
   }
 }

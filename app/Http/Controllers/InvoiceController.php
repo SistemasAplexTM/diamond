@@ -22,10 +22,35 @@ class InvoiceController extends Controller
   public function store(Request $request)
   {
     try {
-      $data = (new Invoice)->fill($request->all());
+      $data = (new Invoice)->fill($request->data);
       if ($data->save()) {
         $answer = array(
-          "datos"  => $request->all(),
+          "datos"  => $data,
+          "code"   => 200,
+          "status" => 200,
+        );
+      } else {
+        $answer = array(
+          "error"  => 'Error al intentar Crear el registro.',
+          "code"   => 600,
+        );
+      }
+      return $answer;
+    } catch (\Exception $e) {
+      $answer = array(
+        "error"  => $e,
+        "code"   => 600,
+      );
+      return $answer;
+    }
+  }
+
+  public function createDetail(Request $request){
+    try {
+      $data = (new InvoiceDetail)->fill($request->data);
+      if ($data->save()) {
+        $answer = array(
+          "datos"  => $data,
           "code"   => 200,
           "status" => 200,
         );
@@ -74,8 +99,33 @@ class InvoiceController extends Controller
 
   public function getAll()
   {
-      $sql = Invoice::with('detail')->orderBy('created_at', 'DESC')->get();
-      return \DataTables::of($sql)->make(true);
+    $sql = Invoice::with('detail')->orderBy('created_at', 'DESC')->get();
+    return \DataTables::of($sql)->make(true);
+  }
+
+  public function getInvoiceById($id)
+  {
+    $invoice = Invoice::where('id', $id)->with('detail')->first();
+
+    if ($invoice->client_table === 'master') {
+      $client = DB::table('transportador AS a')
+      ->select(['a.id','a.nombre as name',DB::raw("'master' as table_name")])
+      ->where('a.id', $invoice->client_id)->first();
+    }else{
+      $client = DB::table($invoice->client_table . ' AS a')
+      ->select(['a.id','a.nombre_full as name',DB::raw("'$invoice->client_table' as table_name")])
+      ->where('a.id', $invoice->client_id)->first();
+    }
+    $data = array(
+      'invoice' => $invoice,
+      'client' => $client
+    );
+    return $data;
+  }
+
+  public function getDetail($id)
+  {
+    return InvoiceDetail::where('invoice_id', $id)->orderBy('created_at', 'DESC')->get();
   }
 
   public function getSelectClient($filter)
@@ -121,6 +171,12 @@ class InvoiceController extends Controller
       );
       return $answer;
     }
+  }
+
+  public function destroyDetail($id)
+  {
+    $data = invoiceDetail::findOrFail($id);
+    $data->delete();
   }
 
 }

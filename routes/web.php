@@ -461,7 +461,11 @@ Route::group(['middleware' => 'auth'], function () {
 
   /* INVOICE */
   Route::resource('invoice', 'InvoiceController', ['except' => ['show', 'create', 'edit']]);
+  Route::post('invoice/createDetail', 'InvoiceController@createDetail');
+  Route::get('invoice/destroyDetail/{id}', 'InvoiceController@destroyDetail');
   Route::get('invoice/getSelectClient/{filter}', 'InvoiceController@getSelectClient');
+  Route::get('invoice/getInvoiceById/{id}', 'InvoiceController@getInvoiceById');
+  Route::get('invoice/getDetail/{id}', 'InvoiceController@getDetail');
   Route::get('invoice/getCurrency', 'InvoiceController@getCurrency');
 
 });

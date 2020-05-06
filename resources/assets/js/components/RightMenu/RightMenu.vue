@@ -6,8 +6,9 @@
     :destroy-on-close="true"
     :append-to-body="true"
     :wrapperClosable="false"
+    @close="close()"
   >
-    <header-component slot="title" :data="data" @back="drawer = false" />
+    <header-component slot="title" :data="data" @back="close()" />
     <transition-group name="fade">
       <component :is="component_active" :payload="data" key="component"></component>
       <footer-component key="footer" :edit="data.edit" v-if="!data.btn_remove" />
@@ -43,7 +44,12 @@ export default {
       me.drawer = false;
     });
   },
-  methods: {}
+  methods: {
+    close(){
+      this.drawer = false;
+      bus.$emit('close_form')
+    }
+  }
 };
 </script>
 <style lang="css">

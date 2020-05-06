@@ -39,7 +39,7 @@ export default {
   position: fixed;
   bottom: 0;
   padding: 10px 20px;
-  width: 27%;
+  width: 26.5%;
   margin-right: 0px;
   margin-left: 0px;
   border-top: solid 1px #dcdfe6;
