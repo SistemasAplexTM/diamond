@@ -86,7 +86,7 @@
         @endforeach
     @endif
         <table width="100%" border="0" cellspacing="0" cellpadding="0" id="reciboWarehouse">
-            @for($i = 1; $i <= 2; $i++)
+            @for($i = 1; $i <= 1; $i++)
                 @if (count($detalle) != 1)
                     <?php $i = 2 ?>
                 @endif
@@ -196,7 +196,7 @@
                     </td>
                 </tr>
                 <tr>
-                <td colspan="2">
+                  <td colspan="2">
                     <div style="padding:2px 0 0 0">
                         <div id="apDiv7">
                             <table width="100%" border="0" cellspacing="0" cellpadding="0">
@@ -215,12 +215,13 @@
                         </div>
                     </div>
 
-                </td>
-            </tr>
-
-                <tr>
+                  </td>
+                </tr>
+                 @endfor
+          </table>
+                {{-- <tr>
                     <td colspan="2">
-                        <div id="apDiv8">
+                        <div id="apDiv8"> --}}
                             <table width="100%" border="1" cellpadding="0" cellspacing="0" bordercolor="#000000" style="border-collapse:collapse;">
                                 <tr>
                                     <th width="2%" rowspan="2" bgcolor="lightgray" scope="col" id="titulo_detalle">#.</th>
@@ -273,12 +274,12 @@
                                     ?>
                                 @endforeach
                             </table>
-                        </div>
+                        {{-- </div>
                     </td>
                 </tr>
                 <tr>
                     <td colspan="2">
-                        <div id="apDiv9">
+                        <div id="apDiv9"> --}}
                             <table width="100%" border="1" cellpadding="0" cellspacing="1" bordercolor="#000000" style="border-collapse:collapse;">
                                 <tr>
                                     <th width="300px" rowspan="2" scope="col"><span style="font-size:20px; color:#666">@lang('general.receives')</span></th>
@@ -300,11 +301,11 @@
                                     <td align="center"><span id="total_detail"> {{ number_format($sumMetro,2) }} </span></td>
                                 </tr>
                             </table>
-                        </div>
+                        {{-- </div>
                     </td>
-                </tr>
-                <tr>
-                    <td colspan="2">
+                </tr> --}}
+                {{-- <tr>
+                    <td colspan="2"> --}}
                         <table width="100%" border="0" cellspacing="0" cellpadding="0">
                             <tr>
                                 <td valign="top">
@@ -350,14 +351,14 @@
                                 </td>
                             </tr>
                         </table>
-                    </td>
-                </tr>
+                    {{-- </td>
+                </tr> --}}
 
-                @if ($i === 1)
-                    <tr>
+                {{-- @if ($i === 1) --}}
+                    {{-- <tr>
                         <td colspan="2"><div id="space">&nbsp;</div></td>
-                    </tr>
-                @endif
-            @endfor
-        </table>
+                    </tr> --}}
+                {{-- @endif --}}
+            {{-- @endfor --}}
+        {{-- </table> --}}
         {{-- {{ exit() }} --}}

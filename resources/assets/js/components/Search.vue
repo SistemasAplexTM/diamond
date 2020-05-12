@@ -22,32 +22,32 @@
         </el-dropdown>
       </template>
       <template slot-scope="{ item }">
-  <div class="content-select">
-    <div style>
-      <i class="fal fa-user icon"></i>
-      {{ item.consignee }}
-    </div>
-    <div style="color: #8492a6;">
-      <i class="fal fa-box-open icon"></i>
-      {{ item.name }} &nbsp;&nbsp;
-      <i class="fal fa-balance-scale icon"></i>
-      {{ item.peso }} Lb &nbsp;&nbsp;
-    </div>
-    <div style="color: #8492a6; font-size: 13px">
-      <div>
-        <i class="fal fa-truck icon"></i>
-        {{ item.tracking }}
-      </div>
-      <div class="content-search">
-        <div class="content-search-item">
-          <i class="fal fa-comment-edit icon"></i>
-          {{ item.contenido }}
+        <div class="content-select">
+          <div style>
+            <i class="fal fa-user icon"></i>
+            {{ item.consignee }}
+          </div>
+          <div style="color: #8492a6;">
+            <i class="fal fa-box-open icon"></i>
+            {{ item.name }} &nbsp;&nbsp;
+            <i class="fal fa-balance-scale icon"></i>
+            {{ item.peso }} Lb &nbsp;&nbsp;
+          </div>
+          <div style="color: #8492a6; font-size: 13px">
+            <div>
+              <i class="fal fa-truck icon"></i>
+              {{ item.tracking }}
+            </div>
+            <div class="content-search">
+              <div class="content-search-item">
+                <i class="fal fa-comment-edit icon"></i>
+                {{ item.contenido }}
+              </div>
+            </div>
+          </div>
+          <hr class="hr-search" />
         </div>
-      </div>
-    </div>
-    <hr class="hr-search" />
-  </div>
-</template>
+      </template>
     </el-autocomplete>
   </div>
 </template>

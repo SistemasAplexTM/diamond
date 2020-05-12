@@ -21,12 +21,23 @@ class Invoice extends Model
       'date_document',
       'client_table',
       'client_id',
-      'currency',
+      'currency_id',
+      'master_id',
       'observation'
   ];
 
   public function detail()
-    {
-        return $this->hasMany('App\InvoiceDetail', 'invoice_id', 'id')->whereNull('deleted_at');
-    }
+  {
+    return $this->hasMany('App\InvoiceDetail', 'invoice_id', 'id')->whereNull('deleted_at');
+  }
+
+  public function currency()
+  {
+    return $this->belongsTo('App\Moneda', 'currency_id', 'id')->whereNull('deleted_at');
+  }
+
+  public function agency()
+  {
+    return $this->belongsTo('App\Agencia', 'agency_id', 'id')->whereNull('deleted_at');
+  }
 }

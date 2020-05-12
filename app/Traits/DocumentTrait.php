@@ -316,6 +316,7 @@ trait DocumentTrait
               'documento_detalle.alto',
               'documento_detalle.peso',
               'documento_detalle.peso2',
+              'documento_detalle.paquete',
               'documento_detalle.' . $codigo . ' as codigo',
               'documento_detalle.num_warehouse',
               'documento_detalle.num_guia',

@@ -64,7 +64,12 @@ $(document).ready(function () {
         var btn_delete = '';
         var btn_consolidado = '';
         var btn_hawb = '';
+        var btn_invoice = '';
         var btn_label = '<li><a onclick="createLabel(' + full.id + ', \'' + full.num_master + '\')"><i class="fal fa-tags fa-lg"></i> Labels bolsas</a></li>';
+
+        if (full.consolidado_id == null) {
+          btn_invoice = '<li><a  onclick="createInvoice(' + full.id + ', ' + full.invoice_id + ', ' + full.id_consignee + ', \'' + full.consignee + '\')"><i class="fal fa-file-invoice-dollar fa-lg"></i> Facturar</i></span></a></li>';
+        }
         if (full.master_id == null) {
           var btn_hawb = '<li><a onclick="createHouse(' + full.id + ', \'' + full.num_master + '\')"><i class="fal fa-copy fa-lg"></i> Crear House</a></li>';
         }
@@ -76,7 +81,7 @@ $(document).ready(function () {
         }
         var btn_relacionar_consolidado = "<li><a  onclick=\'asociarConsolidado(" + full.id + ")\'  ><i class='fal fa-arrows-alt-h'></i> Relacionar consolidado </i></span ></a ></li>";
 
-        var btn_cost = '<li><a onclick="createCost(' + full.id + ', \'' + full.num_master + '\', \'' + full.peso + '\', \'' + full.peso_kl + '\', \'' + full.tarifa + '\')"><i class="fal fa-file-invoice-dollar fa-lg"></i> Crear Costos</a></li>';
+        var btn_cost = '<li><a onclick="createCost(' + full.id + ', \'' + full.num_master + '\', \'' + full.peso + '\', \'' + full.peso_kl + '\', \'' + full.tarifa + '\')"><i class="fal fa-dollar-sign fa-lg"></i> Crear Costos</a></li>';
         var btn_xml = '<li><a href="master/generateXml/' + full.id + '" target="_blank"><i class="fal fa-file-export fa-lg"></i> Generar XML</a></li>';
         if (full.consolidado_id != null) {
           let link = "<li><a href='impresion-documento/" + full.consolidado_id + "/consolidado_guias' target='_blank'> <spam class='fal fa-print'></spam> Guias hijas</a></li>";
@@ -100,6 +105,7 @@ $(document).ready(function () {
           btn_cost +
           // btn_xml +
           btn_relacionar_consolidado +
+          btn_invoice +
           '<li role="separator" class="divider"></li>' +
           btn_delete +
           "</ul></div>";
@@ -171,11 +177,33 @@ function createLabel(id, master) {
   $('#modalPrintLabelsMaster').modal('show');
 }
 
+function createInvoice(id, invoice_id, id_client, name_client) {
+  var client={
+    id: id_client,
+    name: name_client,
+    table_name: 'master',
+  }
+  if (invoice_id != 'null' && invoice_id != '' && invoice_id != null) {
+    objVue.editInvoice(invoice_id);
+  }else{
+    objVue.openRigthBarInvoice(false, client);
+  }
+}
+
 var objVue = new Vue({
   el: '#master_list',
   mounted() {
     this.getData();
     this.tax_date = this.getTime();
+  },
+  created() {
+    let me = this;
+    bus.$on("pdf", function(payload) {
+      window.open('invoice/pdf/'+me.invoice_id);
+    });
+    bus.$on("email", function(payload) {
+      console.log('email');
+    });
   },
   watch: {
     write: function (value) {
@@ -225,8 +253,37 @@ var objVue = new Vue({
     icon_title: 'Escribir',
     text_cost: 'Seleccionar Costo o Gasto',
     gidesConsolidate: [],
+    invoice_id: null
   },
   methods: {
+    editInvoice(invoice_id){
+      let me = this;
+      this.invoice_id= invoice_id
+      axios.get("invoice/getInvoiceById/" + invoice_id)
+        .then(function(response) {
+          me.openRigthBarInvoice(true, response.data.client, response.data.invoice);
+        })
+        .catch(function(error) {
+          console.log(error);
+          toastr.warning("Error.");
+          toastr.options.closeButton = true;
+        });
+    },
+    openRigthBarInvoice(edit, client, invoice) {
+      var data = {
+        component: 'invoice',
+        title: (edit) ? 'Factura #' + invoice.id : 'Nueva Factura',
+        icon: 'fal fa-file-invoice-dollar',
+        table: 'invoice',
+        hidden_btn: true,
+        edit: edit,
+        agency: data_agencia,
+        invoice: invoice,
+        client: client,
+        master: ''
+      }
+      bus.$emit('open', data)
+    },
     printGuidesConsolidate(index, row) {
       window.open("documento/" + row.consolidado_id + "/consolidateGuidesCharge/" + row.id);
     },

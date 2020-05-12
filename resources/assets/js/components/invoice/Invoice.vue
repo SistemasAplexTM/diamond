@@ -1,5 +1,9 @@
 <template>
-  <div>
+  <div
+    v-loading="loading"
+    element-loading-text="Cargando..."
+    element-loading-spinner="el-icon-loading"
+    element-loading-background="rgba(212, 212, 212, 0.8)">
     <el-row :gutter="24" class="row_form">
       <el-col :span="12">
         <span class="input-label">Fecha: </span>
@@ -13,7 +17,11 @@
       </el-col>
       <el-col :span="12">
         <span class="input-label">Moneda: </span>
-        <el-select size="medium" value-key="id" v-model="currency" clearable placeholder="Seleccione">
+        <el-select size="medium" 
+          value-key="id" 
+          v-model="currency_id" 
+          clearable 
+          placeholder="Seleccione">
           <el-option
             v-for="item in currencies"
             :key="item.id"
@@ -26,17 +34,18 @@
       </el-col>
     </el-row>
     <el-row :gutter="24" class="row_form">
-      <el-col :span="24">
+      <el-col :span="12">
         <span class="input-label">Cliente: <small>{{ client_id.table_name }}</small></span>
         <el-autocomplete
           class="inline-input"
           v-model="client_id.name"
           :fetch-suggestions="querySearch"
           :trigger-on-focus="false"
-          placeholder="Buscar Cliente"
+          placeholder="Buscar Cliente.."
           @select="handleSelect"
           size="medium"
           autocomplete="nuevo-cliente"
+          clearable
         >
           <template slot-scope="{ item }">
             <div>
@@ -52,20 +61,22 @@
           </template>
         </el-autocomplete>
       </el-col>
+      <el-col :span="12">
+        <span class="input-label">Adjunte recibos a esta factura</span>
+        <el-button type="success" size="medium" icon="el-icon-folder-opened" @click="attachReceipt()" style="width:100%">Clik para adjuntar</el-button>
+      </el-col>
     </el-row>
     <div class="detail_txt">Detalle</div>
     <el-row :gutter="24" class="row_form">
-      <el-col :span="9">
+      <el-col :span="14">
         <span class="input-label">Descripción</span>
         <el-input size="medium" type="textarea" :rows="4"  placeholder="Descripción" v-model="description"></el-input>
       </el-col>
-      <el-col :span="5">
-        <span class="input-label">Cant.</span>
-        <el-input size="medium" type="number" placeholder="Seleccione" v-model="quantity"></el-input>
-      </el-col>
       <el-col :span="7">
+        <span class="input-label">Cantidad</span>
+        <el-input size="medium" type="number" min="0" placeholder="0" v-model="quantity"></el-input>
         <span class="input-label">Valor</span>
-        <el-input size="medium" type="number" placeholder="Seleccione" v-model="amount"></el-input>
+        <el-input size="medium" type="number" min="0" placeholder="$00.00" v-model="amount"></el-input>
       </el-col>
       <el-col :span="3">
         <span class="input-label">&nbsp;</span>
@@ -76,42 +87,56 @@
     </el-row>
     
     <!-- DETALLE -->
-    <el-row>
+    <el-row class="mt-20">
       <el-col>
         <el-table
           :data="tableData"
           style="width: 100%"
-          height="300">
+          height="300"
+          v-loading="loadingDetail"
+          element-loading-text="Cargando..."
+          element-loading-spinner="el-icon-loading"
+          element-loading-background="rgba(212, 212, 212, 0.8)">
           <el-table-column
             label="Descripción"
-            width="200"
+            width="210"
             prop="description">
           </el-table-column>
           <el-table-column
-            label="Cantidad"
+            label="Cant."
             prop="quantity">
           </el-table-column>
           <el-table-column
             label="Valor"
             prop="amount">
+            <template slot-scope="scope">
+              <div>{{ formatPrice(scope.row.amount) }}</div>
+            </template>
           </el-table-column>
           <el-table-column
             label="">
             <template slot-scope="scope">
-              <el-button type="danger" size="mini" icon="el-icon-delete" circle
-                class="fr"
-                @click="handleDelete(scope.$index, scope.row)"></el-button>
+              <el-tooltip content="Eliminar" placement="top">
+                <el-button type="danger" size="mini" icon="el-icon-delete" circle
+                  class="fr"
+                  @click="handleDelete(scope.$index, scope.row)"></el-button>
+              </el-tooltip>
             </template>
           </el-table-column>
         </el-table>
       </el-col>
     </el-row>
+    <modal-receipt :openModal="openModal" :invoice_id="id" @close="openModal = false"></modal-receipt>
   </div>
 </template>
 <script>
+import ModalReceipt from './ModalReceipt'
 export default {
   name: 'invoice',
   props: ['payload'],
+  components:{
+    ModalReceipt
+  },
   watch: {
     payload: {
       handler(nv, ov) {
@@ -125,9 +150,9 @@ export default {
       id: '',
       agency_id: this.payload.agency.id,
       consecutive:'',
-      date_document:'',
+      date_document:this.getTime(),
       client_id:{},
-      currency:1,
+      currency_id:1,
       observation:'',
       currencies:[],
       //detail
@@ -136,11 +161,10 @@ export default {
       amount: '',
       tableData: [],
       loading: false,
-      error: false
+      loadingDetail: false,
+      error: false,
+      openModal: false
     }
-  },
-  mounted() {
-    
   },
   created() {
     let me = this;
@@ -159,8 +183,16 @@ export default {
     });
   },
   methods:{
+    attachReceipt(){
+      if (this.id != '') {
+        this.openModal=true
+      }else{
+        toastr.warning("Es necesario guardar la factura para adjuntar recibos.");
+      }
+    },
     asignedData(){
       let me = this;
+      this.loading = true;
       setTimeout(() => {
         if (me.payload.edit) {
           me.id = me.payload.invoice.id;
@@ -171,10 +203,19 @@ export default {
             name: me.payload.client.name,
             table_name: me.payload.invoice.client_table,
           },
-          me.currency = parseInt(me.payload.invoice.currency);
+          me.currency_id = parseInt(me.payload.invoice.currency_id);
           me.observation = me.payload.invoice.observation;
           me.getDetail();
+        }else{
+          if (me.payload.client) {
+            me.client_id = {
+              id: me.payload.client.id,
+              name: me.payload.client.name,
+              table_name: me.payload.client.table_name,
+            }
+          }
         }
+        me.loading = false;
       }, 300);
     },
     beforeSend(edit){
@@ -185,8 +226,9 @@ export default {
         } else {
           this.store();
         }
+      }else{
+        this.loading = false;
       }
-      this.loading = false;
     },
     validateFields(){
       var op = true;
@@ -194,7 +236,7 @@ export default {
         op = false; this.error = true;
         toastr.warning("Atención! Ingresa la fecha.");
       }else{
-        if (this.currency == '') {
+        if (this.currency_id == '') {
           op = false; this.error = true;
           toastr.warning("Atención! Ingresa la moneda.");
         }else{
@@ -214,7 +256,7 @@ export default {
         date_document: this.date_document,
         client_table: this.client_id.table_name,
         client_id: this.client_id.id,
-        currency: this.currency,
+        currency_id: this.currency_id,
         observation: this.observation,
       }
       axios
@@ -225,17 +267,47 @@ export default {
             bus.$emit('refresh'); // Refrescar tabla de facturas
             toastr.success("Registro creado correctamente.");
             toastr.options.closeButton = true;
+            me.loading = false;
           } else {
             toastr.warning("Error");
             toastr.options.closeButton = true;
+            me.loading = false;
           }
         })
         .catch(function(error) {
           alert("Ocurrió un error al intentar registrar");
+          me.loading = false;
         });
     },
     update(){
-      console.log('actualizar');
+      var me = this;
+      var data = {
+        agency_id: this.agency_id,
+        // consecutive: this.consecutive,
+        date_document: this.date_document,
+        client_table: this.client_id.table_name,
+        client_id: this.client_id.id,
+        currency_id: this.currency_id,
+        observation: this.observation,
+      }
+      axios
+        .put("invoice/"+ this.id, {data})
+        .then(function(response) {
+          if (response.data["code"] == 200) {
+            bus.$emit('refresh'); // Refrescar tabla de facturas
+            toastr.success("Registro editado correctamente.");
+            toastr.options.closeButton = true;
+            me.loading = false;
+          } else {
+            toastr.warning("Error");
+            toastr.options.closeButton = true;
+            me.loading = false;
+          }
+        })
+        .catch(function(error) {
+          alert("Ocurrió un error al intentar editar");
+          me.loading = false;
+        });
     },
     addDetail(){
       let me = this;
@@ -274,14 +346,17 @@ export default {
     },
     getDetail(){
       let me = this;
+      me.loadingDetail=true
       axios.get("invoice/getDetail/" + me.id)
         .then(function(response) {
           me.tableData = response.data
+          me.loadingDetail=false
         })
         .catch(function(error) {
           console.log(error);
           toastr.warning("Error.");
           toastr.options.closeButton = true;
+          me.loadingDetail=false
         });
     },
     querySearch(queryString, cb) {
@@ -363,12 +438,19 @@ export default {
       this.client_id={},
       this.currency=1,
       this.tableData = [];
-    }
+    },
+    formatPrice(value) {
+      let val = (value / 1).toFixed(2).replace('.', ',')
+      return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
+    },
   }
 }
 </script>
 
 <style lang="css" scoped>
+.mt-20{
+    margin-top: 20px;
+  }
 .color_s{
   color: red;
 }

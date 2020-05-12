@@ -11,7 +11,7 @@
     <header-component slot="title" :data="data" @back="close()" />
     <transition-group name="fade">
       <component :is="component_active" :payload="data" key="component"></component>
-      <footer-component key="footer" :edit="data.edit" v-if="!data.btn_remove" />
+      <footer-component key="footer" :edit="data.edit" :table="data.table" v-if="!data.btn_remove" />
     </transition-group>
   </el-drawer>
 </template>

@@ -3236,9 +3236,20 @@ class DocumentoController extends Controller
                     ['a.deleted_at', null],
                     ['a.id', '<>', $id_detalle],
                     ['a.flag', 0],
+                    ['a.mintic', null],
                     ['a.consolidado', 0],
                     ['b.carga_courier', 1]
                 ])
+                ->havingRaw(DB::raw('(
+                    SELECT
+                        Count( z.id ) 
+                    FROM
+                        documento_detalle AS z 
+                    WHERE
+                        z.deleted_at IS NULL 
+                        AND z.agrupado = a.id 
+                        AND z.id <> a.id 
+                    ) = 0'))
                 ->orderBy('codigo', 'DESC')
                 ->get();
         } else {

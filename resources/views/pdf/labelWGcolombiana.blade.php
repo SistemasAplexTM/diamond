@@ -124,9 +124,16 @@
                         <strong>{{ ((isset($documento->agencia) and $documento->agencia != '') ? trim($documento->agencia) : '') }}
                             Su mejor opción</strong>
                     </div>
-                    {{-- <div style="text-align:center">
-                           <strong> </strong>
-                        </div> --}}
+                </td>
+            </tr>
+            <tr>
+                <td class="" colspan="4">
+                    <div style="text-align:center">
+                        <img id="barcode" style="height: 38px;padding-top: 15px;"
+                            src="data:image/png;base64, {{ DNS1D::getBarcodePNG($value->codigo, "C128",2,45) }}"
+                            alt="barcode" /> <label style="font-size: 20px;">{{ $value->paquete }} de {{ $piezas }}</label>
+                    </div>
+                    
                 </td>
             </tr>
         </table>

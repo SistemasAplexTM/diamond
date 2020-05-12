@@ -11,6 +11,7 @@ use App\MasterCostos;
 use App\MasterCargosAdicionales;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use JavaScript;
 use Auth;
 
 class MasterController extends Controller
@@ -24,6 +25,9 @@ class MasterController extends Controller
     }
     public function index()
     {
+        JavaScript::put([
+        'data_agencia' => $this->getNameAgencia(),
+        ]);
         $this->assignPermissionsJavascript('master');
         return view('templates.master.list');
     }
@@ -382,6 +386,7 @@ class MasterController extends Controller
             ->join('localizacion AS e', 'd.localizacion_id', 'e.id')
             ->join('transportador AS g', 'a.consignee_id', 'g.id')
             ->leftJoin('documento AS f', 'f.master_id', 'a.id')
+            ->leftJoin('invoice AS i', 'i.master_id', 'a.id')
             ->select(
                 'a.id',
                 'a.master_id',
@@ -395,6 +400,7 @@ class MasterController extends Controller
                 DB::raw("ROUND(SUM(b.peso),2) AS peso"),
                 DB::raw("SUM(b.peso_kl) AS peso_kl"),
                 // 'b.tarifa',
+                'g.id AS id_consignee',
                 'g.nombre AS consignee',
                 'g.contacto AS contacto',
                 'a.created_at',
@@ -411,7 +417,8 @@ class MasterController extends Controller
                 impuesto_master AS z
                 WHERE
                 z.master_id = a.id AND
-                z.deleted_at IS NULL) AS fecha_liquidacion")
+                z.deleted_at IS NULL) AS fecha_liquidacion"),
+                'i.id AS invoice_id'
             )
             ->groupBy(
                 'a.id',
@@ -425,7 +432,8 @@ class MasterController extends Controller
                 'g.nombre',
                 'g.contacto',
                 'a.created_at',
-                'tipo_consolidado_id'
+                'tipo_consolidado_id',
+                'invoice_id'
             )
             ->where([
                 ['a.deleted_at', null],

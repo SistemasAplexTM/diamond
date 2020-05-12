@@ -116,8 +116,8 @@ class LoginController extends Controller
         }
       }
       // echo '<pre>';
+      // print_r($printersDB);
       // print_r($printers);
-      // print_r($default);
       // echo '</pre>';
       // exit();
       Session::put('printer', $default);

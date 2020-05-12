@@ -26,10 +26,13 @@
 			</tr>
 			<tr>
 				{{-- <td>Warehouse#</td> --}}
-				<td>Mintic</td>
+				<td>Recibos</td>
 				<td>Guia#</td>
 				<td>Tracking</td>
+				<td>Piezas</td>
 				<td>Peso lb</td>
+				<td>Peso kl</td>
+				<td>Contenido</td>
 				<td>Nombre Destinatario</td>
 				<td>Direccion Destinatario</td>
 				<td>Ciudad Destinatario</td>
@@ -44,7 +47,10 @@
 				<td>{{ $value->mintic }}</td>
 				<td>{{ $value->num_guia }}</td>
 				<td>{{ $value->tracking }}</td>
+				<td>{{ $value->piezas }}</td>
 				<td>{{ $value->peso_lb }}</td>
+				<td>{{ round(($value->peso_lb) * 0.453592,2) }}</td>
+				<td>{{ $value->contenido }}</td>
 				<td>{{ $value->cons }}</td>
 				<td>{{ $value->cons_dir }}</td>
 				<td>{{ $value->cons_ciu }}</td>
@@ -69,7 +75,10 @@
 				<td>{{ ($value->is_mintic != '') ? $value->mintic : '' }}</td>
 				<td>{{ $value->num_guia }}</td>
 				<td>{{ $value->tracking }}</td>
+				<td>{{ $value->piezas }}</td>
 				<td>{{ $value->peso_lb }}</td>
+				<td>{{ round(($value->peso_lb) * 0.453592, 2) }}</td>
+				<td>{{ $value->contenido }}</td>
 				<td>{{ $value->cons }}</td>
 				<td>{{ $value->cons_dir }}</td>
 				<td>{{ $value->cons_ciu }}</td>

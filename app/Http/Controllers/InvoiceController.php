@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Barryvdh\DomPDF\Facade as PDF;
 use JavaScript;
 use App\Moneda;
 use App\Invoice;
 use App\InvoiceDetail;
+use App\InvoiceReceiptPivot;
 
 class InvoiceController extends Controller
 {
@@ -45,6 +47,42 @@ class InvoiceController extends Controller
     }
   }
 
+  public function saveRelationReceipt(Request $request)
+  {
+    try {
+      $pivot = InvoiceReceiptPivot::where('document_id', $request->data['document_id'])->with('invoice')->first();
+      if($pivot){
+        $answer = array(
+          "error"  => 'El recibo ya esta registrado en la factura #.' . $pivot->invoice->id,
+          "data"  => $pivot,
+          "code"   => 600,
+        );
+      }else{
+        $data = (new InvoiceReceiptPivot)->fill($request->data);
+        if ($data->save()) {
+          $answer = array(
+            "datos"  => $data,
+            "code"   => 200,
+            "status" => 200,
+          );
+        } else {
+          $answer = array(
+            "error"  => 'Error al intentar Crear el registro.',
+            "code"   => 600,
+          );
+        }
+      }
+      return $answer;
+    } catch (\Exception $e) {
+      $answer = array(
+        "error"  => $e,
+        "dat"  => '',
+        "code"   => 600,
+      );
+      return $answer;
+    }
+  }
+
   public function createDetail(Request $request){
     try {
       $data = (new InvoiceDetail)->fill($request->data);
@@ -74,9 +112,9 @@ class InvoiceController extends Controller
   {
     try {
       $data = Invoice::findOrFail($id);
-      $data->update($request->all());
+      $data->update($request->data);
       $answer = array(
-        "datos"  => $request->all(),
+        "datos"  => $data,
         "code"   => 200,
         "status" => 500,
       );
@@ -93,29 +131,31 @@ class InvoiceController extends Controller
 
   public function destroy($id)
   {
-    $data = invoice::findOrFail($id);
+    $data   = invoice::findOrFail($id);
+    $detail = $this->getDetail($id);
+    $pivot  = $this->getRelationReceipt($id);
+    foreach ($detail as $key => $value) {
+      $this->destroyDetail($value->id);
+    }
+    foreach ($pivot as $key => $value) {
+      $this->destroyRelationReceipt($value->id);
+    }
     $data->delete();
   }
 
   public function getAll()
   {
-    $sql = Invoice::with('detail')->orderBy('created_at', 'DESC')->get();
+    $sql = Invoice::with('detail', 'currency', 'agency')->orderBy('created_at', 'DESC')->get();
+    foreach ($sql as $key => $value) {
+      $sql[$key]->client_id = $this->getClientById($value->client_table, $value->client_id);
+    }
     return \DataTables::of($sql)->make(true);
   }
 
   public function getInvoiceById($id)
   {
-    $invoice = Invoice::where('id', $id)->with('detail')->first();
-
-    if ($invoice->client_table === 'master') {
-      $client = DB::table('transportador AS a')
-      ->select(['a.id','a.nombre as name',DB::raw("'master' as table_name")])
-      ->where('a.id', $invoice->client_id)->first();
-    }else{
-      $client = DB::table($invoice->client_table . ' AS a')
-      ->select(['a.id','a.nombre_full as name',DB::raw("'$invoice->client_table' as table_name")])
-      ->where('a.id', $invoice->client_id)->first();
-    }
+    $invoice = Invoice::where('id', $id)->with('detail', 'currency', 'agency')->first();
+    $client = $this->getClientById($invoice->client_table, $invoice->client_id);
     $data = array(
       'invoice' => $invoice,
       'client' => $client
@@ -126,6 +166,25 @@ class InvoiceController extends Controller
   public function getDetail($id)
   {
     return InvoiceDetail::where('invoice_id', $id)->orderBy('created_at', 'DESC')->get();
+  }
+
+  public function getRelationReceipt($id)
+  {
+    return InvoiceReceiptPivot::where('invoice_id', $id)->with('document')->orderBy('created_at', 'DESC')->get();
+  }
+
+  public function getClientById($table, $id){
+    $client = null;
+    if ($table === 'master') {
+      $client = DB::table('transportador AS a')
+      ->select(['a.id','a.nombre as name', 'a.email', 'a.information',DB::raw("'master' as table_name")])
+      ->where('a.id', $id)->first();
+    }else{
+      $client = DB::table($table . ' AS a')
+      ->select(['a.id','a.nombre_full as name', 'a.direccion', 'a.telefono', 'a.correo',DB::raw("'$table' as table_name")])
+      ->where('a.id', $id)->first();
+    }
+    return $client;
   }
 
   public function getSelectClient($filter)
@@ -177,6 +236,29 @@ class InvoiceController extends Controller
   {
     $data = invoiceDetail::findOrFail($id);
     $data->delete();
+  }
+
+  public function destroyRelationReceipt($id)
+  {
+    $data = InvoiceReceiptPivot::findOrFail($id);
+    $data->delete();
+  }
+
+  public function pdf($id)
+  {
+    $data = $this->getInvoiceById($id);
+    // echo '<pre>';
+    // print_r($data['invoice']->currency);
+    // print_r($data['client']);
+    // echo '</pre>';
+    // exit();
+    $pdf  = PDF::loadView('pdf.invoice.invoice', compact('data'));
+    $pdf->save(public_path() . '/files/invoice.pdf'); //GUARDAR PARA IMPRIMIR POR DEFECTO
+    $dom_pdf = $pdf->getDomPDF();
+
+    $canvas = $dom_pdf ->get_canvas();
+    $canvas->page_text(522, 800, "Page {PAGE_NUM} of {PAGE_COUNT}", null, 10, array(0, 0, 0));
+    return $pdf->stream('Invoice #'.$id.'.pdf'); //visualizar en el navegador
   }
 
 }

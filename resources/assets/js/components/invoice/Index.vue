@@ -18,7 +18,8 @@
                   <th><i class="fal fa-user"></i> Cliente</th>
                   <th><i class="fal fa-money-bill-wave"></i> Moneda</th>
                   <th><i class="fal fa-dollar-sign"></i> Monto Total</th>
-                  <th></th>
+                  <th><i class="fal fa-warehouse-alt"></i> Agencia</th>
+                  <th><i class="fal fa-bolt"></i> Acciones</th>
                 </tr>
               </thead>
             </table>
@@ -31,14 +32,19 @@
 
 <script>
 export default {
-  props: ['agency_data', 'id_edit'],
+  props: ['agency_data', 'id_edit', 'id_delete'],
   watch: {
     id_edit:function(value){
       if (value != null) {
         this.id = value
         this.edit();
       }
-    }
+    },
+    id_delete:function(value){
+      if (value != null) {
+        this.delete(value);
+      }
+    },
   },
   data(){
     return {
@@ -52,7 +58,12 @@ export default {
     bus.$on("refresh", function(payload) {
       me.getAll();
     });
-    
+    bus.$on("pdf", function(payload) {
+      window.open('invoice/pdf/'+me.id);
+    });
+    bus.$on("email", function(payload) {
+      console.log('email');
+    });
   },
   mounted(){
     this.getAll();
@@ -90,8 +101,8 @@ export default {
       if ($.fn.DataTable.isDataTable('#tbl-invoice')) {
         var table = $('#tbl-invoice').DataTable();
         table.clear();
-        $('#tbl-invoice tbody').empty();
         $('#tbl-invoice').dataTable().fnDestroy();
+        $('#tbl-invoice tbody').empty();
       }
       $('#tbl-invoice').DataTable({
           processing: true,
@@ -103,8 +114,18 @@ export default {
           columns: [
               {data: 'id', name: 'id'},
               {data: 'date_document', name: 'date_document'},
-              {data: 'client_id', name: 'client_id'},
-              {data: 'currency', name: 'currency'},
+              {
+                "render": function (data, type, full, meta) {
+                  return full.client_id.name;
+                },
+                name: 'client_id.name'
+              },
+              {
+                sortable: false,
+                "render": function (data, type, full, meta) {
+                  return '('+full.currency.moneda+') ' + full.currency.descripcion;
+                }
+              },
               {
                 sortable: false,
                 "render": function (data, type, full, meta) {
@@ -112,8 +133,14 @@ export default {
                   full.detail.forEach(el => {
                     total += parseFloat(el.amount) * parseInt(el.quantity);
                   });
-                  return total;
+                  return full.currency.simbolo + ' ' + objVue.formatPrice(total);
                 }
+              },
+              {
+                "render": function (data, type, full, meta) {
+                  return full.agency.descripcion;
+                },
+                name: 'agency.descripcion'
               },
               {
                   sortable: false,
@@ -121,14 +148,38 @@ export default {
                       var btn_edit = '';
                       var btn_delete = '';
                       var btn_edit = '<a onclick="edit('+full.id+')" class="edit" title="Editar" data-toggle="tooltip" style="color:#FFC107;"><i class="fal fa-pencil fa-lg"></i></a> ';
-                      var btn_pdf = '<a href="#" class="edit" title="Ver PDF" data-toggle="tooltip" style="color:#ff0740;"><i class="fal fa-file-pdf fa-lg"></i></a> ';
+                      var btn_pdf = '<a href="invoice/pdf/'+full.id+'" target="blank_" class="edit" title="Ver PDF" data-toggle="tooltip" style="color:#ff0740;"><i class="fal fa-file-pdf fa-lg"></i></a> ';
                       var btn_email = '<a href="#" class="edit" title="Enviar Email" data-toggle="tooltip" style="color:#075fff;"><i class="fal fa-envelope-open-text fa-lg"></i></a> ';
-                      var btn_delete = ' <a class="delete" title="Eliminar" data-toggle="tooltip" style="color:#E34724;"><i class="fal fa-trash-alt fa-lg"></i></a>';
+                      var btn_delete = ' <a onclick="deleteRecord('+full.id+')" class="delete" title="Eliminar" data-toggle="tooltip" style="color:#E34724;"><i class="fal fa-trash-alt fa-lg"></i></a>';
                       return btn_edit + btn_pdf + btn_email + '&nbsp;' + btn_delete;
                   },
                   width:150
               }
           ]
+      });
+    },
+    delete(id){
+      let me = this
+      swal({
+        title: 'Atención!',
+        text: "Desea eliminar la factura #"+id+"?",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Si',
+        cancelButtonText: 'No',
+      }).then((result) => {
+        if (result.value) {
+          axios.delete('invoice/'+id).then(function(response) {
+            me.getAll()
+            bus.$emit('refresh'); // Refrescar tabla de facturas
+            toastr.success("Registro eliminado correctamente.");
+            toastr.options.closeButton = true;
+          }).catch(function(error) {
+            alert("Ocurrió un error al intentar eliminar");
+          });
+        }
       });
     }
   }

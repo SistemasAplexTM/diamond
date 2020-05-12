@@ -462,11 +462,15 @@ Route::group(['middleware' => 'auth'], function () {
   /* INVOICE */
   Route::resource('invoice', 'InvoiceController', ['except' => ['show', 'create', 'edit']]);
   Route::post('invoice/createDetail', 'InvoiceController@createDetail');
+  Route::post('invoice/saveRelationReceipt', 'InvoiceController@saveRelationReceipt');
+  Route::get('invoice/getRelationReceipt/{id}', 'InvoiceController@getRelationReceipt');
+  Route::get('invoice/destroyRelationReceipt/{id}', 'InvoiceController@destroyRelationReceipt');
   Route::get('invoice/destroyDetail/{id}', 'InvoiceController@destroyDetail');
   Route::get('invoice/getSelectClient/{filter}', 'InvoiceController@getSelectClient');
   Route::get('invoice/getInvoiceById/{id}', 'InvoiceController@getInvoiceById');
   Route::get('invoice/getDetail/{id}', 'InvoiceController@getDetail');
   Route::get('invoice/getCurrency', 'InvoiceController@getCurrency');
+  Route::get('invoice/pdf/{id}', 'InvoiceController@pdf');
 
 });
 Route::get('DocumentoController', 'DocumentoController@printFile');
