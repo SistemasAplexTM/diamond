@@ -433,7 +433,10 @@ class MasterController extends Controller
                 'g.contacto',
                 'a.created_at',
                 'tipo_consolidado_id',
-                'invoice_id'
+                'invoice_id',
+                'g.id',
+                'g.nombre',
+                'g.contacto'
             )
             ->where([
                 ['a.deleted_at', null],
