@@ -51,7 +51,7 @@ return [
             'charset' => 'utf8mb4',
             'collation' => 'utf8mb4_unicode_ci',
             'prefix' => '',
-            'strict' => true,
+            'strict' => false,
             'engine' => null,
             'dump' => [
                 'dump_binary_path' => 'D:\laragon\bin\mysql\mysql-5.7.24-winx64\bin', // only the path, so without `mysqldump` or `pg_dump`

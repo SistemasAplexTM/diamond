@@ -248,8 +248,7 @@ class InvoiceController extends Controller
   {
     $data = $this->getInvoiceById($id);
     // echo '<pre>';
-    // print_r($data['invoice']->currency);
-    // print_r($data['client']);
+    // print_r($data['invoice']->agency);
     // echo '</pre>';
     // exit();
     $pdf  = PDF::loadView('pdf.invoice.invoice', compact('data'));

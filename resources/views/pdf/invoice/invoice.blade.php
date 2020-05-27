@@ -40,7 +40,7 @@
     }
 
     .column {
-      width: 25%;
+      width: 18%;
     }
 
     .column_title1 {
@@ -99,7 +99,7 @@
       <tbody>
         <tr>
           <td  rowspan="2" style="text-align:center;padding-bottom:35px;">
-            @if(env('APP_DEPELOPER'))
+            @if(!env('APP_DEPELOPER'))
             <img src="{{ public_path() . '/storage/' }}/{{ $data['invoice']->agency->logo }}" alt="" style="margin: 0 auto">
             @else
             <img src="{{ '/storage/' . $data['invoice']->agency->logo }}" alt="" style="margin: 0 auto">
@@ -112,14 +112,22 @@
             <div class="content">{{ $data['invoice']->date_document }}</div>
           </td>
           <td class="column column_title1">
+            <div class="title">Due Date</div>
+            <div class="content">&nbsp;
+            {{-- {{ $data['invoice']->date_document }} --}}
+            </div>
+          </td>
+          <td class="column column_title1">
             <div class="title">Currency</div>
             <div class="content">{{ $data['invoice']->currency->moneda }}</div>
           </td>
           <td class="column column_title2">
             <div class="title">INVOICE # </div>
-            <div class="content" style="font-size:20px;font-weight:bold;text-align:right;padding-right:10px;">{{ $data['invoice']->id }}</div>
+            <div class="content" style="font-size:20px;font-weight:bold;text-align:right;padding-right:10px;">
+              {{ str_pad($data['invoice']->id,  6, "0", STR_PAD_LEFT) }}
+            </div>
           </td>
-          </tr>
+        </tr>
       </tbody>
     </table>
     <table border="1" width="100%" cellspacing="0" cellpadding="0">
@@ -129,7 +137,10 @@
             <div class="title">Company:</div>
             <div class="content">
               <div>{{ $data['invoice']->agency->descripcion }}</div>
-              <div>{{ $data['invoice']->agency->direccion }}</div>
+              <div>
+                {{ $data['invoice']->agency->direccion }} {{ $data['invoice']->agency->city->nombre }}, 
+                {{ $data['invoice']->agency->city->state->abreviatura }} {{ $data['invoice']->agency->zip }}
+                </div>
               <div>{{ $data['invoice']->agency->telefono }}</div>
               <div>{{ $data['invoice']->agency->email }}</div>
             </div>
@@ -180,7 +191,7 @@
 
         @foreach ($data['invoice']->detail as $item)
         <tr>
-          <td class="br">
+          <td class="br" style="height:50px">
             <div class="content_detail" style="text-align:center;">{{ $cont++ }}</div>
           </td>
           <td class="br">
@@ -208,6 +219,18 @@
         $total +=$item->quantity * $item->amount;
         @endphp
         @endforeach
+
+        @if ($cont < 8)
+            @for ($i = $cont - 8 ; $i <= 5; $i++)
+                <tr>
+                  <td class="br" style="height:50px">&nbsp;</td>
+                  <td class="br">&nbsp;</td>
+                  <td class="br">&nbsp;</td>
+                  <td class="br">&nbsp;</td>
+                  <td>&nbsp;</td>
+                </tr>
+            @endfor
+        @endif
 
       </tbody>
       <tfoot>

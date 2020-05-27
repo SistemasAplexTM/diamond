@@ -38,6 +38,6 @@ class Invoice extends Model
 
   public function agency()
   {
-    return $this->belongsTo('App\Agencia', 'agency_id', 'id')->whereNull('deleted_at');
+    return $this->belongsTo('App\Agencia', 'agency_id', 'id')->with('city')->whereNull('deleted_at');
   }
 }

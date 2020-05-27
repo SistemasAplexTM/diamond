@@ -49,4 +49,9 @@ class Agencia extends Model
         'url_registro_casillero',
         'url_prealerta',
     ];
+
+    public function city()
+    {
+        return $this->belongsTo('App\Ciudad', 'localizacion_id', 'id')->with('state')->whereNull('deleted_at');
+    }
 }
