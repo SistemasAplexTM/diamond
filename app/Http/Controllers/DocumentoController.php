@@ -449,7 +449,8 @@ class DocumentoController extends Controller
                 'a.zip',
                 'a.localizacion_id AS ciudad_id',
                 'b.nombre AS ciudad',
-                'c.pais_id'
+                'c.pais_id',
+                'a.tarifa'
             )
             ->where([
                 ['a.deleted_at', null],
@@ -565,6 +566,7 @@ class DocumentoController extends Controller
                 $data             = Documento::findOrFail($id);
                 $data->updated_at = $request->date;
                 $data->agencia_id = $request->agencia_id;
+                $data->white_warehouse = $request->white_warehouse;
                 $shipper_old = $data->shipper_id;
                 $consignee_old = $data->consignee_id;
                 // if ($request->opEditarShip) {
@@ -2929,8 +2931,15 @@ class DocumentoController extends Controller
                     );
                 }
 
+                // emails CC
+                $consignee = Consignee::findOrFail($id_cons);
+                $moreUsers = [];
+                if($consignee->email_cc != ''){
+                    $moreUsers = explode(',', $consignee->email_cc);
+                }
+
                 return Mail::to(trim($objConsignee->correo))
-                    // ->cc($moreUsers)
+                    ->cc($moreUsers)
                     // ->bcc($evenMoreUsers)
                     ->send(new \App\Mail\WarehouseEmail($cuerpo_correo, $from_self, $asunto_correo, $pdf));
             } else {

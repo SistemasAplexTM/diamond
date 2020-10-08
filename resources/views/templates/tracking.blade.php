@@ -126,13 +126,28 @@
               </div>
             </div>
           </div>
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="form-group" :class="{ 'has-error': errors.has('peso_tracking') }">
+                <div class="col-sm-4">
+                  <label for="contenido" class="control-label gcore-label-top">@lang('general.weight'):</label>
+                </div>
+                <div class="col-sm-8">
+                  <input class="form-control" id="peso_tracking" name="peso_tracking" placeholder="@lang('general.weight')"
+                    type="text" v-model="peso_tracking">
+                  <small class="help-block error" v-show="errors.has('peso_tracking')">
+                    @{{ errors.first('peso_tracking') }}
+                  </small>
+                </div>
+              </div>
+            </div>
+          </div>
           @endif
           <div class="row">
             <div class="col-lg-12">
               <div class="form-group" :class="{ 'has-error': errors.has('consignee_id') }">
                 <div class="col-sm-4">
                   <label for="consignee_id" class="control-label gcore-label-top">@lang('general.consignee'):
-
                   </label>
                 </div>
                 <div class="col-sm-8">
@@ -413,6 +428,7 @@
                             <th></th>
                             <th>@lang('documents.tracking')</th>
                             <th>@lang('documents.content')</th>
+                            <th>@lang('documents.weight')</th>
                           </tr>
                         </thead>
                       </table>

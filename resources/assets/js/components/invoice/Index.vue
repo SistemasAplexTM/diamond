@@ -56,13 +56,16 @@ export default {
   created() {
     let me = this;
     bus.$on("refresh", function(payload) {
+      me.id = payload.id;
       me.getAll();
     });
     bus.$on("pdf", function(payload) {
-      window.open('invoice/pdf/'+me.id);
+      if(me.id !== null){
+        window.open('invoice/pdf/'+me.id);
+      }
     });
     bus.$on("email", function(payload) {
-      console.log('email');
+      console.log('email index');
     });
   },
   mounted(){

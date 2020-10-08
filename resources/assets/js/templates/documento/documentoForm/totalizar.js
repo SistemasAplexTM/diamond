@@ -13,7 +13,6 @@ $(window).load(function () {
         totalizeDocument();
     }, 1000);
 });
-$(document).ready(function () { });
 
 function totalizeDocument(elemento) {
     // setTimeout(function(){

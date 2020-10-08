@@ -18,6 +18,7 @@ class Tracking extends Model
         'consignee_id',
         'codigo',
         'contenido',
+        'peso_tracking',
         'confirmed_send'
     ];
 }

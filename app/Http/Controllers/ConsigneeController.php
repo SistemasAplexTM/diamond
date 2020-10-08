@@ -437,22 +437,28 @@ class ConsigneeController extends Controller
         'address' => $agencia->email,
         'name'    => $agencia->descripcion,
       );
+      // echo '<pre>';
+      // print_r($plantilla);
+      // echo '</pre>';
+      // exit();
+      $response = null;
       if ($correo) {
         if ($plantilla) {
-          Mail::to($correo)->send(new \App\Mail\CasilleroEmail($cuerpo_correo, $from_self, $asunto_correo));
-          $this->AddToLog('Email casillero enviado id consignee (' . $id_consignee . ')');
+          $mail_status = Mail::to($correo)->send(new \App\Mail\CasilleroEmail($cuerpo_correo, $from_self, $asunto_correo));
+          $this->AddToLog('Email casillero enviado id consignee. (' . $id_consignee . ')');
+          $response = array('status' => $mail_status);
         } else {
-          return 'No existe plantilla.';
+          $response =  'No existe plantilla.';
         }
       } else {
-        return 'No existe el correo.';
+        $response =  'No existe el correo.';
       }
+      return $response;
       DB::commit();
-    } catch (\Exception $e) {
+    } catch (\Throwable $e) {
       DB::rollback();
       $success   = false;
-      $exception = $e;
-      return $e;
+      return $e->getMessage();
     }
   }
 
@@ -476,6 +482,7 @@ class ConsigneeController extends Controller
     $term = $data;
     $tags = Consignee::select(['id', 'nombre_full as name', 'po_box'])
       ->whereRaw("TRIM(REPLACE(nombre_full,'  ',' ')) like '%$term%'")
+      ->orWhere('po_box', $term)
       ->where([
         ['agencia_id', Auth::user()->agencia_id],
         ['deleted_at', null]
@@ -504,10 +511,11 @@ class ConsigneeController extends Controller
     try {
       $data    = Consignee::findOrFail($id);
       // Enviar Email de casillero
-      $this->enviarEmailCasillero($data['id'], Auth::user()->agencia_id, $data['nombre_full'], $data['correo'], $data['telefono']);
+      $mail_status = $this->enviarEmailCasillero($data['id'], Auth::user()->agencia_id, $data['nombre_full'], $data['correo'], $data['telefono']);
       return array(
         'code' => 200,
-        'user' => $data
+        'user' => $data,
+        'mail_status' => $mail_status,
       );
     } catch (Exception $e) {
       return $e;

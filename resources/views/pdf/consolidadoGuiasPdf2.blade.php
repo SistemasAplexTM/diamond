@@ -250,7 +250,7 @@ $toalRegistros = count($detalleConsolidado);
   </tr>
   <tr>
     <td colspan="8" style="border-top: 1px solid #ccc;margin-top:5px;font-size: 8px;text-align: justify;">
-      @lang('general.message_goods')
+      The goods written here are apparently accepted in good condition for transport according to the following clauses {{ $documento->agencia }} provide the service as requested by the sender and make the necessary arrangements for air transport through a direct and responsible airline. {{ $documento->agencia }} It will insure this package against loss or damage to the normal market value limit of US $ 100, or dollars during collection and delivery. The responsibility of {{ $documento->agencia }} in accordance with this paragraph will be reduced by the value of any other insurance that the shipper has or by the loss or damage of the shipment. The sender guarantees {{ $documento->agencia }} That the contents of the shipment can be legally embarked on airplanes or ships and does not contain prohibited substances in accordance with current regulations and regulations and that it is adequately wrapped for its purpose if necessary. The mitente will indemnify {{ $documento->agencia }} any damage suffered by the latter for violating this regulation. This authorizes {{ $documento->agencia }} or its agents to designate a customs broker to act on behalf of the consignee who is appointed to carry out the customs procedure.
     </td>
   </tr>
   <tr>

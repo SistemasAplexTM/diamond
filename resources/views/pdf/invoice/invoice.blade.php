@@ -114,7 +114,7 @@
           <td class="column column_title1">
             <div class="title">Due Date</div>
             <div class="content">&nbsp;
-            {{-- {{ $data['invoice']->date_document }} --}}
+            {{ $data['invoice']->due_date }}
             </div>
           </td>
           <td class="column column_title1">

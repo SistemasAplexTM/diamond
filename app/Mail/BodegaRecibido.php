@@ -16,6 +16,8 @@ class BodegaRecibido extends Mailable implements ShouldQueue
     public $from_name;
     public $from_email;
     public $subject_msn;
+
+    
     /**
      * Create a new message instance.
      *

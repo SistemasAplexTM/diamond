@@ -77,4 +77,37 @@ export default {
 .el-page-header__content {
   color: white !important;
 }
+
+@media (max-width: 1260px) {
+  .el-drawer, .el-drawer__header {
+    width: 40% !important;
+  }
+   .footerRight{
+     width: 38.5% !important;
+   }
+}
+@media (max-width: 920px) {
+  .el-drawer, .el-drawer__header {
+    width: 50% !important;
+  }
+   .footerRight{
+     width: 48.5% !important;
+   }
+}
+@media (max-width: 700px) {
+  .el-drawer, .el-drawer__header {
+    width: 70% !important;
+  }
+   .footerRight{
+     width: 68.5% !important;
+   }
+}
+@media (max-width: 490px) {
+  .el-drawer, .el-drawer__header {
+    width: 90% !important;
+  }
+   .footerRight{
+     width: 88.5% !important;
+   }
+}
 </style>

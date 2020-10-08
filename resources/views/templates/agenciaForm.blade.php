@@ -533,9 +533,9 @@
                               @php
                               $arr = explode("//", url('/'));
                               @endphp
-                              <a
-                                href="{{ $arr[0] . '//casillero/' . $arr[1].'/login/' }}{{ (isset($agencia) and $agencia) ? base64_encode($agencia->id) : '' }}">
-                                {{ $arr[0] . '//casillero/' . $arr[1].'/login/' }}{{ (isset($agencia) and $agencia) ? base64_encode($agencia->id) : '' }}
+                              <a target="_blank"
+                                href="{{ $arr[0] . '//casillero.' . $arr[1].'/login/' }}{{ (isset($agencia) and $agencia) ? base64_encode($agencia->id) : '' }}">
+                                {{ $arr[0] . '//casillero.' . $arr[1].'/login/' }}{{ (isset($agencia) and $agencia) ? base64_encode($agencia->id) : '' }}
                               </a>
                             </td>
                           </tr>

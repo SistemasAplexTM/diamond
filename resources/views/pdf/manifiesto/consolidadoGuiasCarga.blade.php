@@ -817,9 +817,9 @@
 								</td>
 								<td align="center" valign="top" class="left_line" style="border-left: 1px solid {{ $color }};">
 									<div id="kilos" class="margin_div text_regular_c">
-										{{ ($documento->tipo_consolidado_id != 23) ? $peso_cobrado : round($data->total_peso * 0.453592, 2) }}
+										{{ round(($documento->tipo_consolidado_id != 23) ? $peso_cobrado : round($data->total_peso * 0.453592, 2),0) }}
 										<br>
-										{{ ($documento->tipo_consolidado_id != 23) ? round($data->peso2,2) : round($data->total_peso,2) }}
+										{{ round(($documento->tipo_consolidado_id != 23) ? round($data->peso2,2) : round($data->total_peso,2),0) }}
 										</br>
 									</div>
 								</td>
@@ -844,7 +844,7 @@
 										$t_peso = $data->total_peso; ///2,2046
 										$t_volumen = $data->total_volumen;
 										@endphp
-										{{ $peso_cobrado = (($documento->tipo_consolidado_id != 23) ? $data->peso2 : ($t_peso > $t_volumen) ? $t_peso : round($t_volumen / 2.2046, 0)) }}
+										{{ $peso_cobrado = round(($documento->tipo_consolidado_id != 23) ? $data->peso2 : ($t_peso > $t_volumen) ? $t_peso : round($t_volumen / 2.2046, 0),0) }}
 									</div>
 								</td>
 								<td class="left_line bg_azul"
@@ -878,7 +878,7 @@
 								<td align="center" valign="middle" class="left_line top_line"
 									style="border-left: 1px solid {{ $color }};border-top: 1px solid {{ $color }};">
 									<div id="total_kilos" class="text_regular_c">
-										{{ ($documento->tipo_consolidado_id != 23) ? $peso_cobrado : round($data->total_peso * 0.453592, 2) }}
+										{{ round(($documento->tipo_consolidado_id != 23) ? $peso_cobrado : round($data->total_peso * 0.453592, 2),0) }}
 									</div>
 								</td>
 								<td align="center" valign="middle" class="left_line" style="border-left: 1px solid {{ $color }};">
@@ -904,6 +904,7 @@
 							</tr>
 						</table>
 						{{-- master_detail --}}
+						
 						<div
 							style="font-family:'Courier New', Courier, monospace;color: #dedede;position: absolute;margin-top: -80px;margin-left: 30em;width: 400px;">
 						</div>

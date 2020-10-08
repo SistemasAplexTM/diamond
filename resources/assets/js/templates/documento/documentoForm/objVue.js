@@ -1,6 +1,13 @@
 var objVue = new Vue({
   el: '#documento',
   watch: {
+    white_warehouse: function (value) {
+      if (value) {
+        $('#white_warehouse').val(1);
+      } else {
+        $('#white_warehouse').val(0);
+      }
+    },
     emailD: function (value) {
       if (value != null && value != '') {
         this.enviarEmailDestinatario = true;
@@ -55,6 +62,7 @@ var objVue = new Vue({
   },
   created: function () {
     this.liquidado = $('#document_type').data('liquidado');
+    this.white_warehouse = ($('#white_warehouse').val() == 1) ? true : false;
     this.showHiddeFields();
     let me = this;
     bus.$on('getData', function (payload) {
@@ -159,7 +167,8 @@ var objVue = new Vue({
     loading_add_tracking: false,
     date_document: objVue.getTime(), // la funcion esta en el main.js en los mixins de vue
     updateConsolidatedDetail: true,
-    updateDetail: true
+    updateDetail: true,
+    white_warehouse: false
   },
   methods: {
     open(op, create) {
@@ -283,7 +292,14 @@ var objVue = new Vue({
       }, 1000);
     },
     showTotals(value) {
+      let me = this
       this.showFieldsTotals = value;
+      if(this.consignee_data.tarifa){
+        setTimeout(() => {
+          $('#valor_libra').val(me.consignee_data.tarifa);
+          $('#valor_libra2').val(me.consignee_data.tarifa);
+        }, 1000);
+      }
     },
     addTrackings(id) {
       this.id_detalle = id;
@@ -654,9 +670,19 @@ var objVue = new Vue({
               me.nombreD = data['nombre_full'];
               $('#consignee_id').val(id);
               $('#modalConsignee').modal('hide');
+              if (data.tarifa > 0) {
+                $('#valor_libra').val(data.tarifa);
+                $('#valor_libra2').val(data.tarifa);
+                me.totalizeDocument()
+              }
             });
             me.addShipperConsigneeToDocument(id, table);
           } else {
+            if (consignee_data.tarifa > 0) {
+              $('#valor_libra').val(consignee_data.tarifa);
+              $('#valor_libra2').val(consignee_data.tarifa);
+              me.totalizeDocument()
+            }
             me.placeShipperConsignee(consignee_data, table);
           }
         }

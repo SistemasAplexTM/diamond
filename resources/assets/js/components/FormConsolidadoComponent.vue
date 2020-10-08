@@ -1077,15 +1077,6 @@ export default {
           toastr.options.closeButton = true;
         });
     },
-    addGuiasToConsolidadoModal: function() {
-      let me = this;
-      var datos = $("#formGuiasConsolidado").serializeArray();
-      $.each(datos, function(i, field) {
-        if (field.name === "chk[]") {
-          me.addGuiasToConsolidado($("#chk" + field.value).data("numguia"));
-        }
-      });
-    },
     getModalGuias: function() {
       var me = this;
       if (
@@ -1183,7 +1174,7 @@ export default {
         );
       }
     },
-    saveConsolidado: function() {
+    saveConsolidado: function(msn) {
       if (this.validateForm()) {
         var me = this;
         var rowData = {
@@ -1198,8 +1189,10 @@ export default {
         axios
           .put("../" + $("#id_documento").val(), rowData)
           .then(function(response) {
-            toastr.success("Registro actualizado correctamente.");
-            toastr.options.closeButton = true;
+            if (!msn) {
+              toastr.success("Registro actualizado correctamente.");
+              toastr.options.closeButton = true;
+            }
             me.disabled_agencia = true;
             me.disabled_city = true;
             me.disabled_transporte = true;
@@ -1252,7 +1245,21 @@ export default {
           toastr.options.closeButton = true;
         });
     },
-    addGuiasToConsolidado: function(num_guia, op) {
+    addGuiasToConsolidadoModal: function() {
+      let me = this;
+      var datos = $("#formGuiasConsolidado").serializeArray();
+      $.each(datos, function(i, field) {
+        if (field.name === "chk[]") {
+          me.addGuiasToConsolidado($("#chk" + field.value).data("numguia"), false, true);
+          if (datos.length === (i+1)) {
+            me.updateTableDetail();
+            toastr.success("Documentos agregados correctamente.");
+            toastr.options.closeButton = true;
+          }
+        }
+      });
+    },
+    addGuiasToConsolidado: function(num_guia, op, updateDetail) {
       if (num_guia) {
         this.num_guia = num_guia;
       }
@@ -1279,12 +1286,14 @@ export default {
               if (response.data.code === 200) {
                 var table = $("#tbl-consolidado").DataTable();
                 if (!table.data().count()) {
-                  this.saveConsolidado();
+                  this.saveConsolidado(updateDetail);
                   this.disabled_city = true;
                   this.disabled_agencia = true;
                   this.disabled_transporte = true;
                 }
-                me.updateTableDetail(op);
+                if (!updateDetail) {
+                  me.updateTableDetail(op);
+                }
                 // toastr.success("Registro agregado correctamente.");
                 // toastr.options.closeButton = true;
                 this.num_guia = "";
@@ -1980,31 +1989,6 @@ export default {
         offset: 70
       });
     }
-    // updateDataDetailNew(data, el) {
-    //   let me = this;
-    //   axios
-    //     .post("updateDetailConsolidado", data)
-    //     .then(response => {
-    //       if (response.data.code == 200) {
-    //         var datos =
-    //           data.data === "" || data.data === "null" ? "NULL" : data.data;
-    //         // console.log("success!", data, datos);
-    //         setTimeout(() => {
-    //           //Cargamos finalmente el contenido deseado
-    //           $(el)
-    //             .siblings(".edit_full_inline")
-    //             .fadeIn(1000)
-    //             .html(datos);
-    //         }, 300);
-    //       } else {
-    //         console.log("err0r");
-    //       }
-    //     })
-    //     .catch(function(error) {
-    //       console.log(error);
-    //       toastr.warning("Error: -" + error);
-    //     });
-    // }
   }
 };
 </script>

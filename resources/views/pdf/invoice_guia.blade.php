@@ -180,7 +180,11 @@
           </tr>
           <tr>
             <td>
+              @if ($documento->white_warehouse == 0)
               {{ ((isset($documento->ship_nomfull) and $documento->ship_nomfull != '') ? $documento->ship_nomfull : '') }}
+              @else
+              {{ ((isset($documento->agencia) and $documento->agencia != '') ? $documento->agencia : '') }}
+              @endif
             </td>
             <td>&nbsp;</td>
             <td>
@@ -188,26 +192,48 @@
             </td>
           </tr>
           <tr>
-            <td>{{ ((isset($documento->ship_dir) and $documento->ship_dir != '') ? $documento->ship_dir : '') }}</td>
+            <td>
+              @if ($documento->white_warehouse == 0)
+              {{ ((isset($documento->ship_dir) and $documento->ship_dir != '') ? $documento->ship_dir : '') }}
+              @else
+              {{ ((isset($documento->agencia_dir) and $documento->agencia_dir != '') ? $documento->agencia_dir : '') }}
+              @endif
+            </td>
             <td>&nbsp;</td>
             <td>{{ ((isset($documento->cons_dir) and $documento->cons_dir != '') ? $documento->cons_dir : '') }}</td>
           </tr>
           <tr>
             <td>
+              @if ($documento->white_warehouse == 0)
               {{ ((isset($documento->ship_ciudad) and $documento->ship_ciudad != '') ? $documento->ship_ciudad : '') }},
               {{ ((isset($documento->ship_zip) and $documento->ship_zip != '') ? $documento->ship_zip : '') }}</td>
+              @else
+              {{ ((isset($documento->agencia_ciudad) and $documento->agencia_ciudad != '') ? $documento->agencia_ciudad : '') }},
+              {{ ((isset($documento->agencia_zip) and $documento->agencia_zip != '') ? $documento->agencia_zip : '') }}
+              @endif
             <td>&nbsp;</td>
             <td>
               {{ ((isset($documento->cons_ciudad) and $documento->cons_ciudad != '') ? $documento->cons_ciudad : '') }},
               {{ ((isset($documento->cons_zip) and $documento->cons_zip != '') ? $documento->cons_zip : '') }}</td>
           </tr>
           <tr>
-            <td>{{ ((isset($documento->ship_tel) and $documento->ship_tel != '') ? $documento->ship_tel : '') }}</td>
+            <td>
+              @if ($documento->white_warehouse == 0)
+              {{ ((isset($documento->ship_tel) and $documento->ship_tel != '') ? $documento->ship_tel : '') }}
+              @else
+              {{ ((isset($documento->agencia_tel) and $documento->agencia_tel != '') ? $documento->agencia_tel : '') }}
+              @endif
+            </td>
             <td>&nbsp;</td>
             <td>{{ ((isset($documento->cons_tel) and $documento->cons_tel != '') ? $documento->cons_tel : '') }}</td>
           </tr>
           <tr>
-            <td>{{ ((isset($documento->ship_email) and $documento->ship_email != '') ? $documento->ship_email : '') }}
+            <td>
+              @if ($documento->white_warehouse == 0)
+              {{ ((isset($documento->ship_email) and $documento->ship_email != '') ? $documento->ship_email : '') }}
+              @else
+              {{ ((isset($documento->agencia_email) and $documento->agencia_email != '') ? $documento->agencia_email : '') }}
+              @endif
             </td>
             <td>&nbsp;</td>
             <td>{{ ((isset($documento->cons_email) and $documento->cons_email != '') ? $documento->cons_email : '') }}
@@ -323,100 +349,88 @@
           <table>
             <tr>
               <td>
-                <div id="apDiv10">
-                  <table width="100%" border="0" cellspacing="1" cellpadding="0">
-                    {{-- <tr> --}}
-                    <?php
-                                    $flete = 0;
-                                    $impuesto = 0;
-                                      if($documento->tipo_embarque_id == '8'){
-                                        if($pa_id == '1'){
-                                          $flete = $pie * $documento->valor_libra;
-                                        }else{
-                                          $flete = $metro * $documento->valor_libra;
-                                        }
-                                      }else{
-                                        // if($total_libras > $total_volumen){
-                                          $flete = ($documento->flete);
-                                          $impuesto = ($total_declarado * $documento->impuesto / 100);
-                                        // }else{
-                                        //   $sub = ($total_declarado * $documento->impuesto / 100) + ($documento->flete);
-                                        // }
-                                      }
-                                      $subtotal = number_format(($flete + $impuesto), 2)
-                                    ?>
-                    {{-- <td><b>@lang('general.value'): (Flete+Impuesto) </b></td>
-                                    <td align="right">$ {{ $subtotal }}
+                @if ($documento->white_warehouse == 0)
+                  <div id="apDiv10">
+                    <table width="100%" border="0" cellspacing="1" cellpadding="0">
+                      <?php
+                        $flete = 0;
+                        $impuesto = 0;
+                          if($documento->tipo_embarque_id == '8'){
+                            if($pa_id == '1'){
+                              $flete = $pie * $documento->valor_libra;
+                            }else{
+                              $flete = $metro * $documento->valor_libra;
+                            }
+                          }else{
+                              $flete = ($documento->flete);
+                              $impuesto = ($total_declarado * $documento->impuesto / 100);
+                          }
+                          $subtotal = number_format(($flete + $impuesto), 2)
+                      ?>
+                      <tr>
+                        <td><b>Freight: </b></td>
+                        <td align="right">$ {{ number_format(($documento->flete), 2) }} </td>
+                      </tr>
+                      <tr>
+                        <td><b>Tax: </b></td>
+                        <td align="right">$ {{ number_format(($total_declarado * $documento->impuesto / 100), 2) }} </td>
+                      </tr>
+
+                      <tr>
+                        <td><b>@lang('general.insurance'): </b></td>
+                        <?php $seguro = $documento->seguro_cobrado; ?>
+                        <td align="right">$ {{ number_format(($seguro), 2) }} </td>
+                      </tr>
+                      <tr>
+                        <td><b>@lang('general.discount'):</b></td>
+                        <td align="right">$ {{ number_format(($documento->descuento), 2) }} </td>
+                      </tr>
+                      <tr>
+                        <td><b>@lang('general.others'):</b></td>
+                        <td align="right">$ {{ number_format(($documento->cargos_add), 2) }} </td>
+                      </tr>
+                    </table>
+                  </div>
+                  <div>
+                    <div id="apDiv11">
+                      <table width="100%" border="0" cellspacing="1" cellpadding="0">
+
+                        <tr>
+                          <td><b>Total:</b></td>
+                          <td align="right"><b><span style="font-size:14px;color:#F00">$
+                                {{ $total = number_format(($flete + $impuesto + $seguro + $documento->cargos_add - $documento->descuento), 2) }}</span></b>
+                          </td>
+                        </tr>
+                      </table>
+                    </div>
+                  </div>
+                @endif
               </td>
-            </tr> --}}
-            <tr>
-              <td><b>Freight: </b></td>
-              <td align="right">$ {{ number_format(($documento->flete), 2) }} </td>
             </tr>
-            <tr>
-              <td><b>Tax: </b></td>
-              <td align="right">$ {{ number_format(($total_declarado * $documento->impuesto / 100), 2) }} </td>
-            </tr>
-
-            <tr>
-              <td><b>@lang('general.insurance'): </b></td>
-              <?php $seguro = $documento->seguro_cobrado; ?>
-              <td align="right">$ {{ number_format(($seguro), 2) }} </td>
-            </tr>
-            <tr>
-              <td><b>@lang('general.discount'):</b></td>
-              <td align="right">$ {{ number_format(($documento->descuento), 2) }} </td>
-            </tr>
-            <tr>
-              <td><b>@lang('general.others'):</b></td>
-              <td align="right">$ {{ number_format(($documento->cargos_add), 2) }} </td>
-            </tr>
-            {{-- <tr>
-                                    <td><b>Sub Total:</b></td>
-                                    <td align="right">$ {{ $total = number_format(($flete + $seguro + $documento->cargos_add - $documento->descuento), 2) }}
+          </table>
         </td>
-      </tr> --}}
-  </table>
-  </div>
-  <div>
-    <div id="apDiv11">
-      <table width="100%" border="0" cellspacing="1" cellpadding="0">
-
-        <tr>
-          <td><b>Total:</b></td>
-          <td align="right"><b><span style="font-size:14px;color:#F00">$
-                {{ $total = number_format(($flete + $impuesto + $seguro + $documento->cargos_add - $documento->descuento), 2) }}</span></b>
-          </td>
-        </tr>
-      </table>
-    </div>
-  </div>
-  </td>
-  </tr>
-  </table>
-  </td>
-  <td colspan="{{ (env('APP_CLIENT') == 'worldcargo' || env('APP_CLIENT') == 'colombiana') ? '4' : '3' }}" valign="top">
-    <table>
-      <tr>
-        <td style="height: 60px;color: #5e5e5e;font-size: 13px;width: 55%;">PoBox:</td>
-        <td style="font-size: 25px;font-weight: bold;">
-          <div>{{ ((isset($documento->cons_pobox) and $documento->cons_pobox != '') ? $documento->cons_pobox : '') }}
-          </div>
-        </td>
-      </tr>
-      @if(env('APP_CLIENT') == 'worldcargo')
-      <tr>
-        <td colspan="2">
-          <div style="width: 75%;margin: 0 auto;text-align: center;color: red;font-weight: bold;">Pago a nombre de World
-            Cargo</div>
+        <td colspan="{{ (env('APP_CLIENT') == 'worldcargo' || env('APP_CLIENT') == 'colombiana') ? '4' : '3' }}" valign="top">
+          <table>
+            <tr>
+              <td style="height: 60px;color: #5e5e5e;font-size: 13px;width: 55%;">PoBox:</td>
+              <td style="font-size: 25px;font-weight: bold;">
+                <div>{{ ((isset($documento->cons_pobox) and $documento->cons_pobox != '') ? $documento->cons_pobox : '') }}
+                </div>
+              </td>
+            </tr>
+            @if(env('APP_CLIENT') == 'worldcargo')
+            <tr>
+              <td colspan="2">
+                <div style="width: 75%;margin: 0 auto;text-align: center;color: red;font-weight: bold;">Pago a nombre de World
+                  Cargo</div>
+              </td>
+            </tr>
+            @endif
+          </table>
         </td>
       </tr>
       @endif
-    </table>
-  </td>
-  </tr>
-  @endif
-  </tfoot>
+    </tfoot>
   </table>
   @if(env('APP_CLIENT') == 'worldcargo' || env('APP_CLIENT') == 'colombiana')
   <table border="0">

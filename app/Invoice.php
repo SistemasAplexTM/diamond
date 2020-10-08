@@ -19,6 +19,7 @@ class Invoice extends Model
       'agency_id',
       'consecutive',
       'date_document',
+      'due_date',
       'client_table',
       'client_id',
       'currency_id',

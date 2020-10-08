@@ -92,6 +92,7 @@
 
             <ul class="nav navbar-top-links navbar-right">
                 <li><span id="liveclock" style=""></span></li>
+                {{-- <li>{{ env('SENDGRID_API_KEY') }}</li> --}}
                 <!--NOTIFICACIONES-->
                 <li class="dropdown">
                     <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">

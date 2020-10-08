@@ -59,6 +59,7 @@ class Documento extends Model
         'carga_courier',
         'tipo_consolidado',
         'tipo_consolidado_id',
+        'white_warehouse',
         'created_at'
     ];
 }

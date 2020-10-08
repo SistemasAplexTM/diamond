@@ -5,7 +5,7 @@
     element-loading-spinner="el-icon-loading"
     element-loading-background="rgba(212, 212, 212, 0.8)">
     <el-row :gutter="24" class="row_form">
-      <el-col :span="12">
+      <el-col :span="8">
         <span class="input-label">Fecha: </span>
         <el-date-picker
           v-model="date_document"
@@ -15,7 +15,17 @@
           value-format="yyyy-MM-dd">
         </el-date-picker>
       </el-col>
-      <el-col :span="12">
+      <el-col :span="8">
+        <span class="input-label">Vencimiento: </span>
+        <el-date-picker
+          v-model="due_date"
+          type="date"
+          placeholder="aaaa-mm-dd"
+          format="yyyy-MM-dd"
+          value-format="yyyy-MM-dd">
+        </el-date-picker>
+      </el-col>
+      <el-col :span="8">
         <span class="input-label">Moneda: </span>
         <el-select size="medium" 
           value-key="id" 
@@ -148,9 +158,11 @@ export default {
   data(){
     return{
       id: '',
+      invoice: null,
       agency_id: this.payload.agency.id,
       consecutive:'',
       date_document:this.getTime(),
+      due_date:'',
       client_id:{},
       currency_id:1,
       observation:'',
@@ -183,6 +195,20 @@ export default {
     });
   },
   methods:{
+    openRigthBar(edit) {
+      var data = {
+        component: 'invoice',
+        title: (edit) ? 'Factura #' + this.id : 'Nueva Factura',
+        icon: 'fal fa-file-invoice-dollar',
+        table: 'invoice',
+        hidden_btn: true,
+        edit: edit,
+        agency: this.payload.agency,
+        invoice: this.invoice,
+        client: this.client_id
+      }
+      bus.$emit('open', data)
+    },
     attachReceipt(){
       if (this.id != '') {
         this.openModal=true
@@ -198,6 +224,7 @@ export default {
           me.id = me.payload.invoice.id;
           me.consecutive = me.payload.invoice.consecutive;
           me.date_document = me.payload.invoice.date_document;
+          me.due_date = me.payload.invoice.due_date;
           me.client_id = {
             id: me.payload.client.id,
             name: me.payload.client.name,
@@ -254,6 +281,7 @@ export default {
         agency_id: this.agency_id,
         // consecutive: this.consecutive,
         date_document: this.date_document,
+        due_date: this.due_date,
         client_table: this.client_id.table_name,
         client_id: this.client_id.id,
         currency_id: this.currency_id,
@@ -264,7 +292,8 @@ export default {
         .then(function(response) {
           if (response.data["code"] == 200) {
             me.id = response.data.datos.id;
-            bus.$emit('refresh'); // Refrescar tabla de facturas
+            me.invoice = response.data.datos;
+            bus.$emit('refresh', me.invoice); // Refrescar tabla de facturas
             toastr.success("Registro creado correctamente.");
             toastr.options.closeButton = true;
             me.loading = false;
@@ -285,6 +314,7 @@ export default {
         agency_id: this.agency_id,
         // consecutive: this.consecutive,
         date_document: this.date_document,
+        due_date: this.due_date,
         client_table: this.client_id.table_name,
         client_id: this.client_id.id,
         currency_id: this.currency_id,
@@ -322,11 +352,12 @@ export default {
         .post("invoice/createDetail", {data})
         .then(function(response) {
           if (response.data["code"] == 200) {
-            me.resetDetail();
-            me.getDetail();
-            bus.$emit('refresh'); // Refrescar tabla de facturas
+            // me.resetDetail();
+            // me.getDetail();
+            // bus.$emit('refresh'); // Refrescar tabla de facturas
             toastr.success("Detalle agregado.");
             toastr.options.closeButton = true;
+            me.openRigthBar(true)
           } else {
             toastr.warning("Error");
             toastr.options.closeButton = true;
@@ -445,7 +476,7 @@ export default {
     },
   }
 }
-</script>
+</script> 
 
 <style lang="css" scoped>
 .mt-20{

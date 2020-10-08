@@ -220,6 +220,7 @@
     <input type="hidden" class="form-control" id="id_documento" name="id_documento" value="{{ $documento->id }}"
       readonly="">
     <input type="hidden" class="form-control" id="option" name="option" value="" readonly="">
+    <input type="hidden" class="form-control" id="white_warehouse" name="white_warehouse" value="{{ $documento->white_warehouse }}" readonly="">
     <input type="hidden" class="form-control" name="document_type" id="document_type"
       data-liquidado="{{ $documento->liquidado }}" value="consolidado" readonly="" v-model="document_type">
     <div class="col-lg-12" style="">
@@ -1036,19 +1037,8 @@
               <div class="row">
                 <div class="col-lg-12">
                   <div class="form-group">
-                    {{-- <label for="" class="">@lang('documents.payment_type')</label> --}}
                     <el-radio v-model="tipo_pago_id" label="4" border @change="validatePayment">Collect</el-radio>
                     <el-radio v-model="tipo_pago_id" label="5" border @change="validatePayment">Prepaid</el-radio>
-                    {{-- <el-select v-model="tipo_pago_id" placeholder="Tipo de Pago" @change="validatePayment">
-                                    <el-option
-                                      v-for="item in paymentMethod"
-                                      :key="item.id"
-                                      :label="item.descripcion"
-                                      :value="item.id">
-                                      <span style="float: left">@{{ item.nombre }}</span>
-                    <span style="float: right; color: #8492a6; font-size: 13px">@{{ item.descripcion }}</span>
-                    </el-option>
-                    </el-select> --}}
                   </div>
                   <div class="form-group" v-show="showPay">
                     <label for="" class="">@lang('documents.way_to_pay')</label>
@@ -1059,6 +1049,9 @@
                       </el-option>
                     </el-select>
                   </div>
+                </div>
+                <div class="col-lg-12">
+                  <el-checkbox v-model="white_warehouse">White Label</el-checkbox>
                 </div>
               </div>
             </form>

@@ -288,7 +288,11 @@ function showDataToCreateReceipt(consignee_id, client, agencia_id) {
           "</a>"
         );
       }
-    }
+    },
+    {
+      data: "peso",
+      name: "peso"
+    },
     ],
     drawCallback: function () {
       $(".td_edit").editable({
@@ -307,7 +311,29 @@ function showDataToCreateReceipt(consignee_id, client, agencia_id) {
           refreshTable("tbl-trackings-client");
         }
       });
-    }
+    },
+    "footerCallback": function (row, data, start, end, display) {
+      var api = this.api(),
+        data;
+      /*Remove the formatting to get integer data for summation*/
+      var intVal = function (i) {
+        return typeof i === 'string' ?
+          i.replace(/[\$,]/g, '') * 1 :
+          typeof i === 'number' ?
+            i : 0;
+      };
+      /*Total over all pages*/
+      var peso = api
+        .column(3)
+        .data()
+        .reduce(function (a, b) {
+          return parseFloat(a) + parseFloat(b);
+        }, 0);
+      
+      /*Update footer formatCurrency()*/
+      objVue.peso = peso;
+
+    },
   });
   objVue.consignee_id_doc = consignee_id;
   $("#client-tracking").html(client.toUpperCase());
@@ -348,6 +374,7 @@ var objVue = new Vue({
     consignee_name: null,
     shipper_id: null,
     contenido: null,
+    peso_tracking: null,
     tracking: null,
     email: null,
     peso: null,
@@ -443,16 +470,18 @@ var objVue = new Vue({
     },
     querySearchConsignee(queryString, cb) {
       var me = this;
-      axios
-        .get("/consignee/vueSelect/" + queryString)
-        .then(function (response) {
-          me.consignees = response.data.items;
-          cb(me.consignees);
-        })
-        .catch(function (error) {
-          console.log(error);
-          toastr.warning("Error: -" + error);
-        });
+      if (queryString && queryString.length > 4) {
+        axios
+          .get("/consignee/vueSelect/" + queryString)
+          .then(function (response) {
+            me.consignees = response.data.items;
+            cb(me.consignees);
+          })
+          .catch(function (error) {
+            console.log(error);
+            toastr.warning("Error: -" + error);
+          });
+      }
     },
     handleSelect(item) {
       this.consignee_id = item;
@@ -489,16 +518,17 @@ var objVue = new Vue({
       this.consignee_name = null;
       this.tracking = null;
       this.contenido = null;
+      this.peso_tracking = null;
       this.email = null;
       this.instruccion = false;
       this.confirmedSend = false;
       this.editar = 0;
       this.create_receitp = false;
       this.peso2 = null,
-      this.largo2 = 0,
-      this.ancho2 = 0,
-      this.alto2 = 0,
-      this.shipper_id2 = null
+        this.largo2 = 0,
+        this.ancho2 = 0,
+        this.alto2 = 0,
+        this.shipper_id2 = null
     },
     validation: function (data) {
       if (data.contenido != "") {
@@ -534,7 +564,7 @@ var objVue = new Vue({
       l.ladda("start");
       let me = this;
       var datosForm = '';
-      if(typeof op != 'undefined'){
+      if (typeof op != 'undefined') {
         datosForm = {
           contenido: dat.contenido,
           peso: dat.peso,
@@ -548,7 +578,7 @@ var objVue = new Vue({
           consignee_id: dat.consignee_id,
           agencia_id: dat.agencia_id
         };
-      }else{
+      } else {
         var datos = $("#formTrackingClient").serializeArray();
         me.ids_tracking = [];
         me.contenido_tracking = [];
@@ -762,6 +792,7 @@ var objVue = new Vue({
             consignee_id: this.consignee_id != null ? this.consignee_id.id : null,
             codigo: this.tracking,
             contenido: this.contenido,
+            peso_tracking: this.peso_tracking,
             confirmed_send: this.confirmedSend,
             agencia_id: $("#agencia_id").val(),
             // datos adicionales
@@ -805,7 +836,7 @@ var objVue = new Vue({
           toastr.warning("Error: " + error);
         });
     },
-    validate2(op, data){
+    validate2(op, data) {
       if (op) {
         if (data.peso != "" && parseFloat(data.peso) > 0) {
           if (data.shipper_id != null) {
@@ -825,7 +856,7 @@ var objVue = new Vue({
           toastr.error("Ingresa el peso del paquete.");
           return false;
         }
-      }else{
+      } else {
         return true
       }
     },

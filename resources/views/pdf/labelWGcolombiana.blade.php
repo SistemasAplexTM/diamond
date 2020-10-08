@@ -82,7 +82,11 @@
                         Remitente
                     </div>
                     <div>
+                        @if ($documento->white_warehouse == 0)
                         <strong>{{ ($shipper) ? $shipper->nombre_full : $value->ship_nomfull }}</strong>
+                        @else
+                        <strong>{{ ((isset($documento->agencia) and $documento->agencia != '') ? trim($documento->agencia) : '') }}</strong>
+                        @endif
                     </div>
                 </td>
             </tr>
@@ -97,7 +101,7 @@
                     <div class="dir">{{ ($consignee) ? $consignee->direccion : $value->cons_dir }}</div>
                     <div>{{ ($consignee) ? $consignee->telefono : $value->cons_tel }} -
                         {{ ($consignee) ? $consignee->ciudad :$value->cons_ciudad }}</div>
-                    <div></div>
+                        <div></div>
                 </td>
             </tr>
             <tr>
@@ -131,7 +135,7 @@
                     <div style="text-align:center">
                         <img id="barcode" style="height: 38px;padding-top: 15px;"
                             src="data:image/png;base64, {{ DNS1D::getBarcodePNG($value->codigo, "C128",2,45) }}"
-                            alt="barcode" /> <label style="font-size: 20px;">{{ $value->paquete }} de {{ $piezas }}</label>
+                            alt="barcode" /> <label style="font-size: 15px;">{{ $value->paquete }} de {{ $piezas }}</label>
                     </div>
                     
                 </td>

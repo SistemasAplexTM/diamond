@@ -8,6 +8,7 @@ use Redirect;
 use DataTables;
 use App\Transportador;
 use App\Http\Requests\TransportadorRequest;
+use Illuminate\Support\Facades\DB;
 
 class TransportadorController extends Controller
 {
@@ -40,6 +41,10 @@ class TransportadorController extends Controller
     {
         try {
             $data = (new Transportador)->fill($request->all());
+            $information= $data->nombre . "\n" . $data->direccion ."\n". $data->telefono ."\n". $data->email;
+            DB::table('transportador')
+                    ->where('id', $data->id)
+                    ->update(['information' => $information]);
             $data->created_at = date('Y-m-d H:i:s');
             if ($data->save()) {
                 $answer = array(
@@ -82,6 +87,10 @@ class TransportadorController extends Controller
         try {
             $data = Transportador::findOrFail($id);
             $data->update($request->all());
+            $information= $data->nombre . "\n" . $data->direccion ."\n". $data->telefono ."\n". $data->email;
+            DB::table('transportador')
+                    ->where('id', $data->id)
+                    ->update(['information' => $information]);
             $answer = array(
                 "datos" => $request->all(),
                 "code" => 200,

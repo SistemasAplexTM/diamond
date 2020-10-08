@@ -292,13 +292,13 @@ var objVue = new Vue({
           }).catch(function (error) {
             console.log(error);
             if (error.response.status === 422) {
-              me.formErrors = error.response.data; //guardo los errores
-              me.listErrors = me.formErrors.errors; //genero lista de errores
+              this.formErrors = error.response.data; //guardo los errores
+              this.listErrors = this.formErrors.errors; //genero lista de errores
             }
-            $.each(me.formErrors.errors, function (key, value) {
+            $.each(this.formErrors.errors, function (key, value) {
               $('.result-' + key).html(value);
             });
-            toastr.error("Porfavor completa los campos obligatorios.", {
+            toastr.error("Error .", {
               timeOut: 50000
             });
           });
