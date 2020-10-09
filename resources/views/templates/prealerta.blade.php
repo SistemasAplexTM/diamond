@@ -26,6 +26,9 @@
         .help-block{
             color: red;
         }
+        .el-upload__input{
+          display: none !important;
+        }
     </style>
 </head>
 <body>
@@ -82,6 +85,27 @@
                                                     <input type="text" placeholder="@lang('general.enter_the_instruction')" class="form-control" name="instruccion" v-model="instruccion">
                                                     <small class="help-block">@{{ errors.first('instruccion') }}</small>
                                             </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                          <div class="form-group" :class="{ 'has-error': errors.has('instruccion') }">
+                                            <label class="control-label" for="instruccion">@lang('general.invoice') </label>
+                                            <el-upload
+                                                class="upload-demo"
+                                                ref="upload"
+                                                action="{{ '/prealerta/' . $id_age . '/uploadFile' }}"
+                                                multiple
+                                                :limit="3"
+                                                :auto-upload="false"
+                                                :file-list="fileList"
+                                                :on-exceed="handleExceed"
+                                                :headers="headersUpload">
+                                                <el-button slot="trigger" size="small" type="primary">Selecciona un archivo</el-button>
+                                                <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">Cargar al servidor</el-button>
+                                                <div slot="tip" class="el-upload__tip">Solo archivos con un tamaño menor de 1 MB</div>
+                                            </el-upload>
+                                          </div>
                                         </div>
                                     </div>
                                     <div class="row">

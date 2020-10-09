@@ -94,6 +94,20 @@ class PrealertaController extends Controller
         }
     }
 
+    public function uploadFile(Request $request, $id_agencia)
+    {
+        try {
+            $id_agencia = base64_decode($id_agencia);
+            $file = '';
+            if ($request->has('file')) {
+                $file = $request->file('file');
+            }
+            return ['code' => 200, 'agency' => $id_agencia, 'data' => $file];
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
     /**
      * Remove the specified resource from storage.
      *

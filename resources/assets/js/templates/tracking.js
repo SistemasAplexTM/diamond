@@ -245,6 +245,20 @@ function loadTableCreateReceipt() {
   });
 }
 
+function calculateWeigth() {
+  var datos = $("#formTrackingClient").serializeArray();
+  var peso = 0;
+  $.each(datos, function (i, field) {
+    if (field.name === "chk[]") {
+      peso += $("#chk" + field.value).data('peso');
+    }
+  });
+  setTimeout(() => {
+    console.log('p:',peso);
+    objVue.peso = peso;
+  }, 300);
+}
+
 function showDataToCreateReceipt(consignee_id, client, agencia_id) {
   $('#agencia_id_receipt').val(agencia_id);
   if ($.fn.DataTable.isDataTable("#tbl-trackings-client")) {
@@ -262,7 +276,9 @@ function showDataToCreateReceipt(consignee_id, client, agencia_id) {
     columns: [{
       render: function (data, type, full, meta) {
         return (
-          '<div class="checkbox checkbox-success"><input type="checkbox" checked="true" data-contenido="' +
+          '<div class="checkbox checkbox-success"><input type="checkbox" onclick="calculateWeigth()" checked="true" data-peso="' +
+          full.peso
+          + '" data-contenido="' +
           full.contenido +
           '" id="chk' +
           full.id +
@@ -329,7 +345,7 @@ function showDataToCreateReceipt(consignee_id, client, agencia_id) {
         .reduce(function (a, b) {
           return parseFloat(a) + parseFloat(b);
         }, 0);
-      
+
       /*Update footer formatCurrency()*/
       objVue.peso = peso;
 

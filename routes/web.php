@@ -518,6 +518,7 @@ Route::get('prealerta/{id_agencia}/all', 'PrealertaController@getAll')->name('pr
 Route::post('prealerta/{id_agencia}', 'PrealertaController@store');
 Route::post('prealerta/{id_agencia}/existEmailPost', 'PrealertaController@existEmailPost');
 Route::post('prealerta/{id_agencia}/validar_tracking', 'PrealertaController@validar_tracking');
+Route::post('prealerta/{id_agencia}/uploadFile', 'PrealertaController@uploadFile');
 
 /* RASTREO */
 Route::get('rastreo', 'RastreoController@index');

@@ -4045,7 +4045,7 @@ class DocumentoController extends Controller
                 ],
             ]);
         });
-        return 200;
+        return $request->file('file');
     }
 
     public function validateUploadDocs()
