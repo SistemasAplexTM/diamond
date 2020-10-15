@@ -54,41 +54,18 @@ var objVue = new Vue({
     existConsignee: false,
     despachar: false,
     dialogVisibleUpload: false,
-    client: null,
-    fileList: [],
+    fileList:[],
     headersUpload: {
       'X-CSRF-TOKEN': $("meta[name='csrf-token']").attr("content"),
     },
   },
   methods: {
-    uploadFiles(file, fileList) {
-      let me = this
-      //Create new formData object
-      const fd = new FormData();
-      //append the file you want to upload
-      fd.append("file", file.file);
-      fd.append("agency_id", $('#agency_id').val());
-      fd.append("client_id", this.client.id);
-      fd.append("client_email", this.client.correo);
-      fd.append("module", 'consigee');
-
-      //send call the api to upload files using axios or any other means
-      axios.post(file.action, fd).then(function (req) {
-        me.$refs.upload.clearFiles()
-        console.log('Archivo cargado exitosamente');
-      }).catch(function (error) {
-        console.log(error);
-        toastr.error("Error al cargar el archivo.", {
-          timeOut: 30000
-        });
-      });
-    },
     submitUpload() {
       this.$refs.upload.submit();
     },
     handleExceed(files, fileList) {
       this.$message.warning(
-        `El límite es 1 archivo, haz cargado ${fileList.length} archivo esta vez`
+        `El límite es 3 archivo, haz cargado ${fileList.length} archivo esta vez`
       );
     },
     msn: function () {
@@ -134,13 +111,9 @@ var objVue = new Vue({
           }).then(function (response) {
             l.stop();
             if (response.data['code'] == 200) {
-              me.client = response.data['client'];
               toastr.success('Su paquete ha sido prealertado');
               toastr.options.closeButton = true;
-              setTimeout(() => {
-                me.submitUpload();
-                me.resetForm();
-              }, 500);
+              me.resetForm();
             } else {
               console.log(response);
               toastr.warning('Error: ' + response.data['error']);

@@ -45,7 +45,7 @@ class PrealertaController extends Controller
     {
         try {
             $id_agencia = base64_decode($id_agencia);
-            $dataUser = Consignee::select('id')->where('correo', $request->email)->first();
+            $dataUser = Consignee::select('id', 'correo')->where('correo', $request->email)->first();
             if (!$dataUser) {
                 /* ENVIAR EMAIL */
                 $plantilla = $this->getDataEmailPlantillaById(4);
@@ -72,6 +72,7 @@ class PrealertaController extends Controller
             // }
             $answer = array(
                 "datos"  => $request->all(),
+                "client"  => $dataUser,
                 "code"   => 200,
                 "status" => 200,
             );
@@ -98,11 +99,15 @@ class PrealertaController extends Controller
     {
         try {
             $id_agencia = base64_decode($id_agencia);
-            $file = '';
-            if ($request->has('file')) {
-                $file = $request->file('file');
-            }
-            return ['code' => 200, 'agency' => $id_agencia, 'data' => $file];
+            $data = $this->fileUpload([
+                'file' => $request->file('file'),
+                'module' => 'consignee',
+                'module_id' => ($request->client_id !== "") ? $request->client_id : null,
+                'prealerta_email' => ($request->client_email !== "") ? $request->client_email : null,
+                'agency_id' => $id_agencia
+            ]);
+            return  $data;
+            // return ['code' => 200, 'file' => $request->file('file')];
         } catch (\Throwable $th) {
             throw $th;
         }

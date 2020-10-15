@@ -8,6 +8,7 @@ use JavaScript;
 use App\Agencia;
 use App\Shipper;
 use App\Consignee;
+use App\file;
 use App\AplexConfig;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
@@ -143,7 +144,7 @@ class Controller extends BaseController
         return true;
     }
 
-    
+
     public function getNamesAndFullNames($name_complet)
     {
         $nomFull = array();
@@ -244,11 +245,11 @@ class Controller extends BaseController
             '({ciudad_agencia})'  => ($objAgencia) ? $objAgencia->ciudad : '',
             '({estado_agencia})'  => ($objAgencia) ? $objAgencia->depto : '',
             '({pais_agencia})'    => ($objAgencia) ? $objAgencia->pais : '',
-            '({url_casillero})'   => $arr[0] . '//casillero' . $arr[1].'/login/'.base64_encode($objAgencia->id),
+            '({url_casillero})'   => $arr[0] . '//casillero' . $arr[1] . '/login/' . base64_encode($objAgencia->id),
             // '({url_casillero})'   => ($objAgencia) ? $objAgencia->url_casillero : '',
             '({url_terms})'       => ($objAgencia) ? $objAgencia->url_terms : '',
-            '({url_registro})'    => url('/').'/registro/'.base64_encode($objAgencia->id),
-            '({url_rastreo})'     => url('/').'/rastreo/',
+            '({url_registro})'    => url('/') . '/registro/' . base64_encode($objAgencia->id),
+            '({url_rastreo})'     => url('/') . '/rastreo/',
             '({url_prealerta})'   => ($objAgencia) ? $objAgencia->url_prealerta : '',
             '({url_registro_casillero})'     => ($objAgencia) ? $objAgencia->url_registro_casillero : '',
             '({url})'             => ($objAgencia) ? $objAgencia->url : '',
@@ -299,5 +300,30 @@ class Controller extends BaseController
         }
     }
 
-    
+    public function fileUpload($data = [])
+    {
+        $file = $data['file'];
+        $data_file = null;
+        if ($file) {
+            $oldName = $file->getClientOriginalName();
+            $extension = trim($file->getClientOriginalExtension());
+            $name = base64_encode(trim($oldName) . date('Y-m-d hh:mm:ss')) . '.' . $extension;
+            $size = $file->getSize();
+            //indicamos que queremos guardar un nuevo archivo en el disco local
+            \Storage::disk('public')->put('storage/files/' . $name, \File::get($file)); //se guardara en 'public/storage'
+
+            $data_file = new File;
+            $data_file->name_file = $name;
+            $data_file->name_old = $oldName;
+            $data_file->extension = $extension;
+            $data_file->size = $size;
+            $data_file->module = $data['module'];
+            $data_file->module_id = $data['module_id'];
+            $data_file->agency_id = $data['agency_id'];
+            $data_file->prealerta_email = $data['prealerta_email'];
+            $data_file->save();
+        }
+
+        return $data_file;
+    }
 }

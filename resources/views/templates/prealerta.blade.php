@@ -29,6 +29,9 @@
         .el-upload__input{
           display: none !important;
         }
+        .upload-file{
+            height: 240px;
+        }
     </style>
 </head>
 <body>
@@ -40,6 +43,7 @@
                         <h1>@lang('general.preview_your_shipment')</h1>
                         <p>@lang('general.enter_the_tracking_and_instruction')</p>
                         <form id="formPrealerta" enctype="multipart/form-data" data-id_agencia="{{ $id_age }}" class="form-horizontal casillero_form" role="form" action="#" method="post">
+                        <input type="hidden" id="agency_id" value="{{ $id_age }}">
                             <div class="ibox float-e-margins">
                                 <div class="ibox-content gray-bg">
                                     <!--***** contenido ******-->
@@ -88,30 +92,31 @@
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-lg-12">
+                                        <div class="col-lg-12" style="text-align: center;">
                                           <div class="form-group" :class="{ 'has-error': errors.has('instruccion') }">
-                                            <label class="control-label" for="instruccion">@lang('general.invoice') </label>
+                                            <label class="control-label" for="instruccion">Cargar Factura </label>
                                             <el-upload
-                                                class="upload-demo"
                                                 ref="upload"
+                                                class="upload-file"
                                                 action="{{ '/prealerta/' . $id_age . '/uploadFile' }}"
-                                                multiple
-                                                :limit="3"
+                                                :http-request="uploadFiles"
+                                                drag
+                                                :limit="1"
                                                 :auto-upload="false"
                                                 :file-list="fileList"
                                                 :on-exceed="handleExceed"
                                                 :headers="headersUpload">
-                                                <el-button slot="trigger" size="small" type="primary">Selecciona un archivo</el-button>
-                                                <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">Cargar al servidor</el-button>
+                                                <i class="el-icon-upload"></i>
+                                                <div class="el-upload__text">Suelta tu archivo aquí o <em>haz clic para cargar</em></div>
                                                 <div slot="tip" class="el-upload__tip">Solo archivos con un tamaño menor de 1 MB</div>
                                             </el-upload>
                                           </div>
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-lg-12">
+                                        <div class="col-lg-12" style="text-align: center;">
                                             <div class="form-group">
-                                              <button @click.prevent="create" type="button" class="ladda-button btn btn-primary hvr-float-shadow" data-style="expand-right" title=""><span class="ladda-label"> Prealertar <i class="fal fa-paper-plane" aria-hidden="true"></i></span><span class="ladda-spinner"></span></button>
+                                              <button @click.prevent="create" type="button" class="ladda-button btn btn-primary hvr-float-shadow" style="width: 50%;" data-style="expand-right" title=""><span class="ladda-label"> Prealertar <i class="fal fa-paper-plane" aria-hidden="true"></i></span><span class="ladda-spinner"></span></button>
                                             </div>
                                         </div>
                                     </div>
