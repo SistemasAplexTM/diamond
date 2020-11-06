@@ -68,7 +68,7 @@ export default {
     },
     getMenu(menu_id){
       axios.get('getMenu/' + false + '/' + menu_id).then(({data}) => {
-        this.menuAll = data;
+        this.menuAll = data.menu;
       });
     },
     formatMeta (meta, param) {

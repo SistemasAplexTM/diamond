@@ -1,0 +1,11 @@
+2020-11-06
+
+- agregar modelo FileModule
+- actualizar modelo File.php
+- actualizar modelo Modulo.php
+- agregar en la tabla de BD modulo el campo table_db
+- quitar de la tabla de BD file los campos module-module_id-agency_id
+- agregar la tabla _files_module
+- actualizar controlador pricipal Controfller.php
+- actulaizar PrealertaController.php
+- actualizar prealerta.js

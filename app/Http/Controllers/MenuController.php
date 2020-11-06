@@ -32,11 +32,11 @@ class MenuController extends Controller
       $request->validate(
         [
           'name' => 'required|max:255',
-          'route' => 'required'
+          // 'route' => 'required'
         ],
         [
           'name.required' => 'El nombre es requerido',
-          'route.required' => 'la ruta es requerida'
+          // 'route.required' => 'la ruta es requerida'
         ]
       );
       $menu = new Menu;
@@ -75,11 +75,11 @@ class MenuController extends Controller
       $request->validate(
         [
           'name' => 'required|max:255',
-          'route' => 'required'
+          // 'route' => 'required'
         ],
         [
           'name.required' => 'El nombre es requerido',
-          'route.required' => 'la ruta es requerida'
+          // 'route.required' => 'la ruta es requerida'
         ]
       );
       $menu = Menu::findOrFail($id);
@@ -159,14 +159,14 @@ class MenuController extends Controller
           $rolesIn[] = $value->id;
         }
         $query->whereIn('rol_id', $rolesIn)->orderby('parent');
-      })
+      })->with('roles')
         ->where('type', $type)
         ->orderby('parent')
         ->orderby('order_item')
         ->get()
         ->toArray();
     } else {
-      return Menu::where('type', $type)->orderby('parent')
+      return Menu::where('type', $type)->with('roles')->orderby('parent')
         ->orderby('order_item')
         ->get()
         ->toArray();
@@ -183,7 +183,7 @@ class MenuController extends Controller
       $item = [array_merge($line, ['children' => Self::getHijos($padres, $line)])];
       $menuAll = array_merge($menuAll, $item);
     }
-    return $menuAll;
+    return ['menu' => $menuAll, 'user' => Auth::user()];
   }
 
   public static function getById($id)

@@ -201,7 +201,7 @@ Route::group(['middleware' => 'auth'], function () {
   Route::get('servicios/all/{id_embarque?}', 'ServiciosController@getAll')->name('datatable/all');
   Route::get('servicios/getAllServiciosAgencia/{id_embarque?}', 'ServiciosController@getAllServiciosAgencia');
   Route::get('servicios/delete/{id}/{logical?}', 'ServiciosController@delete')->name('servicios.delete');
-  Route::get('servicios/restaurar/{id}', 'ServiciosController@restaurar');
+  Route::get('servicios/restaurar/{id}', 'ServiciosController@restaurar'); 
 
   /*--- MODULO TRANSPORTADOR ---*/
   Route::resource('transportador', 'TransportadorController', ['except' => ['show', 'create', 'edit']]);

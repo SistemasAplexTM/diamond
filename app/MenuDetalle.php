@@ -19,4 +19,6 @@ class MenuDetalle extends Model
     protected $fillable = [
         'id','menu_id', 'product_id', 'weight_1_3', 'weight_4_5'
     ];
+
+    
 }

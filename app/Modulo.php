@@ -13,6 +13,6 @@ class Modulo extends Model
      * @var array
      */
     protected $fillable = [
-        'nombre', 'route', 'type'
+        'nombre', 'table_db', 'route', 'type'
     ];
 }

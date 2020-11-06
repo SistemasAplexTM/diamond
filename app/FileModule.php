@@ -4,9 +4,9 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class File extends Model
+class FileModule extends Model
 {
-    public $table = "_files";
+    public $table = "_files_module";
     protected $dates = ['deleted_at'];
     
     /**
@@ -16,11 +16,9 @@ class File extends Model
      */
     protected $fillable = [
         'id',
-        'name_file', 
-        'name_old', 
-        'extension',
-        'size',
-        'module',
+        'file_id',
         'module_id',
+        'module_record_id',
+        'agency_id',
     ];
 }

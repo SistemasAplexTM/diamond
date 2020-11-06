@@ -94,6 +94,7 @@ export default {
     getById(id){
       let me = this
       axios.get('menu/id/' + id).then(({data}) => {
+        console.log('getMenu',data);
         me.form = data;
         me.roles_selected = []
         for (var i = 0; i < data.roles.length; i++) {
@@ -102,7 +103,7 @@ export default {
         var meta = JSON.parse(data.meta)
         me.icon = meta.icon
         me.form.color = meta.color
-        var module = me.modules.filter(result => result.route == data.route)
+        var module = me.modules.filter(module => module.id == data.module_id)
         me.module_selected = module[0]
       });
     },

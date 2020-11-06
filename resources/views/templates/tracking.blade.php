@@ -133,10 +133,9 @@
                   <label for="contenido" class="control-label gcore-label-top">@lang('general.weight'):</label>
                 </div>
                 <div class="col-sm-8">
-                  <input class="form-control" id="peso_tracking" name="peso_tracking" placeholder="@lang('general.weight')"
-                    type="text" v-model="peso_tracking">
-                  <small class="help-block error" v-show="errors.has('peso_tracking')">
-                    @{{ errors.first('peso_tracking') }}
+                  <input class="form-control" id="peso2" name="peso2" type="number" min="0" v-model="peso2" placeholder="@lang('general.weight')">
+                  <small class="help-block error" v-show="errors.has('peso2')">
+                    @{{ errors.first('peso2') }}
                   </small>
                 </div>
               </div>
@@ -194,7 +193,7 @@
                   </div>
                   <div class="form-group" v-if="create_receitp">
                     <div class="col-sm-4">
-                      <input class="form-control" id="peso2" placeholder="Peso" type="number" min="0" v-model="peso2">
+                      <input class="form-control" id="declarado" placeholder="Declarado $00.0" type="number" min="0" v-model="declarado2">
                     </div>
                     <div class="col-sm-8">
                       <div class="input-group">
@@ -374,7 +373,7 @@
                             v-for="item in shippers"
                             :key="item.id"
                             :label="item.name"
-                            :value="item">
+                            :value="item.id">
                           </el-option>
                         </el-select>
 
@@ -389,12 +388,12 @@
                       <input class="form-control" name="peso" placeholder="peso" type="number" min="0" v-model="peso">
                     </div>
                   </div>
-                  {{-- <div class="col-sm-6">
-                                    <div class="form-group">
-                                      <label for="piezas" class="control-label gcore-label-top">@lang('documents.pieces'):</label>
-                                      <input class="form-control" name="piezas" placeholder="piezas" type="number" min="1" v-model="piezas">
-                                    </div>
-                                  </div> --}}
+                  <div class="col-sm-6">
+                    <div class="form-group">
+                      <label for="declarado" class="control-label gcore-label-top">@lang('documents.declared') $:</label>
+                      <input class="form-control" name="declarado" placeholder="$ 00.0" type="number" min="0" v-model="declarado">
+                    </div>
+                  </div>
                   <div class="col-sm-12">
                     <div class="form-group">
                       <label for="piezas" class="control-label gcore-label-top">@lang('documents.dimensions') (L x W x
@@ -429,6 +428,7 @@
                             <th>@lang('documents.tracking')</th>
                             <th>@lang('documents.content')</th>
                             <th>@lang('documents.weight')</th>
+                            <th>@lang('documents.declared')</th>
                           </tr>
                         </thead>
                       </table>

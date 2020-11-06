@@ -20,7 +20,15 @@ class Menu extends Model
 
     public function roles()
     {
-      return $this->hasMany('App\MenuRol', 'menu_id')->select('rol_id AS id', 'menu_id');
+      return $this->hasMany('App\MenuRol', 'menu_id')
+      ->join('roles', 'roles.id', 'aplex_menu_rol.rol_id')
+      ->select(
+        'aplex_menu_rol.rol_id AS id', 
+        'aplex_menu_rol.menu_id', 
+        'roles.name', 
+        'roles.slug',
+        'roles.description'
+      );
     }
 
     public function modules()

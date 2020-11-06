@@ -107,6 +107,7 @@ class AerolineasInventarioController extends Controller
         {
           return $query->where('a.usado', 0);
         })
+        ->whereNull('a.deleted_at')
         ->get();
         return DataTables::of($data)->make(true);
     }
@@ -120,6 +121,7 @@ class AerolineasInventarioController extends Controller
         )
         ->where('aerolinea_id', $id)
         ->where('usado', 0)
+        ->whereNull('a.deleted_at')
         ->get();
         return $data;
     }

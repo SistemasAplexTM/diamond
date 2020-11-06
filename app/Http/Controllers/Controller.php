@@ -8,7 +8,8 @@ use JavaScript;
 use App\Agencia;
 use App\Shipper;
 use App\Consignee;
-use App\file;
+use App\File;
+use App\FileModule;
 use App\AplexConfig;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
@@ -250,7 +251,7 @@ class Controller extends BaseController
             '({url_terms})'       => ($objAgencia) ? $objAgencia->url_terms : '',
             '({url_registro})'    => url('/') . '/registro/' . base64_encode($objAgencia->id),
             '({url_rastreo})'     => url('/') . '/rastreo/',
-            '({url_prealerta})'   => ($objAgencia) ? $objAgencia->url_prealerta : '',
+            '({url_prealerta})'   => url('/') . '/prealerta/' . base64_encode($objAgencia->id),
             '({url_registro_casillero})'     => ($objAgencia) ? $objAgencia->url_registro_casillero : '',
             '({url})'             => ($objAgencia) ? $objAgencia->url : '',
             '({logo_agencia})'    => ($objAgencia) ? '<img src="' . url('storage') . '/' . $objAgencia->logo . '" alt="logo" height="80" />' : '',
@@ -317,11 +318,15 @@ class Controller extends BaseController
             $data_file->name_old = $oldName;
             $data_file->extension = $extension;
             $data_file->size = $size;
-            $data_file->module = $data['module'];
-            $data_file->module_id = $data['module_id'];
-            $data_file->agency_id = $data['agency_id'];
-            $data_file->prealerta_email = $data['prealerta_email'];
             $data_file->save();
+
+            // save pivot
+            $fileModule = new FileModule;
+            $fileModule->file_id = $data_file->id;
+            $fileModule->module_id = $data['module_id'];
+            $fileModule->module_record_id = $data['module_record_id'];
+            $fileModule->agency_id = $data['agency_id'];
+            $fileModule->save();
         }
 
         return $data_file;

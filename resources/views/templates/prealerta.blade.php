@@ -30,7 +30,7 @@
           display: none !important;
         }
         .upload-file{
-            height: 240px;
+            height: 100px;
         }
     </style>
 </head>
@@ -42,6 +42,7 @@
                     <div class="col-lg-4 col-md-6" id="formulario">
                         <h1>@lang('general.preview_your_shipment')</h1>
                         <p>@lang('general.enter_the_tracking_and_instruction')</p>
+                        <p>Prealertar sus paquetes agilizará el proceso de envío.</p>
                         <form id="formPrealerta" enctype="multipart/form-data" data-id_agencia="{{ $id_age }}" class="form-horizontal casillero_form" role="form" action="#" method="post">
                         <input type="hidden" id="agency_id" value="{{ $id_age }}">
                             <div class="ibox float-e-margins">
@@ -74,8 +75,15 @@
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-lg-12">
+                                        <div class="col-lg-6">
                                             <div class="form-group">
+                                                    <label class="control-label" for="email">@lang('general.declared') </label>
+                                                    <input type="number" min="0" name="declarado" class="form-control" placeholder="$ 00.0" v-model="declarado">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label class="control-label" for="email" style="width: 100%">&nbsp;</label>
                                                 <input type='checkbox' data-toggle="toggle" id='despachar' data-size='mini' data-on="Despachar" data-off="Esperar" data-width="100" data-style="ios" data-onstyle="primary" data-offstyle="warning">
                                                 <span id="msn1" v-if="despachar">@lang('general.dispatch_immediately')</span>
                                                 <span id="msn2" v-if="!despachar">@lang('general.wait_until_you_decide')</span>
@@ -100,14 +108,13 @@
                                                 class="upload-file"
                                                 action="{{ '/prealerta/' . $id_age . '/uploadFile' }}"
                                                 :http-request="uploadFiles"
-                                                drag
                                                 :limit="1"
                                                 :auto-upload="false"
                                                 :file-list="fileList"
                                                 :on-exceed="handleExceed"
-                                                :headers="headersUpload">
-                                                <i class="el-icon-upload"></i>
-                                                <div class="el-upload__text">Suelta tu archivo aquí o <em>haz clic para cargar</em></div>
+                                                :headers="headersUpload"
+                                                accept=".pdf">
+                                                <el-button size="small" type="primary" icon="el-icon-upload">Clic para subir archivo</el-button>
                                                 <div slot="tip" class="el-upload__tip">Solo archivos con un tamaño menor de 1 MB</div>
                                             </el-upload>
                                           </div>

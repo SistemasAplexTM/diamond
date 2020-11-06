@@ -50,11 +50,12 @@ var objVue = new Vue({
     instruccion: null,
     tracking: null,
     contenido: null,
+    declarado: null,
     telefono: null,
     existConsignee: false,
     despachar: false,
     dialogVisibleUpload: false,
-    client: null,
+    data: null,
     fileList: [],
     headersUpload: {
       'X-CSRF-TOKEN': $("meta[name='csrf-token']").attr("content"),
@@ -62,21 +63,27 @@ var objVue = new Vue({
   },
   methods: {
     uploadFiles(file, fileList) {
+      var l = Ladda.create(document.querySelector('.ladda-button'));
+      l.start();
+      // toastr.info('Cargando archivo archivo...');
+      // toastr.options.closeButton = true;
       let me = this
       //Create new formData object
       const fd = new FormData();
       //append the file you want to upload
       fd.append("file", file.file);
       fd.append("agency_id", $('#agency_id').val());
-      fd.append("client_id", this.client.id);
-      fd.append("client_email", this.client.correo);
-      fd.append("module", 'consigee');
+      fd.append("module_record_id", this.data.id);
+      fd.append("module_id", 23);
 
       //send call the api to upload files using axios or any other means
       axios.post(file.action, fd).then(function (req) {
         me.$refs.upload.clearFiles()
-        console.log('Archivo cargado exitosamente');
+        // toastr.success('Archivo cargado correctamente');
+        // toastr.options.closeButton = true;
+        l.stop();
       }).catch(function (error) {
+        l.stop();
         console.log(error);
         toastr.error("Error al cargar el archivo.", {
           timeOut: 30000
@@ -97,6 +104,7 @@ var objVue = new Vue({
     resetForm: function () {
       this.tracking = null;
       this.contenido = null;
+      this.declarado = null;
       this.instruccion = null;
       this.errors.clear();
     },
@@ -130,11 +138,12 @@ var objVue = new Vue({
             'instruccion': this.instruccion,
             'tracking': this.tracking,
             'contenido': this.contenido,
+            'declarado': this.declarado,
             'despachar': $('#despachar').prop('checked'),
           }).then(function (response) {
             l.stop();
             if (response.data['code'] == 200) {
-              me.client = response.data['client'];
+              me.data = response.data['data'];
               toastr.success('Su paquete ha sido prealertado');
               toastr.options.closeButton = true;
               setTimeout(() => {

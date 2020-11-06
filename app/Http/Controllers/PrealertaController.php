@@ -50,7 +50,7 @@ class PrealertaController extends Controller
                 /* ENVIAR EMAIL */
                 $plantilla = $this->getDataEmailPlantillaById(4);
                 if (isset($plantilla->mensaje) and $plantilla->mensaje != '') {
-                    $this->sendEmailDocument($request->email, $id_agencia);
+                    //$this->sendEmailDocument($request->email, $id_agencia);
                 }
             }
 
@@ -63,6 +63,7 @@ class PrealertaController extends Controller
             $data->correo = $request->email;
             $data->tracking    = $request['tracking'];
             $data->contenido    = $request['contenido'];
+            $data->declarado    = $request['declarado'];
             $data->agencia_id  = $id_agencia;
             $data->instruccion = $request['instruccion'];
             $data->despachar = ($request['despachar']) ? 1 : 0;
@@ -72,7 +73,7 @@ class PrealertaController extends Controller
             // }
             $answer = array(
                 "datos"  => $request->all(),
-                "client"  => $dataUser,
+                "data"  => $data,
                 "code"   => 200,
                 "status" => 200,
             );
@@ -101,9 +102,8 @@ class PrealertaController extends Controller
             $id_agencia = base64_decode($id_agencia);
             $data = $this->fileUpload([
                 'file' => $request->file('file'),
-                'module' => 'consignee',
-                'module_id' => ($request->client_id !== "") ? $request->client_id : null,
-                'prealerta_email' => ($request->client_email !== "") ? $request->client_email : null,
+                'module_id' => $request->module_id,
+                'module_record_id' => $request->module_record_id,
                 'agency_id' => $id_agencia
             ]);
             return  $data;

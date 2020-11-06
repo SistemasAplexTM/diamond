@@ -79,6 +79,8 @@ class TrackingController extends Controller
             if ($request->confirmed_send) {
                 $data->confirmed_send = 1;
             }
+            $data->peso_tracking = ($request->peso_tracking != '') ? $request->peso_tracking : 0;
+            $data->declarado_tracking = ($request->declarado_tracking != '') ? $request->declarado_tracking : 0;
             $data->created_at = date('Y-m-d H:i:s');
             if ($data->save()) {
               $tr = Prealerta::where('tracking', $request->codigo)->first();
@@ -265,7 +267,7 @@ class TrackingController extends Controller
     {
         $data = DB::table('prealerta as a')
             ->leftjoin('consignee as b', 'a.consignee_id', 'b.id')
-            ->select('a.id', 'a.consignee_id', 'a.tracking', 'a.contenido', 'a.instruccion', 'a.correo', 'a.despachar', 'b.nombre_full')
+            ->select('a.id', 'a.consignee_id', 'a.tracking', 'a.contenido', 'a.declarado', 'a.instruccion', 'a.correo', 'a.despachar', 'b.nombre_full')
             ->where([
                 ['a.deleted_at', null],
                 ['a.tracking', $tracking],
@@ -437,6 +439,7 @@ class TrackingController extends Controller
               'tracking.codigo',
               'tracking.contenido',
               'tracking.peso_tracking AS peso',
+              'tracking.declarado_tracking AS declarado',
               'tracking.confirmed_send'
           )
           ->where([
@@ -530,4 +533,5 @@ class TrackingController extends Controller
       }
 
     }
+    
 }

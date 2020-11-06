@@ -248,14 +248,16 @@ function loadTableCreateReceipt() {
 function calculateWeigth() {
   var datos = $("#formTrackingClient").serializeArray();
   var peso = 0;
+  var declarado = 0;
   $.each(datos, function (i, field) {
     if (field.name === "chk[]") {
       peso += $("#chk" + field.value).data('peso');
+      declarado += $("#chk" + field.value).data('declarado');
     }
   });
   setTimeout(() => {
-    console.log('p:',peso);
     objVue.peso = peso;
+    objVue.declarado = declarado;
   }, 300);
 }
 
@@ -278,7 +280,9 @@ function showDataToCreateReceipt(consignee_id, client, agencia_id) {
         return (
           '<div class="checkbox checkbox-success"><input type="checkbox" onclick="calculateWeigth()" checked="true" data-peso="' +
           full.peso
-          + '" data-contenido="' +
+          + '" data-declarado="' +
+          full.declarado +
+          '" data-contenido="' +
           full.contenido +
           '" id="chk' +
           full.id +
@@ -308,6 +312,10 @@ function showDataToCreateReceipt(consignee_id, client, agencia_id) {
     {
       data: "peso",
       name: "peso"
+    },
+    {
+      data: "declarado",
+      name: "declarado"
     },
     ],
     drawCallback: function () {
@@ -345,9 +353,15 @@ function showDataToCreateReceipt(consignee_id, client, agencia_id) {
         .reduce(function (a, b) {
           return parseFloat(a) + parseFloat(b);
         }, 0);
-
-      /*Update footer formatCurrency()*/
       objVue.peso = peso;
+
+      var declarado = api
+        .column(4)
+        .data()
+        .reduce(function (a, b) {
+          return parseFloat(a) + parseFloat(b);
+        }, 0);
+      objVue.declarado = declarado;
 
     },
   });
@@ -394,6 +408,7 @@ var objVue = new Vue({
     tracking: null,
     email: null,
     peso: null,
+    declarado: null,
     piezas: 1,
     largo: 0,
     ancho: 0,
@@ -415,6 +430,7 @@ var objVue = new Vue({
     //crear recibo
     create_receitp: false,
     peso2: null,
+    declarado2: null,
     largo2: 0,
     ancho2: 0,
     alto2: 0,
@@ -534,17 +550,19 @@ var objVue = new Vue({
       this.consignee_name = null;
       this.tracking = null;
       this.contenido = null;
-      this.peso_tracking = null;
+      // this.peso_tracking = null;
+      this.declarado = null;
       this.email = null;
       this.instruccion = false;
       this.confirmedSend = false;
       this.editar = 0;
       this.create_receitp = false;
-      this.peso2 = null,
-        this.largo2 = 0,
-        this.ancho2 = 0,
-        this.alto2 = 0,
-        this.shipper_id2 = null
+      this.peso2 = null;
+      this.declarado2 = null;
+      this.largo2 = 0;
+      this.ancho2 = 0;
+      this.alto2 = 0;
+      this.shipper_id2 = null;
     },
     validation: function (data) {
       if (data.contenido != "") {
@@ -583,6 +601,7 @@ var objVue = new Vue({
       if (typeof op != 'undefined') {
         datosForm = {
           contenido: dat.contenido,
+          declarado: dat.declarado_tracking,
           peso: dat.peso,
           largo: dat.largo,
           ancho: dat.ancho,
@@ -613,10 +632,11 @@ var objVue = new Vue({
         datosForm = {
           contenido: me.contenido_detail,
           peso: me.peso,
+          declarado: me.declarado,
           largo: me.largo,
           ancho: me.ancho,
           alto: me.alto,
-          shipper_id: me.shipper_id != null ? me.shipper_id.id : null,
+          shipper_id: me.shipper_id != null ? me.shipper_id : null,
           tipo_documento_id: 1,
           type_id: 1, //COURIER
           created_at: this.getTime(),
@@ -671,6 +691,8 @@ var objVue = new Vue({
           dimensiones: dat.peso + " Vol=" + dat.largo + "x" + dat.ancho + "x" + dat.alto,
           peso: dat.peso,
           peso2: dat.peso,
+          declarado: dat.declarado,
+          valor: dat.declarado,
           contenido: dat.contenido,
           contenido2: dat.contenido,
           largo: dat.largo,
@@ -723,6 +745,7 @@ var objVue = new Vue({
             me.consignee_id = null;
           }
           me.contenido = datos.data["contenido"];
+          me.declarado2 = datos.data["declarado"];
           me.instruccion = datos.data["instruccion"];
           me.email = datos.data["correo"];
           me.confirmedSend = datos.data["despachar"] == 1 ? true : false;
@@ -808,11 +831,12 @@ var objVue = new Vue({
             consignee_id: this.consignee_id != null ? this.consignee_id.id : null,
             codigo: this.tracking,
             contenido: this.contenido,
-            peso_tracking: this.peso_tracking,
+            peso_tracking: me.peso2,
             confirmed_send: this.confirmedSend,
             agencia_id: $("#agencia_id").val(),
             // datos adicionales
             peso: me.peso2,
+            declarado_tracking: me.declarado2,
             largo: me.largo2,
             ancho: me.ancho2,
             alto: me.alto2,
@@ -869,7 +893,7 @@ var objVue = new Vue({
           toastr.options = {
             positionClass: "toast-top-center"
           };
-          toastr.error("Ingresa el peso del paquete.");
+          toastr.error("Al crear el recibo es necesario ingresar el peso del paquete.");
           return false;
         }
       } else {

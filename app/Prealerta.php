@@ -17,6 +17,7 @@ class Prealerta extends Model
         'agencia_id',
         'tracking',
         'contenido',
+        'declarado',
         'instruccion',
         'correo',
         'telefono',

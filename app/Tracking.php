@@ -19,6 +19,7 @@ class Tracking extends Model
         'codigo',
         'contenido',
         'peso_tracking',
+        'declarado_tracking',
         'confirmed_send'
     ];
 }

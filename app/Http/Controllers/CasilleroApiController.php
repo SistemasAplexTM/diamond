@@ -26,6 +26,8 @@ class CasilleroApiController extends Controller
       DB::raw("(SELECT GROUP_CONCAT(tracking.codigo) FROM tracking WHERE tracking.documento_detalle_id = f.id) as tracking")];
 
       $count = [DB::raw('COUNT(p.id) AS cant'), 'p.status_id'];
+
+      //DB::connection()->enableQueryLog();
       $data = DB::table('status_detalle AS p')
       ->join('status AS q', 'q.id', 'p.status_id')
       ->join(DB::raw("(
@@ -50,7 +52,7 @@ class CasilleroApiController extends Controller
           m.peso,
           m.id
         ORDER BY
-          m.id DESC
+          z.id DESC
             ) AS f"), 'f.id_last_status', 'p.id'
         )
       ->select(
@@ -66,6 +68,7 @@ class CasilleroApiController extends Controller
           }
         })
         ->get();
+        //return DB::getQueryLog();
         $answer = array(
           "data" => $data,
           "code"  => 200,

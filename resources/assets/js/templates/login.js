@@ -62,6 +62,7 @@
 var objVue = new Vue({
   el: "#setup",
   created() {
+    localStorage.removeItem("menu");
     this.getPrints();
   },
   data: {

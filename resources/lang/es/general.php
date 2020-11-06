@@ -215,7 +215,7 @@ return [
     'dispatch_immediately' => 'Despachar de inmediato',
     'wait_until_you_decide' => 'Esperar hasta que decida ',
     'enter_a_tracking_number' => 'Ingrese un número de tracking',
-    'enter_the_instruction' => 'Ingresa la instrucción',
+    'enter_the_instruction' => 'Ingrese las instrucciones de despacho de sus paquetes',
 
     //resources/views/template/prealertalist
 

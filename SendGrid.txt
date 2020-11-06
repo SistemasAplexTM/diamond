@@ -13,6 +13,15 @@ Clave: Miami2013$
 sengrid_api_4plbox:
 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
 
+API SMTP COMEXCO
+
+Server:	smtp.sendgrid.net
+Ports:
+25, 587	(for unencrypted/TLS connections)
+465	(for SSL connections)
+UsernamE: apikey
+Password: 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
+
 
 
 /* AKOCARGO (jexpress) */

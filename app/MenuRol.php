@@ -10,4 +10,10 @@ class MenuRol extends Model
     public $timestamps = false;
 
     protected $fillable = ['menu_id', 'rol_id', 'user_id'];
+
+    public function roles()
+    {
+      return $this->hasMany('App\Rol', 'id')->select('id', 'name', 'slug', 'description', 'special', 'is_agency')
+      ;
+    }
 }
